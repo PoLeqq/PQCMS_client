@@ -1,0 +1,1 @@
+document.querySelector("#pqcms").value = window.location.hostname;
