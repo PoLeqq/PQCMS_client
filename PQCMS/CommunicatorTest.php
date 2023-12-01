@@ -44,11 +44,12 @@ require_once("Communicator.inc.php");
 //
 //session_start();
 //$logoutUser = Communicator::communicate(CommunicateURL::LOGOUT_USER,["auth_key" => $authKey]);
+//$logoutUser = Communicator::communicate(CommunicateURL::LOGOUT_USER,["auth_key" => "946e14463744bf46843123bddbb09c3f7cc43926d11920c11d717aea92e4146db3ab5ad2d91dce9d88077dfb05aabd7b908667f29adfe24f51cbaaaadaa898ed"]);
 //echo "\$logoutUser\n";
 //print_r($logoutUser);
 //echo "\n\n";
 //
-//$validAuthKey = Communicator::communicate(CommunicateURL::IS_VALID_AUTH_KEY,["auth_key" => $authKey]);
+//$validAuthKey = Communicator::communicate(CommunicateURL::IS_VALID_AUTH_KEY,["auth_key" => "c7fca35652d32355f2b364d3f90ca09a0ad9c40f0dd035c6b36ee0ae3d96cb8d069aeae8b7977e5b1e1604297b59c0eb247c860566a8a19d0406b9eab128a088"]);
 //echo "\$validAuthKey\n";
 //print_r($validAuthKey);
 //echo "\n\n";
