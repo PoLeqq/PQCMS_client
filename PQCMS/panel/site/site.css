@@ -1,0 +1,92 @@
+body {
+    margin: 0;
+    display: flex;
+}
+
+nav {
+    background: rgba(0, 0, 0, 0.2);
+    /*width: 100%;*/
+    /*width: clamp(0px, 200px, 20vw);*/
+    height: 100vh;
+    transition: all 0.8s;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    overflow-x: visible;
+    overflow-y: auto;
+}
+
+nav::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+nav::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+nav::-webkit-scrollbar-thumb {
+    background: #00A;
+}
+
+nav::-webkit-scrollbar-thumb:hover {
+    background: #00F;
+}
+
+nav > ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+nav > ul > li {
+    font-size: 25px;
+    user-select: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    margin: 6px 0 -3px;
+    padding: 3px;
+    transition: all 0.3s;
+    background-color: rgba(0, 0, 0, 0);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+
+nav > ul > li:hover {
+    border-bottom: 1px solid black;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+nav > ul > li::after {
+    content: attr(title);
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    background-color: #333;
+    color: white;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+nav > ul > li:hover::after {
+    display: block;
+}
+
+#mainFrame {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#mainFrame > iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
