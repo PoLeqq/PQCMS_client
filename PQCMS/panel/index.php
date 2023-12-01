@@ -26,16 +26,6 @@ unset($_SESSION["pqcms-panel-login-error"]);
         function refreshHRFrame() {
             document.querySelector("#panelMain").contentWindow.location.reload();
         }
-
-        setInterval(() => {
-            var response = checkAuthKeyValidity();
-            if (response.trim() !== "") {
-                console.log(JSON.parse(response));
-            } else {
-                console.error("Pusta odpowiedź.");
-            }
-        },1000);
-
     </script>
 </head>
 <body>
