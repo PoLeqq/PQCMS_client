@@ -1,8 +1,15 @@
 <?php
-require_once(dirname(__DIR__) . "/Communicator.inc.php");
+
+session_start();
+
+if(!empty($_SESSION["pqcms-panel-auth_key"]))
+{
+    header("location: ../panel");
+    die("Sesja jest już aktywna.");
+}
 
 // TODO dodać jeszcze tokeny CSRF
-session_start();
+
 if(empty($_POST["username"]) || empty($_POST["password"]))
 {
     $_SESSION["pqcms-panel-login-error"] = "Uzupełnij wszystkie pola!";
@@ -10,6 +17,7 @@ if(empty($_POST["username"]) || empty($_POST["password"]))
     die($_SESSION["pqcms-panel-login-error"]." Błędne przekierowanie.");
 }
 
+require_once(dirname(__DIR__) . "/Communicator.inc.php");
 $loginResult = Communicator::communicate(CommunicateURL::LOGIN_USER,["username" => $_POST["username"], "password" => $_POST["password"]]);
 
 if($loginResult["resp"] == 1)
