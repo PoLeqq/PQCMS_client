@@ -80,24 +80,62 @@ function getCookie(cname) {
 //     return xmlHttp.responseText;
 // }
 
-function checkAuthKeyValidity() {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", window.location.origin + "/pqcms/pqcms/panel/scripts/IsValidUserSession.php", true);
+function checkAuthKeyValidity()
+{
+    return new Promise((resolve, reject) =>
+    {
+        var xmlHttp = new XMLHttpRequest();
+        // todo do zmiany gdy wejdzie na prod
+        xmlHttp.open("GET", window.location.origin + "/pqcmsclient/pqcms/panel/scripts/IsValidUserSession.php", true);
 
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4) {
-            if (xmlHttp.status === 200) {
-                console.log(xmlHttp.responseText);
-            } else {
-                console.error("Błąd żądania: " + xmlHttp.statusText);
+        xmlHttp.onreadystatechange = function()
+        {
+            if(xmlHttp.readyState === 4)
+            {
+                if (xmlHttp.status === 200) resolve(JSON.parse(xmlHttp.responseText));
+                else reject(xmlHttp.statusText);
             }
-        }
-    };
+        };
 
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
+        xmlHttp.send(null);
+    });
 }
 
-// let ar = JSON.parse(httpGet("http://localhost/electrocms/server/test/test.php"));
-// let ar = JSON.parse(httpGet("http://localhost/pqcms/server/GetVersion.php"));
-// console.log(ar);
+async function invalidateSession(data){
+    return new Promise((resolve, reject) => {
+        fetch(`./scripts/InvalidateSession.php?outdated=${data["outdated"]}&invalidated=${data["invalidated"]}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    // outdated: response["outdated"],
+                    // invalidated: response["invalidated"]
+                    "xd": "lol"
+                }),
+            }).then((resp) => {
+            resolve(resp.text());
+        })
+            .catch((error) => {
+                reject(error);
+            })
+    });
+}
+
+setInterval(() =>
+{
+    const checkPromise = checkAuthKeyValidity();
+    checkPromise.then(response =>
+    {
+        if(response["suc"] === 0) window.location.href = `./scripts/InvalidateSession.php`;
+        else if(!response["resp"]["valid"])
+        {
+            let data = response["resp"];
+            window.location.href = `./scripts/InvalidateSession.php?outdated=${data["outdated"]}&invalidated=${data["invalidated"]}`;
+        }
+    }).catch(error =>
+    {
+        console.error(error);
+    })
+},10000);
