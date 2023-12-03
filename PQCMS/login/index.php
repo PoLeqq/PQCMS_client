@@ -69,7 +69,7 @@ if(!empty($_SESSION["pqcms-panel-username"]))
             require_once(dirname(__DIR__)."/initializer/Checker.php");
             $isFirstTime = isFirstTime();
             if(is_null($isFirstTime))
-               echo "Błąd API! Skontaktuj się z administratorem PQCMS!";
+               echo "Błąd API! Skontaktuj się z administratorem PQCMS! (logowanie nie jest możliwe)";
             else if($isFirstTime)
                echo<<<END
                 <div style="text-align: left">
