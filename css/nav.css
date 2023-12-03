@@ -1,0 +1,58 @@
+nav
+{
+    min-height: 100px;
+    background-image: linear-gradient(90deg, #4504dd,#6204dd);
+    opacity: .95;
+    position: fixed!important;
+    top: 0!important;
+    z-index: 9999;
+    min-width: 100vw;
+}
+nav a
+{
+    color: white;
+    transition: all .5s;
+}
+nav a:hover
+{
+    color: rgb(182, 182, 182)!important;
+    transition: color .2s;
+}
+.nav-item a
+{
+    font-size: 20px;
+    color: white;
+    transition: all .5s;
+}
+.nav-item a:hover
+{
+    color: rgb(182, 182, 182)!important;
+    transition: color .2s;
+}
+
+.navbar-nav .nav-item
+{
+    margin: 0 10px 0 10px;
+    padding: 0 5px 0 5px;
+}
+.nav-link
+{
+  color: white!important;
+}
+
+/** SCROLLE  */
+
+#umiejetnosci 
+{
+    scroll-margin-top: 200px;
+}
+
+#projekty
+{
+    scroll-margin-top: 200px;
+}
+
+#kontakt
+{
+    scroll-margin-top: 200px;
+}
