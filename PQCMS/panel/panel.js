@@ -123,8 +123,13 @@ async function invalidateSession(data){
     });
 }
 
+sessionValidator();
 setInterval(() =>
 {
+    sessionValidator();
+},10000);
+
+function sessionValidator() {
     const checkPromise = checkAuthKeyValidity();
     checkPromise.then(response =>
     {
@@ -138,4 +143,4 @@ setInterval(() =>
     {
         console.error(error);
     })
-},10000);
+}
