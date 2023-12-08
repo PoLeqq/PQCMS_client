@@ -1,27 +1,7 @@
 {
-  "tabs": [
-    "_root_",
-    "kontakt",
-    "kontakt/admin",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/support",
-    "kontakt/supportadffasdfs",
-    "kontakt/support"
-  ]
+  "tabs": {
+    "": "Strona główna",
+    "kontakt": "kontakt główny",
+    "kontakt/admin": "kontakt admin"
+  }
 }

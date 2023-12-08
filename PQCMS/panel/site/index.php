@@ -26,11 +26,11 @@ if(empty($_SESSION["pqcms-panel-username"]))
             <?php
                 $site = json_decode(file_get_contents("site.json"),true);
 
-                foreach($site["tabs"] as $tab)
+                foreach($site["tabs"] as $path => $name)
                 {
                     echo<<<END
-                    <li title="${tab}">
-                        ${tab}
+                    <li title="${path}">
+                        ${name}
                     </li>
                     END;
                 }
@@ -39,20 +39,20 @@ if(empty($_SESSION["pqcms-panel-username"]))
     </nav>
 
     <div id="mainFrame">
-        <iframe></iframe>
+        <iframe src="editor/"></iframe>
     </div>
 
     <script>
 
-        function sendMessage() {
-            const message = document.querySelector("#message").value;
-            const iframe = document.querySelector("iframe");
-            iframe.contentWindow.postMessage(message, "*");
+        function sendMessage(element) {
+            const tab = element.getAttribute("title");
+            const iframe = document.querySelector("#mainFrame iframe");
+            iframe.src = "editor?site="+tab;
         }
 
         let tabs = document.querySelectorAll("nav ul li");
         tabs.forEach((e) => {
-            e.addEventListener("click", sendMessage);
+            e.addEventListener("click", () => sendMessage(e));
         })
     </script>
 </body>

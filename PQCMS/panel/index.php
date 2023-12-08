@@ -20,19 +20,13 @@ unset($_SESSION["pqcms-panel-login-error"]);
     <link rel="icon" href="../images/PQCMS.svg">
 
     <script src="panel.js" defer></script>
-
-    <script>
-        // Funkcja do odświeżania iframe "HR" w panelu
-        function refreshHRFrame() {
-            document.querySelector("#panelMain").contentWindow.location.reload();
-        }
-    </script>
 </head>
 <body>
     <div id="main">
         <nav>
             <ul>
-                <li class="internalLink" internalLink="http://localhost/pqcms/server/client/system/homepage.php" tabindex="1">
+                <li class="internalLink" internalLink="https://poleq.pl/server/client/system/homepage.php" tabindex="1">
+<!--                <li class="internalLink" internalLink="http://localhost/pqcms/server/client/system/homepage.php" tabindex="1">-->
                     PQCMS
                     <div class="nav-image">
                         <img src="../images/PQCMS.svg" alt="logo">
@@ -71,9 +65,11 @@ unset($_SESSION["pqcms-panel-login-error"]);
             </a>
         </nav>
         <div id="mainIframe">
+            <div id="mainIframeOverlay">
+                <img src="images/preloader.gif" alt="preloader"/>
+            </div>
             <iframe id="panelMain" src="home/"></iframe>
         </div>
-
 
         <div id="background"></div>
     </div>

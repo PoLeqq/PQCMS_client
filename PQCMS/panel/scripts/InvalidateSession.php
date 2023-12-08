@@ -20,6 +20,7 @@ foreach(array_keys($_SESSION) as $sessionKey)
         unset($_SESSION[$sessionKey]);
 
 if(!empty($_GET["invalidated"])) $_SESSION["pqcms-panel-login-error"] = "Twoja sesja została unieważniona przez administratora!";
-else if(!empty($_GET["outdated"])) $_SESSION["pqcms-panel-login-error"] = "Twoja sesja została przedawniona!";
+else if(!empty($_GET["outdated"])) $_SESSION["pqcms-panel-login-error"] = "Twoja sesja wygasła!";
 
 header("location: ../");
+die("Nieprawidłowe przekierowanie.");

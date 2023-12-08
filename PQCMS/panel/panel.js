@@ -20,14 +20,37 @@ internalLinks.forEach(e => {
     })
 })
 
+
+const iframeOverlay = document.querySelector("#mainIframeOverlay");
+const iframe = document.querySelector("#panelMain");
+
 /**
  * Funkcja aktualizująca główny blok panelu
  * @param {string} path ścieżka pliku, która będzie wyświetlana w panelu
  */
-function updateMain(path) {
+function updateMain(path)
+{
+    const pathURL = new URL(path, window.location);
+    const currentURL = new URL(main.src);
+
+    if(currentURL.href === pathURL.href)
+        return;
+
     main.src = path;
+    iframeOverlay.style.visibility = "visible";
+    iframeOverlay.style.opacity = "1";
     setCookie("main",path,0,0,30);
 }
+
+iframe.addEventListener("load",() => {
+
+
+    iframeOverlay.style.opacity = "0";
+
+    setTimeout(() => {
+        iframeOverlay.style.visibility = "hidden";
+    },510);
+})
 
 
 // COOKIES
@@ -84,7 +107,7 @@ function checkAuthKeyValidity()
 {
     return new Promise((resolve, reject) =>
     {
-        var xmlHttp = new XMLHttpRequest();
+        let xmlHttp = new XMLHttpRequest();
         // todo do zmiany gdy wejdzie na prod
         xmlHttp.open("GET", window.location.origin + "/pqcmsclient/pqcms/panel/scripts/IsValidUserSession.php", true);
 
