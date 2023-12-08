@@ -1,0 +1,378 @@
+<?php
+
+require_once(dirname(__DIR__)."/classes/Tab.php");
+require_once(dirname(__DIR__)."/classes/Text.php");
+
+class Root extends Tab
+{
+    public function __construct()
+    {
+        parent::__construct("_root_","",/*new Text(1),new Text(2)*/);
+    }
+
+    protected function getSourcePath(bool $editable): string
+    {
+        if($editable) return "../../../../";
+        return "";
+    }
+
+    private function generateJson($jsonTexts): string
+    {
+        return<<<JS
+<script>
+
+    {
+        const texts = ${jsonTexts};
+        let changes = [];
+        
+        for(let key in texts)
+            changes[key] = false;
+        
+        const saveButton = createUpdateButton();
+        document.body.appendChild(saveButton);
+        
+        function createUpdateButton() 
+        {
+            const update = document.createElement("div");
+            
+            update.id = "pqcms-saveButton";
+            update.innerText = "Zapisz";
+
+            update.addEventListener("click",() => 
+            {
+                let postChanges = [];
+                for(let key in changes)
+                    if(changes[key])
+                        postChanges[key] = document.querySelector("#pqcms-editable-textarea-"+key).value;
+                // TODO do przesłania na serwer
+                console.log(postChanges);
+            });
+            
+            return update;
+        }
+        
+        function hideUpdateButton() 
+        {
+            saveButton.style.opacity = "0";
+            setTimeout(() => {
+                saveButton.style.visilibity = "hidden";
+            },1000);
+        }
+        
+        function showUpdateButton() 
+        {
+            saveButton.style.visibility = "visible";
+            saveButton.style.opacity = "1";
+        }
+        
+        function isChanged() 
+        {
+            console.log(changes);
+            for(let key in changes)
+                if(changes[key])
+                    return true;
+            return false;
+        }
+        
+        document.querySelectorAll("textarea.pqcms-editable-textarea").forEach((e) => 
+        {
+            e.addEventListener("input",(event) => 
+            {
+                const key = event.target.id.substring(24,event.target.id.length);
+                if(texts[key] === event.target.value) changes[key] = false;
+                else changes[key] = true;
+                    
+                if(isChanged()) showUpdateButton();
+                else hideUpdateButton();
+            });
+        });
+    }
+</script>
+JS;
+    }
+
+    public function generateHtml(bool $editable): string
+    {
+        $sourcePath = $this->getSourcePath($editable);
+
+        $texts = [
+            "header1",
+            "text1",
+            "header2",
+            "text2",
+            "section2_header",
+            "section2_1",
+            "section2_2",
+            "section2_3",
+            "section2_4",
+            "projects_header",
+            "projects_1",
+            "projects_1info",
+            "projects_2",
+            "projects_2info",
+            "projects_3",
+            "projects_3info",
+            "projects_4",
+            "projects_4info"
+        ];
+
+        foreach ($texts as $text)
+            $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text,$editable);
+
+        $generatedJS = "";
+        $panelCSS = "";
+        if($editable)
+        {
+            foreach($texts as $text)
+                $jsonTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, false);
+            $generatedJS = $this->generateJson(json_encode($jsonTexts,JSON_UNESCAPED_UNICODE));
+            $panelCSS = "<link rel=\"stylesheet\" href=\"overlay.css\">";
+        }
+
+        return <<<HTML
+<!-- można dodać plik robots.txt, aby usuwał "podsuwanie" plików pqcms'a pod wyszukiwanie -->
+<!doctype html>
+<html lang="pl-PL">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Strona główna | poleq.pl</title>
+    <meta name="description" content="Moje skromne portfolio c:">
+    <meta name="keywords" content="pqcms, poleq cms, professional quality cms, poleq, wiktor soliński, wiktor solinski, poleq.pl, pqcms.pl">
+    <meta name="author" content='Wiktor "PoLeq" Soliński'>
+    <meta http-equiv="X-Ua-Compatible" content="IE=edge">
+
+    <link rel="icon" type="image/x-icon" href="${sourcePath}/img/trex.jpg">
+
+    <link rel="stylesheet" href="${sourcePath}bs5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${sourcePath}css/default.css">
+    <link rel="stylesheet" href="${sourcePath}css/nav.css">
+    <link rel="stylesheet" href="${sourcePath}css/main.css">
+    <link rel="stylesheet" href="${sourcePath}css/footer.css">
+
+    ${panelCSS}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+  
+  	<meta content="poleq.pl" property="og:title" />
+    <meta content="Zapraszam do przejrzenia mojej skromnej wizytówki c: Odłączeni od Sieci: https://discord.gg/T6HFxVQjJV" property="og:description" />
+    <meta content="https://poleq.pl/" property="og:url" />
+    <meta content="https://poleq.pl/img/trex.jpg" property="og:image" />
+    <meta content="#6204dd" data-react-helmet="true" name="theme-color" />    
+  
+  
+    <script src="${sourcePath}bs5/js/bootstrap.min.js" defer></script>
+    <script src="${sourcePath}js/parallax.min.js" defer></script>
+	<script src="https://unpkg.com/scrollreveal@4" defer></script>
+    <script src="${sourcePath}js/scroll.js" defer></script>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <div class="container-fluid">
+
+            <a class="navbar-brand fs-2 px-3 link-nav" style="font-size: 40px!important;" href="#">poleq.pl</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+
+                <ul class="navbar-nav mb-2 mb-lg-0 fs-4">
+
+                    <li class="nav-item link-nav">
+                        <a class="nav-link" aria-current="page" href="#" style="color: white;">Strona główna</a>
+                    </li>
+                    
+                    <li class="nav-item link-nav">
+                        <a class="nav-link" aria-current="page" href="#umiejetnosci" style="color: white;">Umiejętności</a>
+                    </li>
+
+                    <li class="nav-item link-nav">
+                        <a class="nav-link" href="#projekty" style="color: white;">Projekty</a>
+                    </li>
+
+                    <li class="nav-item link-nav">
+                        <a class="nav-link" href="#kontakt" style="color: white;">Kontakt</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="big-element row p-5 col-sm-12 offset-1" id="big1">
+            <div class="big-element-text m-0 col-lg-5 col-xl-6">
+                <div class="scroll400">
+                    <h1>${siteTexts["header1"]}</h1>
+                    ${siteTexts["text1"]}
+                </div>
+                <br><br>
+                <div class="scroll800">
+                    <h1>${siteTexts["header2"]}</h1>
+                    ${siteTexts["text2"]}
+                </div>
+            </div>
+            <div class="big-element-img mt-5 mt-lg-0 col-lg-7 col-xl-6" id="svgs1-container">
+                <img class="svgs1" id="svg1-1" src="${sourcePath}img/blob1.svg">
+                <img class="svgs1" id="svg1-2" src="${sourcePath}img/blob2.svg">
+                <img src="${sourcePath}img/trex.jpg" xmlns="http://www.w3.org/2000/svg" id="trex">
+            </div>
+        </div>
+        <hr class="hr-space" id="umiejetnosci">
+        <div class="col-12 row container" id="specialty">
+            <h2 class="mt-2 mb-5 scroll600" style="margin-bottom: 100px!important;">${siteTexts["section2_header"]}</h2>
+            
+            <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll800">
+                <div class="sp-img pl-5">
+                    <img src="${sourcePath}img/web.png" width="40">
+                </div>
+                <div class="sp-desc">
+                    ${siteTexts["section2_1"]}
+                </div>
+            </div>
+
+            <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll1000">
+                <div class="sp-img">
+                    <img src="${sourcePath}img/minecraft.svg" width="40">
+                </div>
+                <div class="sp-desc">
+                    ${siteTexts["section2_2"]}
+                </div>
+            </div>
+            
+            <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll1200">
+                <div class="sp-img">
+                    <img src="${sourcePath}img/discord.svg" width="40">
+                </div>
+                <div class="sp-desc">
+                    ${siteTexts["section2_3"]}
+                </div>
+            </div>
+            
+            <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll1400">
+                <div class="sp-img pt-1">
+                    <img src="${sourcePath}img/coding.png" width="40">
+                </div>
+                <div class="sp-desc">
+                    ${siteTexts["section2_4"]}
+                </div>
+            </div>
+        </div>
+
+        <div class="wave-container">
+            <div class="wave"></div>
+        </div>
+
+        <div class="purple-site p-5" id="projekty">
+            <div class="scroll200">
+                <h1 id="projekty-header">${siteTexts["projects_header"]}</h1>
+            </div>
+
+            <div class="containter row p-lg-5">
+                <div class="col-12 col-lg-6 text-center">
+                    <div class="pr-element m-3 p-2 my-5">
+                        <div class="scroll400"><h2>${siteTexts["projects_1"]}</h2></div>
+                        <div class="scroll600">
+                            ${siteTexts["projects_1info"]}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 text-center">
+                    <div class="pr-element m-3 p-2 my-5">
+                        <div class="scroll800"><h2>${siteTexts["projects_2"]}</h2></div>
+                        <div class="scroll1000">
+                            ${siteTexts["projects_2info"]}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-lg-6 text-center">
+                    <div class="pr-element m-3 p-2 my-5">
+                        <div class="scroll1200"><h2>${siteTexts["projects_3"]}</h2></div>
+                        <div class="scroll1400">
+                            ${siteTexts["projects_3info"]}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 text-center">
+                    <div class="pr-element m-3 p-2 my-5">
+                        <div class="scroll1600"><h2>${siteTexts["projects_4"]}</h2></div>
+                        <div class="scroll1800">
+                            ${siteTexts["projects_4info"]}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="purple-gradient"></div>
+
+        <div class="container scroll600" id="kontakt">
+            <h1>Chcesz się ze mną skontaktować?</h1>
+            Pozostawiam Ci tutaj parę sposobów, wybierz ten, który najbardziej Ci odpowiada!
+
+            <div class="table-responsive">
+                <table class="col-10 m-5">
+                    <tr>
+                        <th style="min-width: 100px;">Serwer discord</th>
+                        <th>Discord (nick+tag)</th>
+                        <th>Instagram</th>
+                        <th>E-mail</th>
+                    </tr>
+                    <tr>
+                        <td><a href="https://discord.gg/T6HFxVQjJV">Dołącz na serwer!</a></td>
+                        <td>!PoLeq#7737 <a href="javascript:void(0);" onclick="copynick()">(kopiuj)</a></td>
+                        <td><a href="https://www.instagram.com/poleq__/">poleq__</a></td>
+                        <td><a href="mailto:wiktorsolinski123@gmail.com">wiktorsolinski123@gmail.com</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </main>
+
+
+    <div id="footer-wave-container">
+        <div id="footer-wave"></div>
+    </div>
+    <footer>
+        <div class="scroll800">
+            poleq.pl &copy Wszelkie prawa zastrzeżone
+        </div>
+    </footer>
+
+    <!--<div class="website-info" onclick="closeinfo()">
+        <h3>W budowie...</h3>
+        Strona ta <b>nie jest jeszcze dokończona!</b> Jeżeli masz jakieś uwagi, może i błędy, napisz do mnie śmiało!
+        Pomoże mi to w rozwoju tej jakże niesamowitej strony (xD) i siebie.<br>
+        <i>Kliknij, aby zamknąć okienko</i>
+    </div>-->
+    <!-- <a href="https://www.flaticon.com/free-icons/development" title="development icons">Development icons created by Freepik - Flaticon</a> -->
+
+    <!-- <div class="switch_nd" onclick="switch_theme()">
+        <img src="img/moon.svg" width="40"></svg>
+    </div> -->
+
+    <script src="${sourcePath}js/theme_switcher.js"></script>
+    
+
+    <script>
+        function copynick() {
+            navigator.clipboard.writeText("!PoLeq#7737");
+            alert("Nick skopiowany!");
+        }
+        function closeinfo(){
+            document.querySelector(".website-info").style.display="none";
+        }
+    </script>
+    
+    ${generatedJS}
+</body>
+</html>
+HTML;
+
+    }
+}
