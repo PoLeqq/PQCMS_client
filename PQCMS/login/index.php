@@ -53,10 +53,10 @@ if(!empty($_SESSION["pqcms-panel-username"]))
             <fieldset class="form-group border border-white d-flex flex-column justify-content-center align-items-center" >
                 <legend class="w-75 h2 pb-2 border border-white">Logowanie</legend>
 
-                <label class="mt-1">Nazwa użytkownika</label>
-                <input type="text" name="username" class="w-75 form-control-lg m-2 rounded-0" placeholder="nazwa użytkownika" value="<?php echo @$_POST['username'];?>" />
+                <label class="mt-1" for="username">Nazwa użytkownika</label>
+                <input type="text" id="username" name="username" class="w-75 form-control-lg m-2 rounded-0" placeholder="nazwa użytkownika" value="<?php echo @$_POST['username'];?>" />
 
-                <label class="mt-3">Hasło</label>
+                <label class="mt-3" for="password">Hasło</label>
                 <div class="d-flex w-75 justify-content-center align-items-center">
                     <input type="password" id="password" name="password" class="form-control-lg my-2 rounded-0" placeholder="hasło" value="<?php echo @$_POST['password'];?>" />
                     <img id="showPassword" class="showPassword hidePassword" src="../images/showPassword.svg" alt="oko" tabindex="0">
