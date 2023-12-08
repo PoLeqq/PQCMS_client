@@ -15,9 +15,9 @@ unset($_SESSION["pqcms-initializer-success"])
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Sukces | ElectroCMS</title>
-    <meta name="description" content="Panel logowania do systemu ElectroCMS">
-    <meta name="author" content='Wiktor "PoLeq" Soliński, Jan "Kancjusz" Tokarz'>
+    <title>Sukces | PQCMS</title>
+    <meta name="description" content="Panel logowania do systemu PQCMS">
+    <meta name="author" content='Wiktor "PoLeq" Soliński'>
     <meta http-equiv="X-Ua-Compatible" content="IE=edge">
     <link rel="icon" type="image/x-icon" href="../../../../images/PQCMS.svg">
 
