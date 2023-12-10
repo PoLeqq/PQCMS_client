@@ -45,10 +45,11 @@ if(empty($_SESSION["pqcms-panel-username"]))
         document.querySelectorAll("textarea").forEach((e) =>
         {
             adjustTextareaHeight(e);
+
             e.addEventListener("input",() => {
                 adjustTextareaHeight(e);
-                console.log("input");
             });
+
             e.addEventListener("keydown", (event) => {
 
                let ctrlPressed = event.ctrlKey || event.metaKey;
@@ -58,17 +59,14 @@ if(empty($_SESSION["pqcms-panel-username"]))
                     "i": "i",
                     "u": "u",
                     "s": "s",
-                    "q": "quote",
-                    "l": "link=https://poleq.pl"
+                    // "q": "quote",
+                    "l": "link=https://poleq.pl",
+                    "br": "br",
+                    "p": "p"
                 };
 
-                console.log(shortcuts);
-                console.log(event.key,event.key in shortcuts);
                 if(ctrlPressed && (event.key in shortcuts))
                     shortcutPQCode(event,e,shortcuts[event.key]);
-
-                if(ctrlPressed && event.key === 'b')
-                    console.log("b");
             });
         })
 
