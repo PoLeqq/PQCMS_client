@@ -43,8 +43,6 @@ function updateMain(path)
 }
 
 iframe.addEventListener("load",() => {
-
-
     iframeOverlay.style.opacity = "0";
 
     setTimeout(() => {
@@ -88,20 +86,6 @@ function getCookie(cname) {
     }
     return null;
 }
-
-// function checkAuthKeyValidity()
-// {
-//     var xmlHttp = new XMLHttpRequest();
-//
-//     // xmlHttp.setRequestHeader("Content-Type", "application/json");
-//     // var postData = JSON.stringify({ domain: window.location.hostname, klucz2: "wartosc2" });
-//
-//     // TODO do zmiany! Na razie jak działam na localhoscie tak musi być, ale na prodzie zmienić na 2.
-//     xmlHttp.open( "GET", window.location.origin+"/pqcms/pqcms/panel/scripts/IsValidUserSession.php", true ); // false for synchronous request
-//     // xmlHttp.open( "GET", window.location.origin+"/pqcms/panel/scripts/IsValidUserSession.php", true ); // false for synchronous request
-//     xmlHttp.send( null );
-//     return xmlHttp.responseText;
-// }
 
 function checkAuthKeyValidity()
 {
