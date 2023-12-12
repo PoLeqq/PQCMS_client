@@ -30,7 +30,7 @@ class Text
      */
     public function generateHtml(string $elementId, bool $editable): string
     {
-        if($editable) return "<textarea id='pqcms-editable-textarea-$elementId' style='width: 100%' class='pqcms-editable-textarea'>".$this->getCode()."</textarea>";
+        if($editable) return "<textarea id='pqcms-editable-textarea-$elementId' name='$elementId' style='width: 100%' class='pqcms-editable-textarea'>".$this->getCode()."</textarea>";
         return $this->getCode();
     }
 
