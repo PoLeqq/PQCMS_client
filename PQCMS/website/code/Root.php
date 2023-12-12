@@ -16,81 +16,6 @@ class Root extends Tab
         return "";
     }
 
-    private function generateJson($jsonTexts): string
-    {
-        return<<<JS
-<script>
-
-    {
-        const texts = ${jsonTexts};
-        let changes = [];
-        
-        for(let key in texts)
-            changes[key] = false;
-        
-        const saveButton = createUpdateButton();
-        document.body.appendChild(saveButton);
-        
-        function createUpdateButton() 
-        {
-            const update = document.createElement("div");
-            
-            update.id = "pqcms-saveButton";
-            update.innerText = "Zapisz";
-
-            update.addEventListener("click",() => 
-            {
-                let postChanges = [];
-                for(let key in changes)
-                    if(changes[key])
-                        postChanges[key] = document.querySelector("#pqcms-editable-textarea-"+key).value;
-                // TODO do przesłania na serwer
-                console.log(postChanges);
-            });
-            
-            return update;
-        }
-        
-        function hideUpdateButton() 
-        {
-            saveButton.style.opacity = "0";
-            setTimeout(() => {
-                saveButton.style.visilibity = "hidden";
-            },1000);
-        }
-        
-        function showUpdateButton() 
-        {
-            saveButton.style.visibility = "visible";
-            saveButton.style.opacity = "1";
-        }
-        
-        function isChanged() 
-        {
-            console.log(changes);
-            for(let key in changes)
-                if(changes[key])
-                    return true;
-            return false;
-        }
-        
-        document.querySelectorAll("textarea.pqcms-editable-textarea").forEach((e) => 
-        {
-            e.addEventListener("input",(event) => 
-            {
-                const key = event.target.id.substring(24,event.target.id.length);
-                if(texts[key] === event.target.value) changes[key] = false;
-                else changes[key] = true;
-                    
-                if(isChanged()) showUpdateButton();
-                else hideUpdateButton();
-            });
-        });
-    }
-</script>
-JS;
-    }
-
     public function generateHtml(bool $editable): string
     {
         $sourcePath = $this->getSourcePath($editable);
@@ -121,12 +46,15 @@ JS;
 
         $generatedJS = "";
         $panelCSS = "";
+        $editableFormStart = "<form method='post' action='ChangeTabText.php' id='pqcms-editor-form'>";
+        $editableFormEnd = "</form>";
         if($editable)
         {
             foreach($texts as $text)
                 $jsonTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, false);
             $generatedJS = $this->generateJson(json_encode($jsonTexts,JSON_UNESCAPED_UNICODE));
             $panelCSS = "<link rel=\"stylesheet\" href=\"overlay.css\">";
+//            $editableFormStart = "<form method='post' action='ChangeTabText.php'>";
         }
 
         return <<<HTML
@@ -171,6 +99,7 @@ JS;
 </head>
 <body>
 
+    ${editableFormStart}
     <nav class="navbar navbar-expand-lg navbar-dark">
 
         <div class="container-fluid">
@@ -343,6 +272,7 @@ JS;
             poleq.pl &copy Wszelkie prawa zastrzeżone
         </div>
     </footer>
+    ${editableFormEnd}
 
     <!--<div class="website-info" onclick="closeinfo()">
         <h3>W budowie...</h3>

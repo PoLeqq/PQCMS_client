@@ -20,5 +20,81 @@ abstract class Tab
 //            $this->texts[] = $text;
     }
 
+    protected function generateJson($jsonTexts): string
+    {
+        return<<<JS
+<script>
+
+    {
+        const texts = ${jsonTexts};
+        let changes = [];
+        
+        for(let key in texts)
+            changes[key] = false;
+        
+        const saveButton = createUpdateButton();
+        document.querySelector("#pqcms-editor-form").appendChild(saveButton);
+        
+        function createUpdateButton() 
+        {
+            const update = document.createElement("input");
+            update.type = "submit";
+            
+            update.id = "pqcms-saveButton";
+            update.innerText = "Zapisz";
+
+            update.addEventListener("click",() => 
+            {
+                let postChanges = [];
+                for(let key in changes)
+                    if(changes[key])
+                        postChanges[key] = document.querySelector("#pqcms-editable-textarea-"+key).value;
+                // TODO do przesłania na serwer
+                console.log(postChanges);
+                
+            });
+            
+            return update;
+        }
+        
+        function hideUpdateButton() 
+        {
+            saveButton.style.opacity = "0";
+            setTimeout(() => {
+                saveButton.style.visilibity = "hidden";
+            },1000);
+        }
+        
+        function showUpdateButton() 
+        {
+            saveButton.style.visibility = "visible";
+            saveButton.style.opacity = "1";
+        }
+        
+        function isChanged() 
+        {
+            for(let key in changes)
+                if(changes[key])
+                    return true;
+            return false;
+        }
+        
+        document.querySelectorAll("textarea.pqcms-editable-textarea").forEach((e) => 
+        {
+            e.addEventListener("input",(event) => 
+            {
+                const key = event.target.id.substring(24,event.target.id.length);
+                if(texts[key] === event.target.value) changes[key] = false;
+                else changes[key] = true;
+                    
+                if(isChanged()) showUpdateButton();
+                else hideUpdateButton();
+            });
+        });
+    }
+</script>
+JS;
+    }
+
     public abstract function generateHtml(bool $editable): string;
 }
