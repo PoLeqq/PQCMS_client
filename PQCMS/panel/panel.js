@@ -92,7 +92,7 @@ function checkAuthKeyValidity()
     return new Promise((resolve, reject) =>
     {
         let xmlHttp = new XMLHttpRequest();
-        // todo do zmiany gdy wejdzie na prod
+        // todo do zmiany gdy wejdzie na prod (usunięcie "/pqcmsclinet")
         xmlHttp.open("GET", window.location.origin + "/pqcmsclient/pqcms/panel/scripts/IsValidUserSession.php", true);
 
         xmlHttp.onreadystatechange = function()
@@ -108,22 +108,19 @@ function checkAuthKeyValidity()
     });
 }
 
-async function invalidateSession(data){
-    return new Promise((resolve, reject) => {
+async function invalidateSession(data)
+{
+    return new Promise((resolve, reject) =>
+    {
         fetch(`./scripts/InvalidateSession.php?outdated=${data["outdated"]}&invalidated=${data["invalidated"]}`,
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    // outdated: response["outdated"],
-                    // invalidated: response["invalidated"]
-                    "xd": "lol"
-                }),
+                }
             }).then((resp) => {
-            resolve(resp.text());
-        })
+                resolve(resp.text());
+            })
             .catch((error) => {
                 reject(error);
             })
