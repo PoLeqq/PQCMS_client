@@ -18,8 +18,6 @@ class Root extends Tab
 
     public function generateHtml(bool $editable): string
     {
-        $sourcePath = $this->getSourcePath($editable);
-
         $texts = [
             "header1",
             "text1",
@@ -41,18 +39,49 @@ class Root extends Tab
             "projects_4info"
         ];
 
-        foreach ($texts as $text)
-            $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text,$editable);
+        if($editable)
+        {
+            @session_start();
+            if(empty($_SESSION["pqcms-panel-auth_key"]))
+                return "Najpierw musisz się zalogować!";
+
+            $perms = [];
+            foreach($texts as $text)
+                $perms[] = "pqcms.site.".$text;
+
+            require_once(dirname(__DIR__,2)."/Communicator.inc.php");
+            $hasPermission = (Communicator::communicate(CommunicateURL::HAS_PERMISSION,
+                [
+                    "auth_key" => $_SESSION["pqcms-panel-auth_key"],
+                    "perms" => $perms
+                ]));
+//            var_dump($hasPermission);
+        }
+
+        $sourcePath = $this->getSourcePath($editable);
+
+        if($editable)
+            if($hasPermission["resp"] == 1)
+                foreach($texts as $text)
+                    $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text,true);
+            else
+                foreach($texts as $text)
+                    $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text,true,!$hasPermission["perms"]["pqcms.site.".$text]);
+        else
+            foreach($texts as $text)
+                $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text,false);
 
         $generatedJS = "";
         $panelCSS = "";
-        $editableFormStart = "<form method='post' action='ChangeTabText.php' id='pqcms-editor-form'>";
-        $editableFormEnd = "</form>";
+        $editableFormStart = "";
+        $editableFormEnd = "";
         if($editable)
         {
+            $editableFormStart = "<form method='post' action='ChangeTabText.php' id='pqcms-editor-form'>";
+            $editableFormEnd = "</form>";
             foreach($texts as $text)
                 $jsonTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, false);
-            $generatedJS = $this->generateJson(json_encode($jsonTexts,JSON_UNESCAPED_UNICODE));
+            $generatedJS = $this->generateJS(json_encode($jsonTexts,JSON_UNESCAPED_UNICODE));
             $panelCSS = "<link rel=\"stylesheet\" href=\"overlay.css\">";
 //            $editableFormStart = "<form method='post' action='ChangeTabText.php'>";
         }
