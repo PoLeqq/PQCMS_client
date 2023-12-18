@@ -5,7 +5,7 @@
 //    $_SESSION["loginAmount"] = $login->getAttempts();
 
 session_start();
-if(!empty($_SESSION["pqcms-panel-username"]))
+if(!empty($_SESSION["pqcms-panel-auth_key"]))
 {
     header("location: ../panel");
     die("Sesja logowania jest już aktywna!");
