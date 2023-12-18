@@ -127,21 +127,21 @@ async function invalidateSession(data)
     });
 }
 
-sessionValidator();
+
+setTimeout(sessionValidator,0);
 setInterval(() =>
 {
     sessionValidator();
 },10000);
 
 function sessionValidator() {
-    const checkPromise = checkAuthKeyValidity();
-    checkPromise.then(response =>
+    checkAuthKeyValidity().then(response =>
     {
         if(response["suc"] === 0) window.location.href = `./scripts/InvalidateSession.php`;
-        else if(!response["resp"]["valid"])
+        else if(response["resp"]["valid"] == 0)
         {
             let data = response["resp"];
-            window.location.href = `./scripts/InvalidateSession.php?outdated=${data["outdated"]}&invalidated=${data["invalidated"]}`;
+            window.location.href = `./scripts/InvalidateSession.php?outdated=${data["outdated"]}&invalidated=${data["invalidated"]}&not_secure=${data["not_secure"]}`;
         }
     }).catch(error =>
     {
