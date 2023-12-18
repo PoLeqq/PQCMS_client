@@ -31,12 +31,15 @@ class Communicator
                 @session_start();
                 if(empty($_SESSION["pqcms-panel-auth_key"]))
                     return json_encode(["suc" => 0, "desc" => "Akcja niemożliwa do spełnienia. Nie posiadasz aktywnej sesji!"],JSON_UNESCAPED_UNICODE);
+                else $postData["auth_key"] = $_SESSION["pqcms-panel-auth_key"];
             }
 
             $postData["domain"] = $_SERVER["SERVER_NAME"];
 
             $key = Communicator::communicate(CommunicateURL::VERIFY_LICENSE,["generate_secure_key" => true]);
-            if($key["suc"] == 0)
+            if(is_null($key))
+                return ["suc" => 0, "desc" => "Nieznany błąd podczas komunikacji z serwerem PQCMS."];
+            else if($key["suc"] == 0)
                 return["suc" => 0, "desc" => "Błąd podczas generowania klucza zabezpieczającego: ".$key["desc"]];
             $postData["secure_key"] = $key["secure_key"];
         }
@@ -54,7 +57,12 @@ class Communicator
 
         $context = stream_context_create($options);
 
-        $response = file_get_contents($targetUrl, false, $context);
+        try {
+            @$response = file_get_contents($targetUrl, false, $context);
+        } catch (Exception $e) {
+            echo $e;
+            return null;
+        }
 
 //        var_dump($response);
 
