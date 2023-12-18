@@ -41,7 +41,7 @@ unset($_SESSION["pqcms-panel-login-error"]);
                 <li class="internalLink" internalLink="hr/" tabindex="4">
                     HR
                     <div class="nav-image">
-                        <img src="images/hr.svg" alt="HR">
+                        <img src="images/hr.svg" alt="Osoby">
                     </div>
                 </li>
                 <li class="internalLink" internalLink="logs/" tabindex="5">
@@ -53,16 +53,32 @@ unset($_SESSION["pqcms-panel-login-error"]);
                 <li class="internalLink" internalLink="settings/" tabindex="6">
                     Ustawienia
                     <div class="nav-image">
-                        <img src="images/settings.svg" alt="Logi">
+                        <img src="images/settings.svg" alt="Zębatka">
+                    </div>
+                </li>
+                <li class="internalLink" internalLink="user/" tabindex="7">
+                    Twoje dane
+                    <div class="nav-image">
+                        <img src="images/user.svg" alt="Użytkownik">
                     </div>
                 </li>
             </ul>
-            <a href="logout/" id="logout">
-                Wyloguj się
-                <div class="nav-image">
-                    <img src="images/logout.svg" alt="logout">
+            <div>
+                <a href="logout/" id="logout">
+                    Wyloguj się
+                    <div class="nav-image">
+                        <img src="images/logout.svg" alt="logout">
+                    </div>
+                </a>
+                <div style="display:flex; justify-content: space-between">
+                    <span id="pqcms-username">
+                        <?php echo $_SESSION["pqcms-panel-username"] ?>
+                    </span>
+                    <span id="pqcms-session-timer">
+                        (czas)
+                    </span>
                 </div>
-            </a>
+            </div>
         </nav>
         <div id="mainIframe">
             <div id="mainIframeOverlay">
