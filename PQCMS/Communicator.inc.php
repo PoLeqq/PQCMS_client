@@ -33,8 +33,7 @@ class Communicator
                     return json_encode(["suc" => 0, "desc" => "Akcja niemożliwa do spełnienia. Nie posiadasz aktywnej sesji!"],JSON_UNESCAPED_UNICODE);
             }
 
-            if($_SERVER["SERVER_NAME"] === "localhost") $postData["domain"] = "localhost.localhost";
-            else $postData["domain"] = $_SERVER["SERVER_NAME"];
+            $postData["domain"] = $_SERVER["SERVER_NAME"];
 
             $key = Communicator::communicate(CommunicateURL::VERIFY_LICENSE,["generate_secure_key" => true]);
             if($key["suc"] == 0)
