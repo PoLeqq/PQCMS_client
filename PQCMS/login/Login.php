@@ -20,7 +20,7 @@ if(empty($_POST["username"]) || empty($_POST["password"]))
 require_once(dirname(__DIR__) . "/Communicator.inc.php");
 $loginResult = Communicator::communicate(CommunicateURL::LOGIN_USER,["username" => $_POST["username"], "password" => $_POST["password"]]);
 
-if($loginResult["resp"] == 1)
+if($loginResult["suc"] == 1)
 {
     $_SESSION["pqcms-panel-username"] = $_POST["username"];
     $_SESSION["pqcms-panel-auth_key"] = $loginResult["auth_key"];
