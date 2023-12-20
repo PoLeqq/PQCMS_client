@@ -31,7 +31,7 @@
         <div class="col-2 disableSelect" id="hrNav">
             <ul>
                 <li class="expand">
-                    <div class="liManagable">
+                    <div class="liManageable">
                         <div class="col-10 d-flex align-items-center">
                             <div class="col-2 ulArrow" rotate="true">
                                 <img src="images/arrow.svg">
@@ -52,11 +52,24 @@
                         //                        foreach(getAllUsers("priority",false) as $user)
                         //                            echo "<li>$user->nickname</li>";
 
+                        require_once(dirname(__DIR__,2)."/Communicator.inc.php");
+                        $users = Communicator::communicate(CommunicateURL::GET_USER,["admin" => 0])["resp"];
+
+                        foreach($users as $user)
+                        {
+                            echo<<<HTML
+<li>
+    <b>${user["nickname"]}</b>
+    (${user["username"]})
+</li>
+HTML;
+                        }
+
                         ?>
                     </ul>
                 </li>
                 <li class="expand">
-                    <div class="liManagable">
+                    <div class="liManageable">
                         <div class="col-10 d-flex align-items-center">
                             <div class="col-2 ulArrow" rotate="true">
                                 <img src="images/arrow.svg" alt="arrow">
@@ -79,7 +92,7 @@
                     </ul>
                 </li>
                 <li class="expand">
-                    <div class="liManagable">
+                    <div class="liManageable">
                         <div class="col-10 d-flex align-items-center">
                             <div class="col-2 ulArrow" rotate="true">
                                 <img src="images/arrow.svg">
@@ -99,7 +112,7 @@
                 </li>
             </ul>
         </div>
-        <div class="row col-10">
+        <div class="row col-9">
             <div>Tutaj np. jak kliknie na jakąś rangę/usera to coś tam może mu edytować</div>
         </div>
     </div>
