@@ -59,11 +59,13 @@ function updateSystem(string $login, string $licenseKey): array
     return ["suc" => 0, "desc" => "Błędny format klucza licencyjnego!."];
 }
 
-function updateSettings(int $loginCount, int $tokenLifespan, bool $resetLoginCount, bool $resetTokenLifespan): array
+function updateSettings(int $loginCount, bool $resetLoginCount, int $loginSessionTime, bool $resetLoginSessionTime, int $tokenLifespan, bool $resetTokenLifespan): array
 {
     require_once(dirname(__DIR__,2)."/Communicator.inc.php");
     if($resetLoginCount) $posts["login_count_reset"] = true;
     else $posts["login_count"] = $loginCount;
+    if($resetLoginSessionTime) $posts["login_session_time_reset"] = true;
+    else $posts["login_session_time"] = $loginSessionTime;
     if($resetTokenLifespan) $posts["token_lifespan_reset"] = true;
     else $posts["token_lifespan"] = $tokenLifespan;
 
