@@ -9,9 +9,13 @@ if(time() >= $_SESSION["pqcms-panel-settings-settings-token-expire"])
 
 require_once("updateData.php");
 
-$response = updateSettings((int) $_POST["login_count"],(int) $_POST["token_lifespan"], isset($_POST["login_count_reset"]), isset($_POST["token_lifespan_reset"]));
+$response = updateSettings((int) $_POST["login_count"], isset($_POST["login_count_reset"]),
+    (int) $_POST["login_session_time"], isset($_POST["login_session_time_reset"]),
+    (int) $_POST["token_lifespan"], isset($_POST["token_lifespan_reset"]));
 
-endScript($response["resp"],$response["desc"]);
+//if(!isset($response["resp"]))
+//    endScript(false,$response["desc"]);
+endScript($response["suc"],$response["desc"]);
 
 function endScript(bool $suc, string $desc): void
 {
