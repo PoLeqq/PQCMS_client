@@ -137,8 +137,9 @@ setInterval(() =>
 function sessionValidator() {
     checkAuthKeyValidity().then(response =>
     {
-        if(response["suc"] === 0) window.location.href = `./scripts/InvalidateSession.php`;
-        else if(response["resp"]["valid"] == 0)
+        // Zakomentowany kod, ponieważ z nim czasem wylogowywało się randomowo 🤔
+        /*if(response["suc"] === 0) window.location.href = `./scripts/InvalidateSession.php`;
+        else*/ if(response["resp"]["valid"] == 0)
         {
             let data = response["resp"];
             window.location.href = `./scripts/InvalidateSession.php?outdated=${data["outdated"]}&invalidated=${data["invalidated"]}&not_secure=${data["not_secure"]}`;
