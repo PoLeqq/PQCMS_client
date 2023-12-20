@@ -30,7 +30,7 @@ class Communicator
             {
                 @session_start();
                 if(empty($_SESSION["pqcms-panel-auth_key"]))
-                    return json_encode(["suc" => 0, "desc" => "Akcja niemożliwa do spełnienia. Nie posiadasz aktywnej sesji!"],JSON_UNESCAPED_UNICODE);
+                    return ["suc" => 0, "desc" => "Akcja niemożliwa do spełnienia. Nie posiadasz aktywnej sesji!"];
                 else $postData["auth_key"] = $_SESSION["pqcms-panel-auth_key"];
             }
 
