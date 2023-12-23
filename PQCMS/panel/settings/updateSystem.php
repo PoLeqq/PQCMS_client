@@ -1,23 +1,26 @@
 <?php
 
-session_start();
+@session_start();
+require_once(dirname(__DIR__)."/scripts/notifications/NotificationManager.inc.php");
+$notificationManager = new NotificationManager("settings-updateSystem","Ustawienia - PQCMS");
+
 if(empty($_POST["token"]) || $_POST["token"] != $_SESSION["pqcms-panel-settings-system-token"])
-    endScript(false, "Walidacja tokenu nie powiodła się.",false);
+{
+    $notificationManager->addNotification("e","Walidacja tokenu nie powiodła się.");
+    header("location: ./");
+    die("Niepoprawne przekierowanie");
+}
 
 if(time() >= $_SESSION["pqcms-panel-settings-system-token-expire"])
-    endScript(false,"Token jest przestarzały. Przeładuj stronę!",false);
+{
+    $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
+    header("location: ./");
+    die("Niepoprawne przekierowanie");
+}
 
 require_once("updateData.php");
 $response = updateSystem($_POST["user"],$_POST["license_key"]);
 
-endScript($response["suc"],$response["desc"],!empty($response["license_key"]));
-
-function endScript(bool $suc, string $desc, bool $warn): void
-{
-    $_SESSION["pqcms-panel-settings-system-suc"] = $suc;
-    $_SESSION["pqcms-panel-settings-system-desc"] = $desc;
-    if($warn)
-        $_SESSION["pqcms-panel-settings-system-warn"] = "Niepoprawny format kluczu licencyjnego!";
-    header("location: ./");
-    die($_SESSION["pqcms-panel-settings-system-desc"]." Błędne przekierowanie.");
-}
+$notificationManager->addNotification($response["suc"] ? "s" : "e",$response["desc"]);
+header("location: ./");
+die("Niepoprawne przekierowanie");
