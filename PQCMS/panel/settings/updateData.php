@@ -29,7 +29,7 @@ function updateDatabase(string $host, string $user, string $password): array
         $error = true;
     }
 
-    return ["suc" => 1, "desc" => "Zmieniono dane do bazy danych", "conn_err" => $error];
+    return ["suc" => 1, "desc" => "Zmieniono dane do bazy danych!", "conn_err" => $error];
 }
 
 /**
@@ -53,10 +53,10 @@ function updateSystem(string $login, string $licenseKey): array
     {
         $pqcms->setLogin($login);
         $pqcms->saveData();
-        return ["suc" => 1, "desc" => "Zmieniono dane systemowe."];
+        return ["suc" => 1, "desc" => "Zmieniono dane systemowe!"];
     }
 
-    return ["suc" => 0, "desc" => "Błędny format klucza licencyjnego!."];
+    return ["suc" => 0, "desc" => "Błędny format klucza licencyjnego!"];
 }
 
 function updateSettings(int $loginCount, bool $resetLoginCount, int $loginSessionTime, bool $resetLoginSessionTime, int $tokenLifespan, bool $resetTokenLifespan): array
