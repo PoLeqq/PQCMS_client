@@ -1,13 +1,14 @@
 <?php
 require_once("../utils/database/Database.inc.php");
 $setupDatabase = (Database::setupDefaultDatabase());
-session_start();
+@session_start();
 if(empty($_SESSION["pqcms-panel-auth_key"]))
 {
     header("location: ../");
     die("Najpierw musisz się zalogować!");
 }
 unset($_SESSION["pqcms-panel-login-error"]);
+
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -17,9 +18,11 @@ unset($_SESSION["pqcms-panel-login-error"]);
     <title>PQCMS - Panel</title>
 
     <link rel="stylesheet" href="panel.css">
+    <link rel="stylesheet" href="notifications.css">
     <link rel="icon" href="../images/PQCMS.svg">
 
     <script src="panel.js" defer></script>
+    <script src="notifications.js" defer></script>
 </head>
 <body>
     <div id="main">
@@ -89,6 +92,9 @@ unset($_SESSION["pqcms-panel-login-error"]);
 
         <div id="background"></div>
     </div>
+
+    <div id="pqcms-notifications"></div>
+
     <footer>
         PQCMS &copy Wszelkie prawa zastrzeżone.
         <a class="d-block" href="http://localhost/pqcms/kontakt/">Kontakt z administratorem</a>

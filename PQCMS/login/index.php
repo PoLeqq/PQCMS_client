@@ -4,7 +4,7 @@
 //    $login = new JSONLogin();
 //    $_SESSION["loginAmount"] = $login->getAttempts();
 
-session_start();
+@session_start();
 if(!empty($_SESSION["pqcms-panel-auth_key"]))
 {
     header("location: ../panel");

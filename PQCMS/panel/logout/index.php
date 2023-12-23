@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+@session_start();
 if(empty($_SESSION["pqcms-panel-username"]) || empty($_SESSION["pqcms-panel-auth_key"]))
 {
     header("location: ../");
@@ -10,6 +10,7 @@ if(empty($_SESSION["pqcms-panel-username"]) || empty($_SESSION["pqcms-panel-auth
 require_once(dirname(__DIR__,2)."/Communicator.inc.php");
 $logoutResponse = Communicator::communicate(CommunicateURL::LOGOUT_USER,["auth_key" => $_SESSION["pqcms-panel-auth_key"]]);
 
+unset($_SESSION["pqcms"]);
 foreach(array_keys($_SESSION) as $sessionKey)
     if(str_starts_with($sessionKey,"pqcms-"))
         unset($_SESSION[$sessionKey]);

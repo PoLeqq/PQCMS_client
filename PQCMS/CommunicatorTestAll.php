@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+@session_start();
 
 require_once("Communicator.inc.php");
 
@@ -37,7 +37,7 @@ require_once("Communicator.inc.php");
 printCommunicate("VERIFY_LICENSE",null,CommunicateURL::VERIFY_LICENSE);
 //    printCommunicate("GET_SERVER_VERSION",null,Communicator::communicate(CommunicateURL::GET_SERVER_VERSION));
 
-printCommunicate("LOGIN_USER",["username" => "userr123", "password" => "userr123"],CommunicateURL::LOGIN_USER);
+//printCommunicate("LOGIN_USER",["username" => "userr123", "password" => "userr123"],CommunicateURL::LOGIN_USER);
 
 printCommunicate("GET_SERVER_VERSION",["complex" => true],CommunicateURL::GET_SERVER_VERSION);
 
@@ -55,7 +55,9 @@ printCommunicate("HAS_PERMISSION",
 
 printCommunicate("GET_SETTINGS",null,CommunicateURL::GET_SETTINGS);
 
-printCommunicate("LOGOUT_USER",null,CommunicateURL::LOGOUT_USER);
+printCommunicate("UPDATE_SETTINGS", ["login_count" => 5, "login_session_time" => 1800, "token_lifespan" => 600],CommunicateURL::UPDATE_SETTINGS);
+
+//printCommunicate("LOGOUT_USER",null,CommunicateURL::LOGOUT_USER);
 
 
 

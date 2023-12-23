@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+@session_start();
 if(empty($_SESSION["pqcms-panel-username"]))
 {
     header("location: ../");
