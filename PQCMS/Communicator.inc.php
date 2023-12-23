@@ -11,7 +11,7 @@ class Communicator
      * @param array $postData dane, które zostaną przesłane metodą POST. (podczas VERIFY_LICENSE przesłać pustą)
      * @return mixed|null zwraca return (json) z danego APIka (lub null, gdy połączenie nie powiedzie się)
      */
-    public static function communicate(string $path, array $postData = []): mixed
+    public static function communicate(string $path, array $postData = []): ?array
     {
         if($path == CommunicateURL::VERIFY_LICENSE)
         {
@@ -57,12 +57,8 @@ class Communicator
 
         $context = stream_context_create($options);
 
-        try {
-            @$response = file_get_contents($targetUrl, false, $context);
-        } catch (Exception $e) {
-            echo $e;
-            return null;
-        }
+        try { @$response = file_get_contents($targetUrl, false, $context); }
+        catch(Exception $ignore) { return null; }
 
 //        var_dump($response);
 
