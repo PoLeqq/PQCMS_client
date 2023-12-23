@@ -58,7 +58,7 @@ class Communicator
         $context = stream_context_create($options);
 
         try { @$response = file_get_contents($targetUrl, false, $context); }
-        catch(Exception $ignore) { return null; }
+        catch(Exception) { return null; }
 
 //        var_dump($response);
 
