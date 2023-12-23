@@ -1,0 +1,53 @@
+#pqcms-notifications {
+    position: fixed;
+    bottom: 10vh;
+    right: 20px;
+    z-index: 999999;
+    overflow: hidden;
+}
+
+.pqcms-notification {
+    background-color: rgb(89, 89, 89);
+    color: white;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 10px;
+    width: clamp(300px,300px,300px);
+    display: flex;
+    gap: 10px;
+}
+
+.pqcms-notification-text {
+    width: calc(100% - 40px);
+}
+
+.pqcms-notification-image > img, .pqcms-notification-close {
+    width: 20px;
+}
+
+.pqcms-notification-close {
+    color: grey;
+}
+
+.pqcms-notification-close:hover {
+    color: white;
+    cursor: pointer;
+    user-select: none;
+}
+
+.pqcms-notification-title {
+    display: block;
+    font-weight: bold;
+}
+
+@keyframes notification-close {
+    from {
+        opacity: 1;
+        visibility: visible;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
