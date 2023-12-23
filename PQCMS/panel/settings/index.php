@@ -1,8 +1,3 @@
-<!-- <form method="post" action="updateData.php">
-    Domena: <input name="domain" placeholder="domena"> <input type="checkbox" name="domainNull">
-    <input type="submit">
-</form> -->
-
 <?php
 
 @session_start();
@@ -43,8 +38,23 @@ $websiteSettingsResponse = Communicator::communicate(CommunicateURL::GET_SETTING
 
     <link rel="stylesheet" href="../../bs5/css/bootstrap.min.css">
     <link rel="stylesheet" href="../default.css">
+
+    <style>
+        #form-run-overlay {
+            visibility: hidden;
+            opacity: 0;
+            transition: all .5s;
+            background-color: rgba(0,0,0,.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
 </head>
 <body>
+    <div id="form-run-overlay"></div>
     <div class="p-4">
         <div class="row col-12">
             <form method="POST" action="updateSystem.php" class="col-3 p-4">
@@ -62,29 +72,6 @@ $websiteSettingsResponse = Communicator::communicate(CommunicateURL::GET_SETTING
                     <input type="submit" name="submit" class="btn btn-primary my-4 rounded-0" value="Aktualizuj">
 
                 </fieldset>
-                <?php
-                if(isset($_SESSION["pqcms-panel-settings-system-suc"]) && isset($_SESSION["pqcms-panel-settings-system-desc"]))
-                {
-                    $classResult = ($_SESSION["pqcms-panel-settings-system-suc"]) ? "success" : "error";
-
-                    echo<<<END
-                    <span class="{$classResult}">
-                        {$_SESSION["pqcms-panel-settings-system-desc"]}
-                    </span>
-                    END;
-                    unset($_SESSION["pqcms-panel-settings-system-suc"]);
-                    unset($_SESSION["pqcms-panel-settings-system-desc"]);
-                }
-                if(!empty($_SESSION["pqcms-panel-settings-system-warn"]))
-                {
-                    echo<<<END
-                    <div class="warning">
-                        {$_SESSION["pqcms-panel-settings-system-warn"]}
-                    </div>
-                    END;
-                    unset($_SESSION["pqcms-panel-settings-system-warn"]);
-                }
-                ?>
             </form>
             <form method="POST" action="updateDatabase.php" class="col-3 p-4"> 
                 <fieldset class="d-flex flex-column justify-content-center align-items-start" >
@@ -104,39 +91,6 @@ $websiteSettingsResponse = Communicator::communicate(CommunicateURL::GET_SETTING
                     <input type="submit" name="submit" class="btn btn-primary my-4 rounded-0" value="Aktualizuj">
 
                 </fieldset>
-                <?php
-                if(isset($_SESSION["pqcms-panel-settings-database-suc"]) && isset($_SESSION["pqcms-panel-settings-database-desc"]))
-                {
-                    $classResult = ($_SESSION["pqcms-panel-settings-database-suc"]) ? "success" : "error";
-
-                    echo<<<END
-                    <span class="{$classResult}">
-                        {$_SESSION["pqcms-panel-settings-database-desc"]}
-                    </span>
-                    END;
-
-                    unset($_SESSION["pqcms-panel-settings-database-suc"]);
-                    unset($_SESSION["pqcms-panel-settings-database-desc"]);
-                }
-                if(!empty($_SESSION["pqcms-panel-settings-database-warn"]))
-                {
-                    echo<<<END
-                        <span class="warning">
-                            Ostatnia aktualizacja danych spowodowała utracenie połączenia z bazą danych!
-                        </span>
-                        END;
-                    unset($_SESSION["pqcms-panel-settings-database-warn"]);
-                }
-                ?>
-                <?php
-                require_once(dirname(__DIR__, 2)."/utils/database/Database.inc.php");
-                if(Database::getConnection() == null)
-                    echo<<<END
-                    <span class="error">
-                        Nie można połączyć z bazą danych! Upewnij się, że dane powyżej są prawidłowe!                            
-                    </span>    
-                    END;
-                ?>
             </form>
             <form method="POST" action="updateSettings.php" class="col-3 p-4">
                 <fieldset class="d-flex flex-column justify-content-center align-items-start" >
@@ -146,7 +100,12 @@ $websiteSettingsResponse = Communicator::communicate(CommunicateURL::GET_SETTING
                     if($websiteSettingsResponse["suc"] == 0)
                         echo<<<END
                         <div class="error">
-                            Brak połączenia z serwerem. Czy na pewno wpisane dane systemowe (Ustawienia -> PQCMS) są dobre?<br>
+                            <p>
+                                Brak połączenia z serwerem. Czy na pewno wpisane dane systemowe (Ustawienia -> PQCMS) są dobre?
+                            </p>
+                            <p>
+                                Jeśli uważasz, że problem jest po naszej stronie, skontaktuj się z adminsitratorem PQCMS!
+                            </p>
                             Opis: {$websiteSettingsResponse["desc"]}
                         </div>
                         END;
@@ -164,12 +123,21 @@ $websiteSettingsResponse = Communicator::communicate(CommunicateURL::GET_SETTING
                             Reset
                         </label>
     
-                        <label for="token_lifespan" class="mt-1">Żywotność tokenu CSRF</label>
-                        <i>Przez ile czasu token CSRF będzie ważny</i>
-                        <input type="text" name="token_lifespan" id="token_lifespan" class="my-2 rounded-0" placeholder="czas w sekundach" value="{$websiteSettingsResponse["resp"]["token_lifespan"]}" />
+                        <label for="login_session_time" class="mt-1">Sesja użytkownika</label>
+                        <i>Czas, przez jaki sesja użytkownika będzie ważna na serwerach PQCMS</i>
+                        <input type="number" name="login_session_time" id="login_session_time" class="my-2 rounded-0" placeholder="czas w sekundach" value="{$websiteSettingsResponse["resp"]["login_session_time"]}" />
     
                         <label>
-                            <input type="checkbox" name="token_lifespan_reset" class="my-2 rounded-0" placeholder="czas w sekundach" value="" />
+                            <input type="checkbox" name="login_session_time_reset" class="my-2 rounded-0"/>
+                            Reset
+                        </label>
+                        
+                        <label for="token_lifespan" class="mt-1">Żywotność tokenu CSRF</label>
+                        <i>Przez ile czasu token CSRF będzie ważny</i>
+                        <input type="number" name="token_lifespan" id="token_lifespan" class="my-2 rounded-0" placeholder="czas w sekundach" value="{$websiteSettingsResponse["resp"]["token_lifespan"]}" />
+    
+                        <label>
+                            <input type="checkbox" name="token_lifespan_reset" class="my-2 rounded-0"/>
                             Reset
                         </label>
     
@@ -177,21 +145,6 @@ $websiteSettingsResponse = Communicator::communicate(CommunicateURL::GET_SETTING
 END;
                     ?>
                 </fieldset>
-                <?php
-                if(isset($_SESSION["pqcms-panel-settings-settings-suc"]) && isset($_SESSION["pqcms-panel-settings-settings-desc"]))
-                {
-                    $classResult = ($_SESSION["pqcms-panel-settings-settings-suc"]) ? "success" : "error";
-
-                    echo<<<END
-                    <span class="{$classResult}">
-                        {$_SESSION["pqcms-panel-settings-settings-desc"]}
-                    </span>
-                    END;
-
-                    unset($_SESSION["pqcms-panel-settings-settings-suc"]);
-                    unset($_SESSION["pqcms-panel-settings-settings-desc"]);
-                }
-                ?>
             </form>
             <div class="col-3 p-4">
                 <h4>Aktualizacje</h4>
@@ -199,5 +152,17 @@ END;
             </div>
         </div>
     </div>
+
+    <script>
+        const formRunOverlay = document.querySelector("#form-run-overlay");
+
+        document.querySelectorAll("form > fieldset > input[type=submit]").forEach((e) =>
+        {
+            e.addEventListener("click", () => {
+               formRunOverlay.style.visibility = "visible";
+               formRunOverlay.style.opacity = "1";
+            });
+        });
+    </script>
 </body>
 </html>
