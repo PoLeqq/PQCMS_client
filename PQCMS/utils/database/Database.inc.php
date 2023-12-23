@@ -13,11 +13,19 @@ class Database
         try{
             $connect = mysqli_connect($db->getHost(), $db->getUser(), $db->getPassword());
         } catch(Exception) {
+            require_once(dirname(__DIR__,2)."/panel/scripts/notifications/NotificationManager.inc.php");
+            NotificationManager::addNewNotification("pqcms-databaseConnectionError","Baza danych","e",
+                "Brak połączenia z bazą danych! Sprawdź poprawność danych w ustawieniach!");
             return null;
         }
 
         if (mysqli_errno($connect) != 0)
+        {
+            require_once(dirname(__DIR__,2)."/panel/scripts/notifications/NotificationManager.inc.php");
+            NotificationManager::addNewNotification("pqcms-databaseConnectionError","Baza danych","e",
+                "Brak połączenia z bazą danych! Sprawdź poprawność danych w ustawieniach!");
             return null;
+        }
 
         // Stworzenie bazy danych, jeżeli nie istnieje
         $query = 'CREATE DATABASE IF NOT EXISTS ' . $db->getName();
