@@ -127,12 +127,8 @@ async function invalidateSession(data)
     });
 }
 
-
 setTimeout(sessionValidator,0);
-setInterval(() =>
-{
-    sessionValidator();
-},10000);
+setInterval(sessionValidator,10000);
 
 function sessionValidator() {
     checkAuthKeyValidity().then(response =>
