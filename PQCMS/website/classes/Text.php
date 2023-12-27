@@ -13,6 +13,8 @@ class Text
     {
         require_once(dirname(__DIR__,2)."/utils/database/Database.inc.php");
         $conn = Database::getConnection();
+        if(is_null($conn))
+            return null;
         $query = $conn->query("SELECT value FROM pqcms_site_text WHERE id = $this->id");
 
         if($query->num_rows == 0) $resp = "";
@@ -38,6 +40,8 @@ class Text
     {
         require_once(dirname(__DIR__,2)."/utils/database/Database.inc.php");
         $conn = Database::getConnection();
+        if(is_null($conn))
+            return null;
         $query = $conn->query("SELECT id FROM pqcms_site_text WHERE name = '$name'");
 
         if($query->num_rows == 0) $resp = null;
