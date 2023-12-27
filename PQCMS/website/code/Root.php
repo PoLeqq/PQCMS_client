@@ -39,17 +39,16 @@ class Root extends Tab
             "projects_4info"
         ];
 
-        if($editable)
-        {
+        if ($editable) {
             @session_start();
-            if(empty($_SESSION["pqcms-panel-auth_key"]))
+            if (empty($_SESSION["pqcms-panel-auth_key"]))
                 return "Najpierw musisz się zalogować!";
 
             $perms = [];
-            foreach($texts as $text)
-                $perms[] = "pqcms.site.".$text;
+            foreach ($texts as $text)
+                $perms[] = "pqcms.site." . $text;
 
-            require_once(dirname(__DIR__,2)."/Communicator.inc.php");
+            require_once(dirname(__DIR__, 2) . "/Communicator.inc.php");
             $hasPermission = (Communicator::communicate(CommunicateURL::HAS_PERMISSION,
                 [
                     "auth_key" => $_SESSION["pqcms-panel-auth_key"],
@@ -60,30 +59,53 @@ class Root extends Tab
 
         $sourcePath = $this->getSourcePath($editable);
 
-        if($editable)
-            if($hasPermission["resp"] == 1)
-                foreach($texts as $text)
-                    $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text,true);
+        if ($editable)
+            if ($hasPermission["resp"] == 1)
+                foreach ($texts as $text) {
+                    $textObj = Text::unsafe_getTextByName($text);
+                    if(!is_null($textObj))
+                        $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, true);
+                    else {
+                        $siteTexts[$text] = "{PQCMS:[-]}";
+                    }
+                }
             else
-                foreach($texts as $text)
-                    $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text,true,!$hasPermission["perms"]["pqcms.site.".$text]);
+                foreach ($texts as $text) {
+                    $textObj = Text::unsafe_getTextByName($text);
+                    if(!is_null($textObj))
+                        $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["perms"]["pqcms.site." . $text]);
+                    else {
+
+                        $siteTexts[$text] = "{PQCMS:[-]}";
+                    }
+                }
         else
-            foreach($texts as $text)
-                $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text,false);
+            foreach($texts as $text) {
+                $textObj = Text::unsafe_getTextByName($text);
+                if(!is_null($textObj))
+                    $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, false);
+                else
+                    $siteTexts[$text] = "";
+            }
 
         $generatedJS = "";
         $panelCSS = "";
-        $editableFormStart = "";
-        $editableFormEnd = "";
+        $editableForm = ["",""];
         if($editable)
         {
-            $editableFormStart = "<form method='post' action='ChangeTabText.php' id='pqcms-editor-form'>";
-            $editableFormEnd = "</form>";
+            $editableForm[0] = "<form method='post' action='ChangeTabText.php' id='pqcms-editor-form'>";
+            $editableForm[1] = "</form>";
+            $jsonTexts = [];
             foreach($texts as $text)
-                $jsonTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, false);
+            {
+                $textObj = Text::unsafe_getTextByName($text);
+                if(!is_null($textObj))
+                    $jsonTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, false);
+                else
+                    $jsonTexts[$text] = "";
+            }
             $generatedJS = $this->generateJS(json_encode($jsonTexts,JSON_UNESCAPED_UNICODE));
             $panelCSS = "<link rel=\"stylesheet\" href=\"overlay.css\">";
-//            $editableFormStart = "<form method='post' action='ChangeTabText.php'>";
         }
 
         return <<<HTML
@@ -128,7 +150,7 @@ class Root extends Tab
 </head>
 <body>
 
-    ${editableFormStart}
+    ${editableForm[0]}
     <nav class="navbar navbar-expand-lg navbar-dark">
 
         <div class="container-fluid">
@@ -301,7 +323,7 @@ class Root extends Tab
             poleq.pl &copy Wszelkie prawa zastrzeżone
         </div>
     </footer>
-    ${editableFormEnd}
+    ${editableForm[1]}
 
     <!--<div class="website-info" onclick="closeinfo()">
         <h3>W budowie...</h3>
