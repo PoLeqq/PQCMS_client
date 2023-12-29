@@ -19,11 +19,11 @@ abstract class Tab
         $this->texts[] = "*";
     }
 
-    protected function generateJson($jsonTexts): string
+    protected function generateJS($jsonTexts): string
     {
         return<<<JS
 <script>
-
+    
     {
         const texts = ${jsonTexts};
         let changes = [];
@@ -38,19 +38,22 @@ abstract class Tab
         {
             const update = document.createElement("input");
             update.type = "submit";
-            
             update.id = "pqcms-saveButton";
             update.innerText = "Zapisz";
 
-            update.addEventListener("click",() => 
+            update.addEventListener("click",(event) => 
             {
+                event.preventDefault();
+                
                 let postChanges = [];
                 for(let key in changes)
                     if(changes[key])
-                        postChanges[key] = document.querySelector("#pqcms-editable-textarea-"+key).value;
-                // TODO do przesłania na serwer
-                console.log(postChanges);
+                    {
+                        const inputField = document.querySelector("#pqcms-editable-textarea-"+key);
+                        inputField.name = key;
+                    }
                 
+                document.querySelector("#pqcms-editor-form").submit();
             });
             
             return update;
