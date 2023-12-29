@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+@session_start();
 if(empty($_SESSION["pqcms-panel-auth_key"]))
 {
     header("location: ../");
@@ -59,9 +59,9 @@ if(empty($_SESSION["pqcms-panel-auth_key"]))
                     "i": "i",
                     "u": "u",
                     "s": "s",
-                    // "q": "quote",
+                    "q": "quote",
                     "l": "link=https://poleq.pl",
-                    "br": "br",
+                    // "br": "br",
                     "p": "p"
                 };
 
