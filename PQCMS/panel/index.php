@@ -1,13 +1,39 @@
 <?php
 require_once("../utils/database/Database.inc.php");
 $setupDatabase = (Database::setupDefaultDatabase());
-@session_start();
-if(empty($_SESSION["pqcms-panel-auth_key"]))
+
+require_once("scripts/server/TabUtils.inc.php");
+TabUtils::verifyUser("");
+
+require_once(dirname(__DIR__)."/Communicator.inc.php");
+$tabs = ["editor" => true,"hr" => true,"settings" => true, "user" => true];
+$tabsViewPermissions = Communicator::communicate(CommunicateURL::HAS_PERMISSION,["perms" => getTabsAsPerms($tabs)]);
+
+function getTabsAsPerms(array $tabs): array
 {
-    header("location: ../");
-    die("Najpierw musisz się zalogować!");
+    $perms = [];
+    foreach(array_keys($tabs) as $tab)
+        $perms[] = "pqcms.tabs.view.$tab";
+    return $perms;
 }
-unset($_SESSION["pqcms-panel-login-error"]);
+
+if(is_null($tabsViewPermissions))
+{
+    require_once("scripts/notifications/NotificationManager.inc.php");
+    NotificationManager::addNewNotification("pqcms-index-tabs-error","PQCMS","e",
+        "Wystąpił błąd podczas komunikacji z serwerami PQCMS! Skontaktuj się z administratorem PQCMS!");
+}
+else if($tabsViewPermissions["suc"] == 0)
+{
+    require_once("scripts/notifications/NotificationManager.inc.php");
+    NotificationManager::addNewNotification("pqcms-index-tabs-error","PQCMS","e",
+        "Wystąpił błąd podczas komunikacji z serwerami PQCMS! Opis: ".$tabsViewPermissions["desc"]);
+}
+else
+{
+    foreach($tabsViewPermissions["perms"] as $tab => $tabPermValue)
+        $tabs[$tab] = $tabPermValue;
+}
 
 ?>
 <!DOCTYPE html>
@@ -35,36 +61,54 @@ unset($_SESSION["pqcms-panel-login-error"]);
                         <img src="../images/PQCMS.svg" alt="logo">
                     </div>
                 </li>
-                <li class="internalLink" internalLink="site/" tabindex="2">
-                    Strona
-                    <div class="nav-image">
-                        <img src="images/edit_site.svg" id="edit_site" alt="Strona">
-                    </div>
-                </li>
-                <li class="internalLink" internalLink="hr/" tabindex="4">
-                    HR
-                    <div class="nav-image">
-                        <img src="images/hr.svg" alt="Osoby">
-                    </div>
-                </li>
-                <li class="internalLink" internalLink="logs/" tabindex="5">
-                    Logi
-                    <div class="nav-image">
-                        <img src="images/logs.svg" alt="Logi">
-                    </div>
-                </li>
-                <li class="internalLink" internalLink="settings/" tabindex="6">
-                    Ustawienia
-                    <div class="nav-image">
-                        <img src="images/settings.svg" alt="Zębatka">
-                    </div>
-                </li>
-                <li class="internalLink" internalLink="user/" tabindex="7">
-                    Twoje dane
-                    <div class="nav-image">
-                        <img src="images/user.svg" alt="Użytkownik">
-                    </div>
-                </li>
+                <?php
+                if($tabs["pqcms.tabs.view.editor"])
+                    echo<<<HTML
+<li class="internalLink" internalLink="site/" tabindex="2">
+    Strona
+    <div class="nav-image">
+        <img src="images/edit_site.svg" id="edit_site" alt="Strona">
+    </div>
+</li>
+HTML;
+                if($tabs["pqcms.tabs.view.hr"])
+                    echo<<<HTML
+<li class="internalLink" internalLink="hr/" tabindex="4">
+    HR
+    <div class="nav-image">
+        <img src="images/hr.svg" alt="Osoby">
+    </div>
+</li>
+HTML;
+                if($tabs["pqcms.tabs.view.hr"])
+                    echo<<<HTML
+                <!--                <li class="internalLink" internalLink="logs/" tabindex="5">-->
+<!--                    Logi-->
+<!--                    <div class="nav-image">-->
+<!--                        <img src="images/logs.svg" alt="Logi">-->
+<!--                    </div>-->
+<!--                </li>-->
+HTML;
+                if($tabs["pqcms.tabs.view.settings"])
+                    echo<<<HTML
+<li class="internalLink" internalLink="settings/" tabindex="6">
+    Ustawienia
+    <div class="nav-image">
+        <img src="images/settings.svg" alt="Zębatka">
+    </div>
+</li>
+HTML;
+                if($tabs["pqcms.tabs.view.user"])
+                    echo<<<HTML
+<li class="internalLink" internalLink="user/" tabindex="7">
+    Twoje dane
+    <div class="nav-image">
+        <img src="images/user.svg" alt="Użytkownik">
+    </div>
+</li>
+HTML;
+                ?>
+
             </ul>
             <div>
                 <a href="logout/" id="logout">
