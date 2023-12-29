@@ -69,8 +69,15 @@ HTML;
         return $pqCode->getHTML();
     }
 
-    public static function unsafe_getTextByName(string $name): ?Text
+    /**
+     * @param string $name nazwa tekstu. wymagania: tylko cyfry oraz litery a-z (małe)
+     * @return Text|null
+     */
+    public static function getTextByName(string $name): ?Text
     {
+        if(!preg_match_all('/[a-z0-9]/', $name))
+            return null;
+
         require_once(dirname(__DIR__,2)."/utils/database/Database.inc.php");
         $conn = Database::getConnection();
         if(is_null($conn))
