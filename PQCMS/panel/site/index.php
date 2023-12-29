@@ -1,11 +1,7 @@
 <?php
 
-@session_start();
-if(empty($_SESSION["pqcms-panel-username"]))
-{
-    header("location: ../");
-    die("Najpierw musisz się zalogować! Błędne przekierowanie.");
-}
+require_once(dirname(__DIR__)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUser("editor");
 
 ?>
 
