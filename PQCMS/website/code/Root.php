@@ -7,7 +7,28 @@ class Root extends Tab
 {
     public function __construct()
     {
-        parent::__construct("_root_","",/*new Text(1),new Text(2)*/);
+        parent::__construct("_root_","",
+            [
+                "header1",
+                "text1",
+                "header2",
+                "text2",
+                "section2header",
+                "section21",
+                "section22",
+                "section23",
+                "section24",
+                "projectsheader",
+                "projects1",
+                "projects1info",
+                "projects2",
+                "projects2info",
+                "projects3",
+                "projects3info",
+                "projects4",
+                "projects4info"
+            ]
+        );
     }
 
     protected function getSourcePath(bool $editable): string
@@ -18,72 +39,101 @@ class Root extends Tab
 
     public function generateHtml(bool $editable): string
     {
-        $texts = [
-            "header1",
-            "text1",
-            "header2",
-            "text2",
-            "section2_header",
-            "section2_1",
-            "section2_2",
-            "section2_3",
-            "section2_4",
-            "projects_header",
-            "projects_1",
-            "projects_1info",
-            "projects_2",
-            "projects_2info",
-            "projects_3",
-            "projects_3info",
-            "projects_4",
-            "projects_4info"
+        $groups = [
+            "*",
+            "main"
         ];
 
-        if ($editable) {
+        if($editable)
+        {
             @session_start();
-            if (empty($_SESSION["pqcms-panel-auth_key"]))
+            if(empty($_SESSION["pqcms-panel-auth_key"]))
                 return "Najpierw musisz się zalogować!";
 
             $perms = [];
-            foreach ($texts as $text)
-                $perms[] = "pqcms.site." . $text;
+            foreach ($this->texts as $text)
+                $perms[] = "pqcms.site.text.set.$text";
+            foreach ($groups as $group) {
+                $perms[] = "pqcms.site.group.set.$group";
+            }
 
             require_once(dirname(__DIR__, 2) . "/Communicator.inc.php");
-            $hasPermission = (Communicator::communicate(CommunicateURL::HAS_PERMISSION,
-                [
-                    "auth_key" => $_SESSION["pqcms-panel-auth_key"],
-                    "perms" => $perms
-                ]));
-//            var_dump($hasPermission);
+            $hasPermission = (Communicator::communicate(CommunicateURL::HAS_PERMISSION, ["perms" => $perms]));
+            $isPermissionSet = (Communicator::communicate(CommunicateURL::IS_PERMISSION_SET, ["perms" => $perms]));
+
+            echo "<pre style='margin-top: 100px;'>";
+            var_dump($hasPermission);
+            var_dump($isPermissionSet);
+            echo "</pre>";
+
+            if(is_null($hasPermission) || $hasPermission["suc"] == 0)
+            {
+                require_once(dirname(__DIR__,2)."/panel/scripts/notifications/NotificationManager.inc.php");
+                NotificationManager::addNewNotification("editor-permissions-communicator-error","Edytor","e",
+                    "Wystąpił błąd podczas komunikacji z serwerami PQCMS! (uprawnienia do tekstów mogą działać nieprawidłowo)");
+            }
+            else if(is_null($isPermissionSet) || $isPermissionSet["suc"] == 0)
+            {
+                require_once(dirname(__DIR__,2)."/panel/scripts/notifications/NotificationManager.inc.php");
+                NotificationManager::addNewNotification("editor-permissions-communicator-error","Edytor","e",
+                    "Wystąpił błąd podczas komunikacji z serwerami PQCMS! (uprawnienia do tekstów mogą działać nieprawidłowo)");
+            }
+
+            $hasPermission = $hasPermission["perms"];
+            $isPermissionSet = $isPermissionSet["perms"];
+
         }
 
         $sourcePath = $this->getSourcePath($editable);
 
         if ($editable)
-            if ($hasPermission["resp"] == 1)
-                foreach ($texts as $text) {
-                    $textObj = Text::unsafe_getTextByName($text);
-                    if(!is_null($textObj))
-                        $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, true);
-                    else {
-                        $siteTexts[$text] = "{PQCMS:[-]}";
-                    }
-                }
-            else
-                foreach ($texts as $text) {
-                    $textObj = Text::unsafe_getTextByName($text);
-                    if(!is_null($textObj))
-                        $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["perms"]["pqcms.site." . $text]);
-                    else {
+            foreach ($this->texts as $text) {
+                $textObj = Text::getTextByName($text);
+//                if($textObj->getGroup() != -1)
+                if(!is_null($textObj)) {
+//                    pqcms.site.text.set.<id> - if isset
+//                    pqcms.site.group.set.<id> - if isset
+//                    pqcms.site.group.set.* - if isset
+//                    pqcms.site.text.set.<id> - value
 
-                        $siteTexts[$text] = "{PQCMS:[-]}";
+                    if($isPermissionSet["pqcms.site.text.set.$text"])
+                    {
+                        $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["pqcms.site.text.set.$text"]);
                     }
+                    else
+                    {
+                        $group = $textObj->getGroup();
+                        if(!is_null($group) && $group->doesExists())
+                        {
+                            if($isPermissionSet["pqcms.site.group.set.".$group->getName()])
+                                $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["pqcms.site.group.set.".$group->getName()]);
+                            else if($isPermissionSet["pqcms.site.group.set.*"])
+                                $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["pqcms.site.group.set.*"]);
+                            else
+                                $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["pqcms.site.text.set.*"]);
+                        }
+                        else
+                            $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["pqcms.site.text.set.*"]);
+                    }
+
+
+//                        if($isPermissionSet["pqcms.site.text.set.$text"]) {
+//                            $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["pqcms.site.text.set.$text"]);
+//                        }
+//                        else {
+////                        if($textObj->getGroup() !== -1)
+//                            $siteTexts[$text] = $textObj->generateHtml($text, true, !$hasPermission["pqcms.site.text.set.$text"]);
+//                        }
                 }
+                else {
+                    $siteTexts[$text] = "{PQCMS:[-]}";
+                }
+            }
         else
-            foreach($texts as $text) {
-                $textObj = Text::unsafe_getTextByName($text);
+            foreach($this->texts as $text) {
+                $textObj = Text::getTextByName($text);
                 if(!is_null($textObj))
-                    $siteTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, false);
+                    $siteTexts[$text] = Text::getTextByName($text)->generateHtml($text, false);
                 else
                     $siteTexts[$text] = "";
             }
@@ -96,11 +146,11 @@ class Root extends Tab
             $editableForm[0] = "<form method='post' action='ChangeTabText.php' id='pqcms-editor-form'>";
             $editableForm[1] = "</form>";
             $jsonTexts = [];
-            foreach($texts as $text)
+            foreach($this->texts as $text)
             {
-                $textObj = Text::unsafe_getTextByName($text);
+                $textObj = Text::getTextByName($text);
                 if(!is_null($textObj))
-                    $jsonTexts[$text] = Text::unsafe_getTextByName($text)->generateHtml($text, false);
+                    $jsonTexts[$text] = Text::getTextByName($text)->generateHtml($text, false);
                 else
                     $jsonTexts[$text] = "";
             }
@@ -205,14 +255,14 @@ class Root extends Tab
         </div>
         <hr class="hr-space" id="umiejetnosci">
         <div class="col-12 row container" id="specialty">
-            <h2 class="mt-2 mb-5 scroll600" style="margin-bottom: 100px!important;">${siteTexts["section2_header"]}</h2>
+            <h2 class="mt-2 mb-5 scroll600" style="margin-bottom: 100px!important;">${siteTexts["section2header"]}</h2>
             
             <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll800">
                 <div class="sp-img pl-5">
                     <img src="${sourcePath}img/web.png" width="40">
                 </div>
                 <div class="sp-desc">
-                    ${siteTexts["section2_1"]}
+                    ${siteTexts["section21"]}
                 </div>
             </div>
 
@@ -221,7 +271,7 @@ class Root extends Tab
                     <img src="${sourcePath}img/minecraft.svg" width="40">
                 </div>
                 <div class="sp-desc">
-                    ${siteTexts["section2_2"]}
+                    ${siteTexts["section22"]}
                 </div>
             </div>
             
@@ -230,7 +280,7 @@ class Root extends Tab
                     <img src="${sourcePath}img/discord.svg" width="40">
                 </div>
                 <div class="sp-desc">
-                    ${siteTexts["section2_3"]}
+                    ${siteTexts["section23"]}
                 </div>
             </div>
             
@@ -239,7 +289,7 @@ class Root extends Tab
                     <img src="${sourcePath}img/coding.png" width="40">
                 </div>
                 <div class="sp-desc">
-                    ${siteTexts["section2_4"]}
+                    ${siteTexts["section24"]}
                 </div>
             </div>
         </div>
@@ -250,40 +300,40 @@ class Root extends Tab
 
         <div class="purple-site p-5" id="projekty">
             <div class="scroll200">
-                <h1 id="projekty-header">${siteTexts["projects_header"]}</h1>
+                <h1 id="projekty-header">${siteTexts["projectsheader"]}</h1>
             </div>
 
             <div class="containter row p-lg-5">
                 <div class="col-12 col-lg-6 text-center">
                     <div class="pr-element m-3 p-2 my-5">
-                        <div class="scroll400"><h2>${siteTexts["projects_1"]}</h2></div>
+                        <div class="scroll400"><h2>${siteTexts["projects1"]}</h2></div>
                         <div class="scroll600">
-                            ${siteTexts["projects_1info"]}
+                            ${siteTexts["projects1info"]}
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6 text-center">
                     <div class="pr-element m-3 p-2 my-5">
-                        <div class="scroll800"><h2>${siteTexts["projects_2"]}</h2></div>
+                        <div class="scroll800"><h2>${siteTexts["projects2"]}</h2></div>
                         <div class="scroll1000">
-                            ${siteTexts["projects_2info"]}
+                            ${siteTexts["projects2info"]}
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-12 col-lg-6 text-center">
                     <div class="pr-element m-3 p-2 my-5">
-                        <div class="scroll1200"><h2>${siteTexts["projects_3"]}</h2></div>
+                        <div class="scroll1200"><h2>${siteTexts["projects3"]}</h2></div>
                         <div class="scroll1400">
-                            ${siteTexts["projects_3info"]}
+                            ${siteTexts["projects3info"]}
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6 text-center">
                     <div class="pr-element m-3 p-2 my-5">
-                        <div class="scroll1600"><h2>${siteTexts["projects_4"]}</h2></div>
+                        <div class="scroll1600"><h2>${siteTexts["projects4"]}</h2></div>
                         <div class="scroll1800">
-                            ${siteTexts["projects_4info"]}
+                            ${siteTexts["projects4info"]}
                         </div>
                     </div>
                 </div>
