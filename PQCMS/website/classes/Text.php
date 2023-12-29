@@ -49,10 +49,24 @@ class Text
      * @param bool $editable czy edytowalny
      * @return string wygenerowany kod HTML tekstu
      */
-    public function generateHtml(string $elementId, bool $editable): string
+    public function generateHtml(string $elementId, bool $editable, bool $disabled = false): string
     {
-        if($editable) return "<textarea id='pqcms-editable-textarea-$elementId' name='$elementId' style='width: 100%' class='pqcms-editable-textarea'>".$this->getCode()."</textarea>";
-        return $this->getCode();
+        $disabled = $disabled ? "disabled" : "";
+        $code = $this->getCode();
+        if($editable) return<<<HTML
+<div class="pqcms-editable-div" style="">
+    <div style="border: 1px solid black; display:flex; justify-content:center; align-items:center; background-color: rgba(0,0,0,.2); font-weight: bold; border-radius: 3px">
+        $elementId
+    </div>
+    <textarea ${disabled} id='pqcms-editable-textarea-$elementId' data-name='$elementId' style='box-sizing: border-box; width: 100%; margin-bottom: -7px' class='pqcms-editable-textarea'>$code</textarea>
+</div>
+HTML;
+
+        if(is_null($code))
+            return "";
+        require_once("PQCode.php");
+        $pqCode = new PQCode($code);
+        return $pqCode->getHTML();
     }
 
     public static function unsafe_getTextByName(string $name): ?Text
