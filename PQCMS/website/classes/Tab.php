@@ -4,20 +4,19 @@ abstract class Tab
 {
     protected string $name;
     protected string $path;
-//    protected array $texts;
+    protected array $texts;
 
     /**
      * @param string $name
      * @param string $path
 //     * @param array $texts
      */
-    public function __construct(string $name, string $path/*, ...$texts*/)
+    public function __construct(string $name, string $path, array $texts = [])
     {
         $this->name = $name;
         $this->path = $path;
-
-//        foreach ($texts as $text)
-//            $this->texts[] = $text;
+        $this->texts = $texts;
+        $this->texts[] = "*";
     }
 
     protected function generateJson($jsonTexts): string
