@@ -19,6 +19,7 @@ abstract class Tab
         $this->texts[] = "*";
     }
 
+//    todo może do pliku i po prostu odczyt z pliku??
     protected function generateJS($jsonTexts): string
     {
         return<<<JS

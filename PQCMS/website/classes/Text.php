@@ -9,6 +9,25 @@ class Text
         $this->id = $id;
     }
 
+    public function getGroup(): ?Group {
+        require_once(dirname(__DIR__,2)."/utils/database/Database.inc.php");
+        $conn = Database::getConnection();
+        if(is_null($conn))
+            return null;
+        $query = $conn->query("SELECT group_id FROM pqcms_site_text WHERE id = $this->id");
+
+        if($query->num_rows == 0) $resp = null;
+        else $resp = (int) $query->fetch_row()[0];
+
+        $query->close();
+        $conn->close();
+
+        require_once "Group.php";
+        if(!is_null($resp))
+            return new Group($resp);
+        return null;
+    }
+
     public function getCode(): ?string
     {
         require_once(dirname(__DIR__,2)."/utils/database/Database.inc.php");
