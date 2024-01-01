@@ -94,6 +94,7 @@ class CommunicateURL
     public const LOGOUT_USER = "website/auth/LogoutUser.php";
     public const IS_VALID_AUTH_KEY = "website/auth/IsValidAuthKey.php";
     public const HAS_PERMISSION = "website/perms/HasPermission.php";
+    public const IS_PERMISSION_SET = "website/perms/IsPermissionSet.php";
     public const GET_SETTINGS = "website/settings/GetSettings.php";
     public const UPDATE_SETTINGS = "website/settings/UpdateSettings.php";
 
