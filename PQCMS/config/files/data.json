@@ -2,7 +2,8 @@
     "database": {
         "host": "localhost",
         "user": "root",
-        "password": ""
+        "password": "",
+        "name": "pqcms"
     },
     "pqcms": {
         "version": "dev-1.0.0",

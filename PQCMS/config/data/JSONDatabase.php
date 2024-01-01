@@ -68,6 +68,16 @@ class JSONDatabase extends JSONObject
      */
     function getName(): string
     {
-        return "pqcms";
+        return $this->getObject("name");
+//        return "pqcms";
+    }
+
+    /**
+     * Zmienia hasło DB
+     * UWAGA!!! Aby zapisać do pliku, trzeba użyć funkcji saveData()
+     */
+    function setName($name): void
+    {
+        $this->setObject("name",$name);
     }
 }
