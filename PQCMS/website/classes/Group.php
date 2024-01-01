@@ -9,6 +9,10 @@ class Group
         $this->id = $id;
     }
 
+    public function getId(): int {
+        return $this->id;
+    }
+
     public function doesExists(): ?bool
     {
         require_once(dirname(__DIR__,2)."/utils/database/Database.inc.php");
