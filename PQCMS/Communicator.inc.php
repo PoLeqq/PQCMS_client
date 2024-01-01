@@ -9,9 +9,9 @@ class Communicator
      *
      * @param string $path ścieżka linku do API (Najlepiej skorzystać z CommunicateURL)
      * @param array $postData dane, które zostaną przesłane metodą POST. (podczas VERIFY_LICENSE przesłać pustą)
-     * @return mixed|null zwraca return (json) z danego APIka (lub null, gdy połączenie nie powiedzie się)
+     * @return mixed zwraca return (json) z danego APIka (lub array z kluczami "suc" i "desc", gdy połączenie nie powiedzie się)
      */
-    public static function communicate(string $path, array $postData = []): ?array
+    public static function communicate(string $path, array $postData = []): array
     {
 //        $ch = curl_init();
 //
@@ -49,9 +49,7 @@ class Communicator
             $postData["domain"] = $_SERVER["SERVER_NAME"];
 
             $key = Communicator::communicate(CommunicateURL::VERIFY_LICENSE,["generate_secure_key" => true]);
-            if(is_null($key))
-                return ["suc" => 0, "desc" => "Nieznany błąd podczas komunikacji z serwerem PQCMS."];
-            else if($key["suc"] == 0)
+            if($key["suc"] == 0)
                 return["suc" => 0, "desc" => "Błąd podczas generowania klucza zabezpieczającego: ".$key["desc"]];
             $postData["secure_key"] = $key["secure_key"];
         }
@@ -70,12 +68,17 @@ class Communicator
         $context = stream_context_create($options);
 
         try { @$response = file_get_contents($targetUrl, false, $context); }
-        catch(Exception) { return null; }
+        catch(Exception)
+        {
+            return ["suc" => 0, "desc" => "Nieznany błąd podczas komunikacji z serwerami PQCMS. Skontaktuj się z administratorem PQCMS!"];
+        }
 
 //        var_dump($response);
 
-        if($response === false) return null;
-        else return json_decode($response,true);
+        if($response === false)
+            return ["suc" => 0, "desc" => "Błąd funkcji file_get_contents podczas komunikacji z serwerami PQCMS. Skontaktuj się z administratorem PQCMS!"];
+        else
+            return json_decode($response,true);
     }
 }
 
