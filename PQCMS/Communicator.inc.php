@@ -93,11 +93,15 @@ class CommunicateURL
     public const DOES_ADMIN_EXISTS = "website/hr/admin/DoesAdminExists.php";
     public const ADD_USER = "website/hr/user/AddUser.php";
     public const GET_USER = "website/hr/user/GetUser.php";
+    public const ADD_RANK = "website/hr/rank/AddRank.php";
+    public const GET_RANK = "website/hr/rank/GetRank.php";
     public const LOGIN_USER = "website/auth/LoginUser.php";
     public const LOGOUT_USER = "website/auth/LogoutUser.php";
+    public const GET_LICENSE_EXPIRATION = "website/data/GetLicenseExpiration.php";
     public const IS_VALID_AUTH_KEY = "website/auth/IsValidAuthKey.php";
     public const HAS_PERMISSION = "website/perms/HasPermission.php";
     public const IS_PERMISSION_SET = "website/perms/IsPermissionSet.php";
+    public const GET_PERMS = "website/perms/GetPerms.php";
     public const GET_SETTINGS = "website/settings/GetSettings.php";
     public const UPDATE_SETTINGS = "website/settings/UpdateSettings.php";
 
