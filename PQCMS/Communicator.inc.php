@@ -78,7 +78,10 @@ class Communicator
         if($response === false)
             return ["suc" => 0, "desc" => "Błąd funkcji file_get_contents podczas komunikacji z serwerami PQCMS. Skontaktuj się z administratorem PQCMS!"];
         else
-            return json_decode($response,true);
+        {
+            $ret = json_decode($response,true);
+            return is_null($ret) ? ["suc" => 0, "desc" => "Otrzymano niepoprawną odpowiedź!", "debug_response" => $response] : $ret;
+        }
     }
 }
 
