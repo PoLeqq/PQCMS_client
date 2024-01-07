@@ -12,6 +12,7 @@ class Database
         $db = new JSONDatabase();
         try{
             $connect = mysqli_connect($db->getHost(), $db->getUser(), $db->getPassword());
+            $connect->set_charset("utf8mb4");
         } catch(Exception) {
             require_once(dirname(__DIR__,2)."/panel/scripts/notifications/NotificationManager.inc.php");
             NotificationManager::addNewNotification("pqcms-databaseConnectionError","Baza danych","e",
