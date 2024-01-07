@@ -58,7 +58,7 @@ if(!empty($_SESSION["pqcms-panel-auth_key"]))
 
                 <label class="mt-3" for="password">Hasło</label>
                 <div class="d-flex w-75 justify-content-center align-items-center">
-                    <input type="password" id="password" name="password" class="form-control-lg my-2 rounded-0" placeholder="hasło" value="<?php echo @$_POST['password'];?>" />
+                    <input type="password" id="password" name="password" class="form-control-lg my-2 rounded-0" placeholder="hasło" autocomplete="current-password" value="<?php echo @$_POST['password'];?>" />
                     <img id="showPassword" class="showPassword hidePassword" src="../images/showPassword.svg" alt="oko" tabindex="0">
                 </div>
 
