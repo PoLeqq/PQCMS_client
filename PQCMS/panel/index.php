@@ -3,10 +3,10 @@ require_once("../utils/database/Database.inc.php");
 $setupDatabase = (Database::setupDefaultDatabase());
 
 require_once("scripts/server/TabUtils.inc.php");
-TabUtils::verifyUser("");
+TabUtils::verifyUser();
 
 require_once(dirname(__DIR__)."/Communicator.inc.php");
-$tabs = ["editor" => true,"hr" => true,"settings" => true, "user" => true];
+$tabs = ["editor" => false,"hr" => false,"settings" => false, "user" => false];
 $tabsViewPermissions = Communicator::communicate(CommunicateURL::HAS_PERMISSION,["perms" => getTabsAsPerms($tabs)]);
 
 function getTabsAsPerms(array $tabs): array
@@ -17,17 +17,13 @@ function getTabsAsPerms(array $tabs): array
     return $perms;
 }
 
-if(is_null($tabsViewPermissions))
-{
-    require_once("scripts/notifications/NotificationManager.inc.php");
-    NotificationManager::addNewNotification("pqcms-index-tabs-error","PQCMS","e",
-        "Wystąpił błąd podczas komunikacji z serwerami PQCMS! Skontaktuj się z administratorem PQCMS!");
-}
-else if($tabsViewPermissions["suc"] == 0)
+if($tabsViewPermissions["suc"] == 0)
 {
     require_once("scripts/notifications/NotificationManager.inc.php");
     NotificationManager::addNewNotification("pqcms-index-tabs-error","PQCMS","e",
         "Wystąpił błąd podczas komunikacji z serwerami PQCMS! Opis: ".$tabsViewPermissions["desc"]);
+    foreach(getTabsAsPerms($tabs) as $tab)
+        $tabs[$tab] = false;
 }
 else
 {
