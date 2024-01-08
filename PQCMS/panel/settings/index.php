@@ -1,11 +1,8 @@
 <?php
 
-@session_start();
-if(empty($_SESSION["pqcms-panel-username"]))
-{
-    header("location: ../");
-    die("Najpierw musisz się zalogować! Błędne przekierowanie.");
-}
+// Sprawdzenie, czy user posiada permisje do strony
+require_once(dirname(__DIR__)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUser("settings");
 
 require_once(dirname(__DIR__, 2) . "/config/data/JSONDatabase.php");
 require_once(dirname(__DIR__, 2) . "/config/data/JSONPQCMS.php");
