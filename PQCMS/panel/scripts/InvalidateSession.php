@@ -11,11 +11,11 @@ if(empty($_SESSION["pqcms-panel-auth_key"]))
 //    die("Niepoprawne dane. Powodem może być niespójność między plikami lub błędne przekierowanie.");
 
 if($_GET["not_secure"] == 1)
-    $_SESSION["pqcms-panel-login-error"] = "Twoja sesja została unieważniona, ponieważ przesłane dane nie były bezpieczne!";
+    $_SESSION["pqcms-panel-login-error"] = "Twoja sesja została unieważniona, ponieważ przesłane dane nie były bezpieczne! (niepoprawny \"auth_key\")";
 else if($_GET["invalidated"] == 1)
     $_SESSION["pqcms-panel-login-error"] = "Twoja sesja została unieważniona przez administratora!";
 else if($_GET["outdated"] == 1)
-    $_SESSION["pqcms-panel-login-error"] = "Twoja sesja przedawniła się!";
+    $_SESSION["pqcms-panel-login-error"] = "Twoja sesja wygasła!";
 else
     $_SESSION["pqcms-panel-login-error"] = "Twoja sesja została unieważniona z nieznanego powodu!";
 
