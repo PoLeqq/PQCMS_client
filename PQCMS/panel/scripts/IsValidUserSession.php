@@ -7,4 +7,4 @@ if(empty($_SESSION["pqcms-panel-auth_key"]))
     die(json_encode(["suc" => 0, "desc" => "Najpierw się zaloguj!"],JSON_UNESCAPED_UNICODE));
 
 require_once(dirname(__DIR__,2)."/Communicator.inc.php");
-die(json_encode(Communicator::communicate(CommunicateURL::IS_VALID_AUTH_KEY,["auth_key" => $_SESSION["pqcms-panel-auth_key"]]),JSON_UNESCAPED_UNICODE));
+die(json_encode(Communicator::communicate(CommunicateURL::IS_VALID_AUTH_KEY),JSON_UNESCAPED_UNICODE));
