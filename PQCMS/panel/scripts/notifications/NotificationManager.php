@@ -15,10 +15,16 @@ switch($_GET["action"])
         if(empty($_GET["text"]))
             die(json_encode(["suc" => 0, "desc" => "Nie podano tekstu!"],JSON_UNESCAPED_UNICODE));
 
-        $_SESSION["pqcms"]["panel"]["notifications"][$_GET["name"]]["text"] = $_GET["text"];
+        $_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]["text"] = $_GET["text"];
 
         if(isset($_GET["type"]))
-            $_SESSION["pqcms"]["panel"]["notifications"][$_GET["name"]]["type"] = $_GET["type"];
+            $_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]["type"] = $_GET["type"];
+
+        if(isset($_GET["title"]))
+            $_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]["type"] = $_GET["title"];
+        else
+            $_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]["type"] = $_GET["id"];
+
         break;
     }
     case "d": {
