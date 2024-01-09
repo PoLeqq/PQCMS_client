@@ -34,6 +34,7 @@ textarea[disabled] {
     color: #808080;
     border: 1px solid #ccc;
     opacity: 0.7;
+    resize: none;
 }
 
 textarea[disabled]:hover {
