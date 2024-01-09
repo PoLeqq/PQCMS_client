@@ -32,9 +32,10 @@ function closeNotification(notification)
 
 
 // Show notifications
-
-setTimeout(updateNotifications,0);
-setInterval(updateNotifications,3000);
+document.addEventListener("load",() => {
+    setTimeout(updateNotifications,0);
+    setInterval(updateNotifications,3000);
+})
 
 function updateNotifications()
 {
