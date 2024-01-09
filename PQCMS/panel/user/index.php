@@ -1,11 +1,8 @@
 <?php
 
-@session_start();
-if(empty($_SESSION["pqcms-panel-auth_key"]))
-{
-    header("location: ../");
-    die("Najpierw musisz się zalogować! Błędne przekierowanie.");
-}
+// Sprawdzenie, czy user posiada permisje do strony
+require_once(dirname(__DIR__)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUser("hr");
 
 require_once(dirname(__DIR__,2)."/Communicator.inc.php");
 $user = Communicator::communicate(CommunicateURL::GET_USER,["username" => $_SESSION["pqcms-panel-username"]])["resp"];
