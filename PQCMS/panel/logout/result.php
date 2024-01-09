@@ -36,6 +36,7 @@ if(empty($_SESSION["pqcms-logged_out"]))
             unset($_SESSION["pqcms-logged_out"]);
             ?>
             <a class="d-block mt-2" href="../../../">Powrót do Twojej strony</a>
+            <a class="d-block mt-2" href="../../login">Zaloguj się ponownie</a>
         </div>
     </div>
 </body>
