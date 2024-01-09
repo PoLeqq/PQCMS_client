@@ -118,8 +118,12 @@ function checkAuthKeyValidity()
     });
 }
 
-setTimeout(sessionValidator,0);
-setInterval(sessionValidator,10000);
+
+document.addEventListener("load",() => {
+    setTimeout(sessionValidator,0);
+// setInterval(sessionValidator,10000);
+    setInterval(sessionValidator,2000);
+})
 
 function sessionValidator() {
     checkAuthKeyValidity().then(response =>
