@@ -118,25 +118,6 @@ function checkAuthKeyValidity()
     });
 }
 
-async function invalidateSession(data)
-{
-    return new Promise((resolve, reject) =>
-    {
-        fetch(`./scripts/InvalidateSession.php?outdated=${data["outdated"]}&invalidated=${data["invalidated"]}`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then((resp) => {
-                resolve(resp.text());
-            })
-            .catch((error) => {
-                reject(error);
-            })
-    });
-}
-
 setTimeout(sessionValidator,0);
 setInterval(sessionValidator,10000);
 
