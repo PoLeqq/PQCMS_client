@@ -36,3 +36,6 @@ textarea[disabled] {
     opacity: 0.7;
 }
 
+textarea[disabled]:hover {
+    cursor: not-allowed;
+}
