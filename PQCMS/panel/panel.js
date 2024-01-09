@@ -43,7 +43,17 @@ function updateMain(path)
 }
 
 iframe.addEventListener("load",() => {
-    iframeOverlay.style.opacity = "0";
+    const loginURL = window.location.protocol+"//"+window.location.hostname+"/pqcmsclient/pqcms/login/";
+    let iframeURL = null;
+    try {
+        iframeURL = iframe.contentWindow.location.href;
+    } catch(ignore) {}
+
+    if(iframeURL === loginURL)
+        // window.location.href = `./scripts/InvalidateSession.php?outdated=${data["outdated"]}&invalidated=${data["invalidated"]}&not_secure=${data["not_secure"]}`;
+        window.location.href = loginURL;
+    else
+    //     iframeOverlay.style.opacity = "0";
 
     setTimeout(() => {
         iframeOverlay.style.visibility = "hidden";
