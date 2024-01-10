@@ -192,6 +192,20 @@ HTML;
             </table>
         </div>
     </div>
-</form>
+    <script>
+        window.addEventListener('message', function(event) {
+            // Sprawdź, czy wiadomość pochodzi z prawidłowego źródła
+            <?php
+            require_once(dirname(__DIR__,2)."/config/data/JSONPQCMS.php");
+            $pqcms = new JSONPQCMS();
+            ?>
+            if (event.origin !== 'http://<?php echo $pqcms->getDomain() ?>' ||
+                event.origin !== "https://<?php echo $pqcms->getDomain() ?>") {
+                return;
+            }
+
+            let iframeListener = new IframeListener(event.data);
+        });
+    </script>
 </body>
 </html>
