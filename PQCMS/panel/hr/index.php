@@ -81,57 +81,114 @@ HTML;
     Wystąpił błąd podczas pobierania użytkowników: ${$usersResponse["desc"]}
 </span>
 HTML;
-                        }
-
-                        ?>
-                    </ul>
-                </li>
-                <li class="expand">
-                    <div class="liManageable">
-                        <div class="col-10 d-flex align-items-center">
-                            <div class="col-2 ulArrow" rotate="true">
-                                <img src="images/arrow.svg" alt="arrow">
-                            </div>
-                            <div class="ulText">
-                                Rangi
-                            </div>
-                        </div>
-                        <div class="col-2 ulPlus">
-                            <img class="overlayLink" overlayPath="./overlays/ranks/" src="images/plus.svg">
-                        </div>
-                    </div>
-                    <ul class="px-4 ulHideable">
-                    <?php
-                    //                        TODO Connector may change this code
-                        require_once("../../hr/Rank.php");
-//                            foreach(getAllRanksOrder("priority",false) as $rank)
-//                                echo "<li>$rank->name</li>";
-                    ?>
-                    </ul>
-                </li>
-                <li class="expand">
-                    <div class="liManageable">
-                        <div class="col-10 d-flex align-items-center">
-                            <div class="col-2 ulArrow" rotate="true">
-                                <img src="images/arrow.svg">
-                            </div>
-                            <div class="ulText">
-                                Permisje
-                            </div>
-                        </div>
-                        <div class="col-2 ulPlus">
-                            <img src="images/plus.svg">
-                        </div>
-                    </div>
-                    <ul class="px-4 ulHideable">
-                        <li>Informacje</li>
-                        <li>Domyślne</li>
-                    </ul>
-                </li>
-            </ul>
+                ?>
+                </tbody>
+            </table>
         </div>
-        <div class="row col-9">
-            <div>Tutaj np. jak kliknie na jakąś rangę/usera to coś tam może mu edytować</div>
+
+        <div class="col-4 main-section">
+            <div class="d-flex">
+                <div class="col-10 d-flex align-items-center">
+                    <h3>
+                        Rangi
+                    </h3>
+                </div>
+                <div class="col-2 addImage img-fluid">
+                    <img class="overlayLink" data-overlayPath="./overlays/adders/ranks/" src="images/plus.svg" alt="plus">
+                </div>
+            </div>
+            <i>ID - identyfikator</i><br/>
+            <i>Nazwa - wyświetlana nazwa</i><br/>
+            <i>P - priorytet</i>
+            <table class="px-4 my-3 col-12 data-table" id="ranks-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nazwa</th>
+                        <th>P</th>
+                        <th>Rodzic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+
+                $ranksResponse = Communicator::communicate(CommunicateURL::GET_RANK);
+                if($ranksResponse["suc"] == 1)
+                {
+                    foreach($ranksResponse["resp"] as $rank)
+                    {
+                        $parent = empty($rank["parent"]) ? "-" : $rank["parent"];
+                        echo<<<HTML
+<tr class="overlayLink" data-overlayPath="./overlays/editors/ranks/">
+    <td>${rank["name"]}</td>
+    <td>${rank["display_name"]}</td>
+    <td>${rank["priority"]}</td>
+    <td>${parent}</td>
+</tr>
+HTML;
+//    <pre>
+//        Permsy: ${perms}
+//    </pre>
+                    }
+                }
+                else
+                    echo<<<HTML
+<span style="color: red">
+Wystąpił błąd podczas pobierania rang! Opis: ${$usersResponse["desc"]}
+</span>
+HTML;
+
+                ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-4 main-section">
+            <div>
+                <div class="col-10 d-flex align-items-center">
+                    <h3>
+                        Permisje
+                    </h3>
+                </div>
+            </div>
+            <ul class="px-4">
+                <li>Informacje</li>
+                <li>Domyślne</li>
+            </ul>
+
+            <table class="px-4 my-3 col-12 data-table" id="perms-table">
+                <thead>
+                <tr>
+                    <th>Uprawnienia</th>
+                    <th>Opis</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+
+                $allPerms = Communicator::communicate(CommunicateURL::GET_PERMS);
+                if($allPerms["suc"] == 1)
+                {
+                    foreach($allPerms["resp"] as $perm)
+                    {
+                        echo<<<HTML
+<tr>
+    <td><pre>${perm["perm"]}</pre></td>
+    <td>${perm["description"]}</td>
+</tr>
+HTML;
+                    }
+                }
+                else
+                    echo<<<HTML
+<span style="color: red">
+Wystąpił błąd podczas pobierania rang! Opis: ${$usersResponse["desc"]}
+</span>
+HTML;
+
+                ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </form>
