@@ -4,7 +4,6 @@ export class Overlay
     overlayIframe
     overlayPath
     hidden
-
     constructor() {
         this.overlayDOM = document.querySelector("#overlay")
         this.overlayIframe = this.overlayDOM.querySelector("iframe")
@@ -16,9 +15,6 @@ export class Overlay
           {
             this.hideOverlay()
           }
-            // Kliknięto na overlay (nie na iframe)
-          else
-            console.log("iframe")
         }.bind(this));
     }
 
