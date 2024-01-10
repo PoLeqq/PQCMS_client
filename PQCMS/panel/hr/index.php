@@ -18,6 +18,7 @@ TabUtils::verifyUser("hr");
     <link rel="stylesheet" href="index.css">
 
     <script src="hr.js" type="module" defer></script>
+    <script src="IframeListener.js" type="module" defer></script>
 </head>
 <body>
     <div id="overlay">
