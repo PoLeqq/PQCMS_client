@@ -12,14 +12,14 @@ $pqcms = new JSONPQCMS();
 
 //    TODO zrobić, aby te dane pobierały się z Communicatora (czas tokenu)
 $tokenExpireTime = 600;
-$_SESSION["pqcms-panel-settings-system-token"] = bin2hex(random_bytes(64));
-$_SESSION["pqcms-panel-settings-system-token-expire"] = time() + $tokenExpireTime;
+$_SESSION["pqcms"]["panel"]["settings"]["system"]["token"]["value"] = bin2hex(random_bytes(64));
+$_SESSION["pqcms"]["panel"]["settings"]["system"]["token"]["expire"] = time() + $tokenExpireTime;
 
-$_SESSION["pqcms-panel-settings-database-token"] = bin2hex(random_bytes(64));
-$_SESSION["pqcms-panel-settings-database-token-expire"] = time() + $tokenExpireTime;
+$_SESSION["pqcms"]["panel"]["settings"]["database"]["token"]["value"] = bin2hex(random_bytes(64));
+$_SESSION["pqcms"]["panel"]["settings"]["database"]["token"]["expire"] = time() + $tokenExpireTime;
 
-$_SESSION["pqcms-panel-settings-settings-token"] = bin2hex(random_bytes(64));
-$_SESSION["pqcms-panel-settings-settings-token-expire"] = time() + $tokenExpireTime;
+$_SESSION["pqcms"]["panel"]["settings"]["settings"]["token"]["value"] = bin2hex(random_bytes(64));
+$_SESSION["pqcms"]["panel"]["settings"]["settings"]["token"]["expire"] = time() + $tokenExpireTime;
 
 //    Pobieranie ustawień z serwera
 require_once(dirname(__DIR__,2)."/Communicator.inc.php");

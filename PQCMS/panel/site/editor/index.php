@@ -1,7 +1,7 @@
 <?php
 
 @session_start();
-if(empty($_SESSION["pqcms-panel-auth_key"]))
+if(empty($_SESSION["pqcms"]["panel"]["auth_key"]))
 {
     header("location: ../");
     die("Najpierw musisz się zalogować! Błędne przekierowanie.");

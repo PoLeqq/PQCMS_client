@@ -1,6 +1,6 @@
 <?php
 @session_start();
-if(empty($_SESSION["pqcms-logged_out"]))
+if(empty($_SESSION["pqcms"]["logged_out"]))
 {
     header("location: ../");
     die("Niepoprawne przekierowanie.");
@@ -29,11 +29,8 @@ if(empty($_SESSION["pqcms-logged_out"]))
             </header>
 
             <?php
-            if($_SESSION["pqcms-logged_out"]["suc"])
-                echo $_SESSION["pqcms-logged_out"]["desc"];
-            else
-                echo $_SESSION["pqcms-logged_out"]["desc"];
-            unset($_SESSION["pqcms-logged_out"]);
+            echo $_SESSION["pqcms"]["logged_out"]["desc"];
+            unset($_SESSION["pqcms"]["logged_out"]);
             ?>
             <a class="d-block mt-2" href="../../../">Powrót do Twojej strony</a>
             <a class="d-block mt-2" href="../../login">Zaloguj się ponownie</a>

@@ -5,14 +5,14 @@ require_once(dirname(__DIR__,2)."/scripts/notifications/NotificationManager.inc.
 
 $notificationManager = new NotificationManager("settings-updateDatabase","Ustawienia - Baza danych");
 $notificationManagerError = new NotificationManager("settings-updateDatabase-perms","Ustawienia - Baza danych");
-if(empty($_POST["token"]) || $_POST["token"] != $_SESSION["pqcms-panel-settings-database-token"])
+if(empty($_POST["token"]) || $_POST["token"] != $_SESSION["pqcms"]["panel"]["settings"]["database"]["token"]["value"])
 {
     $notificationManager->addNotification("e","Walidacja tokenu nie powiodła się.");
     header("location: ../");
     die("Niepoprawne przekierowanie");
 }
 
-if(time() >= $_SESSION["pqcms-panel-settings-database-token-expire"])
+if(time() >= $_SESSION["pqcms"]["panel"]["settings"]["database"]["token"]["expire"])
 {
     $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
     header("location: ../");

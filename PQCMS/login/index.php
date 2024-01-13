@@ -5,7 +5,7 @@
 //    $_SESSION["loginAmount"] = $login->getAttempts();
 
 @session_start();
-if(!empty($_SESSION["pqcms-panel-auth_key"]))
+if(!empty($_SESSION["pqcms"]["panel"]["auth_key"]))
 {
     header("location: ../panel");
     die("Sesja logowania jest już aktywna!");
@@ -77,13 +77,13 @@ if(!empty($_SESSION["pqcms-panel-auth_key"]))
                 </div>
                END;
 
-            if(!empty($_SESSION["pqcms-panel-login-error"]))
+            if(!empty($_SESSION["pqcms"]["login"]["error"]))
                 echo<<<END
                 <div style="color: red">
-                    {$_SESSION["pqcms-panel-login-error"]}
+                    {$_SESSION["pqcms"]["login"]["error"]}
                 </div>
                 END;
-            unset($_SESSION["pqcms-panel-login-error"]);
+            unset($_SESSION["pqcms"]["login"]["error"]);
             ?>
         </form>
         

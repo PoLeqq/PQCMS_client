@@ -5,14 +5,14 @@ require_once(dirname(__DIR__,2)."/scripts/notifications/NotificationManager.inc.
 $notificationManager = new NotificationManager("settings-updatePQCMS","Ustawienia - PQCMS");
 $notificationManagerError = new NotificationManager("settings-updatePQCMS-perms","Ustawienia - PQCMS");
 
-if(empty($_POST["token"]) || $_POST["token"] != $_SESSION["pqcms-panel-settings-system-token"])
+if(empty($_POST["token"]) || $_POST["token"] != $_SESSION["pqcms"]["panel"]["settings"]["system"]["token"])
 {
     $notificationManager->addNotification("e","Walidacja tokenu nie powiodła się.");
     header("location: ../");
     die("Niepoprawne przekierowanie");
 }
 
-if(time() >= $_SESSION["pqcms-panel-settings-system-token-expire"])
+if(time() >= $_SESSION["pqcms"]["panel"]["settings"]["system"]["token"]["expire"])
 {
     $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
     header("location: ../");

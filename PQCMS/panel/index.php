@@ -115,7 +115,7 @@ HTML;
                 </a>
                 <div style="display:flex; justify-content: space-between">
                     <span id="pqcms-username">
-                        <?php echo $_SESSION["pqcms-panel-username"] ?>
+                        <?php echo $_SESSION["pqcms"]["panel"]["username"] ?>
                     </span>
                     <span id="pqcms-session-timer">
                         (czas)
