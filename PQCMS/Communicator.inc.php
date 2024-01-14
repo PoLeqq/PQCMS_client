@@ -127,6 +127,8 @@ class CommunicateURL
     public const DOES_ADMIN_EXISTS = "website/hr/admin/DoesAdminExists.php";
     public const ADD_USER = "website/hr/user/AddUser.php";
     public const GET_USER = "website/hr/user/GetUser.php";
+    public const DELETE_USER = "website/hr/user/DeleteUser.php";
+    public const INVALIDATE_SESSION = "website/hr/user/InvalidateSession.php";
     public const ADD_RANK = "website/hr/rank/AddRank.php";
     public const GET_RANK = "website/hr/rank/GetRank.php";
     public const LOGIN_USER = "website/auth/LoginUser.php";
