@@ -33,25 +33,44 @@ class Communicator
                 'domain' => $pqcms->getDomain(),
                 'login' => $pqcms->getLogin(),
                 'license_key' => $pqcms->getLicenseKey(),
-                'generate_secure_key' => $postData["generate_secure_key"] ?? null
             );
+        }
+        else if($path === CommunicateURL::LOGIN_USER && !empty($_SESSION["pqcms"]["panel"]["auth_key"]["value"]))
+        {
+            return ["suc" => 0, "desc" => "Komunikacja z serwerami PQCMS nie nastąpiła, ponieważ posiadasz już aktywną sesję!"];
         }
         else
         {
+            @session_start();
             if(!in_array($path,CommunicateURL::getUnrequiredLoginSession()))
             {
-                @session_start();
-                if(empty($_SESSION["pqcms-panel-auth_key"]))
+                if(empty($_SESSION["pqcms"]["panel"]["auth_key"]["value"]))
                     return ["suc" => 0, "desc" => "Akcja niemożliwa do spełnienia. Nie posiadasz aktywnej sesji!"];
-                else $postData["auth_key"] = $_SESSION["pqcms-panel-auth_key"];
+                else
+                {
+                    if(!isset($postData["auth_key"]))
+                        $postData["auth_key"] = $_SESSION["pqcms"]["panel"]["auth_key"]["value"];
+                }
             }
 
             $postData["domain"] = $_SERVER["SERVER_NAME"];
 
-            $key = Communicator::communicate(CommunicateURL::VERIFY_LICENSE,["generate_secure_key" => true]);
-            if($key["suc"] == 0)
-                return["suc" => 0, "desc" => "Błąd podczas generowania klucza zabezpieczającego: ".$key["desc"]];
-            $postData["secure_key"] = $key["secure_key"];
+
+            date_default_timezone_set("Europe/Warsaw");
+            if(empty($_SESSION["pqcms"]["secure_key"]) ||
+                empty($_SESSION["pqcms"]["secure_key"]["expiry_time"]) ||
+                $_SESSION["pqcms"]["secure_key"]["expiry_time"] < time())
+            {
+                $key = Communicator::communicate(CommunicateURL::VERIFY_LICENSE);
+                if($key["suc"] == 0)
+                    return["suc" => 0, "desc" => "Błąd podczas generowania klucza zabezpieczającego: ".$key["desc"]];
+                if(empty($key["secure_key"]))
+                    return ["suc" => 0, "desc" => "Serwer PQCMS nie zwrócił klucza zabezpieczającego. Trzeba odczekać 🤷‍"];
+
+                $_SESSION["pqcms"]["secure_key"]["value"] = $key["secure_key"]["value"];
+                $_SESSION["pqcms"]["secure_key"]["expiry_time"] = $key["secure_key"]["expire_time"];
+            }
+            $postData["secure_key"] = $_SESSION["pqcms"]["secure_key"]["value"];
         }
 
         $options = array(
@@ -59,7 +78,15 @@ class Communicator
                 'header'  => "Content-type: application/x-www-form-urlencoded\r\n" .
                     "Referer: https://${_SERVER["SERVER_NAME"]}\r\n",
                 'method'  => 'POST',
-                'content' => http_build_query($postData)
+//                'content' => http_build_query($postData,'','&')
+//                'content' => http_build_query($postData)
+                'content' => http_build_query(array_map(function ($value)
+                    {
+                        if(is_array($value) && empty($value))
+                            return '';
+                        else
+                            return $value;
+                    }, $postData))
             )
         );
 
