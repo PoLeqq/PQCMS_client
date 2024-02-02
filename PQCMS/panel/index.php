@@ -1,6 +1,14 @@
 <?php
 require_once("../utils/database/Database.inc.php");
-$setupDatabase = (Database::setupDefaultDatabase());
+$conn = Database::getConnection();
+if($conn)
+    $setupDatabase = (Database::setupDefaultDatabase($conn));
+else
+{
+    require_once(dirname(__DIR__)."/panel/scripts/notifications/NotificationManager.inc.php");
+    NotificationManager::addNewNotification("pqcms-databaseSetupError","Baza danych","e",
+        "Niepowodzenie! Nie połączono z bazą danych, przez co nie można jej skonfigurować!");
+}
 
 require_once("scripts/server/TabUtils.inc.php");
 TabUtils::verifyUser();

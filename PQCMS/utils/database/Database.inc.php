@@ -11,8 +11,9 @@ class Database
 
         $db = new JSONDatabase();
         try{
-            $connect = mysqli_connect($db->getHost(), $db->getUser(), $db->getPassword());
-            $connect->set_charset("utf8mb4");
+            @$connect = mysqli_connect($db->getHost(), $db->getUser(), $db->getPassword());
+            if($connect instanceof mysqli)
+                $connect->set_charset("utf8mb4");
         } catch(Exception) {
             require_once(dirname(__DIR__,2)."/panel/scripts/notifications/NotificationManager.inc.php");
             NotificationManager::addNewNotification("pqcms-databaseConnectionError","Baza danych","e",
@@ -20,20 +21,22 @@ class Database
             return null;
         }
 
-        if (mysqli_errno($connect) != 0)
+        if(!($connect instanceof mysqli) || (mysqli_errno($connect) !== 0))
         {
             require_once(dirname(__DIR__,2)."/panel/scripts/notifications/NotificationManager.inc.php");
             NotificationManager::addNewNotification("pqcms-databaseConnectionError","Baza danych","e",
                 "Brak połączenia z bazą danych! Sprawdź poprawność danych w ustawieniach!");
             return null;
         }
+        else
+        {
+            // Stworzenie bazy danych, jeżeli nie istnieje
+            $query = 'CREATE DATABASE IF NOT EXISTS ' . $db->getName();
+            mysqli_query($connect, $query);
 
-        // Stworzenie bazy danych, jeżeli nie istnieje
-        $query = 'CREATE DATABASE IF NOT EXISTS ' . $db->getName();
-        mysqli_query($connect, $query);
-
-        // Ustawienie bazy danych na poprawną
-        mysqli_select_db($connect, $db->getName());
+            // Ustawienie bazy danych na poprawną
+            mysqli_select_db($connect, $db->getName());
+        }
 
         return $connect;
     }
@@ -94,11 +97,8 @@ class Database
      * Funkcja pobiera wszystkie pliki .sql dołączone do utils/database/tables i je wykonuje.
      * @return array poprawność wykonania operacji z plików sql
      */
-    public static function setupDefaultDatabase(): array
+    public static function setupDefaultDatabase(mysqli $conn): array
     {
-        $conn = Database::getConnection();
-        if(!$conn) return [];
-
         $resp = [];
 
         $path = __DIR__."/tables/";
