@@ -25,6 +25,7 @@ if($loginResult["suc"] == 1)
     $_SESSION["pqcms"]["panel"]["username"] = $_POST["username"];
     $_SESSION["pqcms"]["panel"]["nickname"] = $loginResult["nickname"];
     $_SESSION["pqcms"]["panel"]["auth_key"] = $loginResult["auth_key"];
+    $_SESSION["pqcms"]["panel"]["pqcms_token"] = $loginResult["pqcms_token"];
 }
 // TODO po zmianie API dodać do błędu ilość pozostałych prób
 else
