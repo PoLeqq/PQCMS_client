@@ -1,3 +1,9 @@
+<?php
+
+require_once("../scripts/server/TabUtils.inc.php");
+TabUtils::verifyUser();
+
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -18,6 +24,6 @@
     </style>
 </head>
 <body>
-    <iframe src="http://localhost/pqcms/server/client/system/homepage.php"></iframe>
+    <iframe src="https://poleq.pl/server/client/system/index.php?token=<?php echo $_SESSION["pqcms"]["panel"]["pqcms_token"] ?>"></iframe>
 </body>
 </html>
