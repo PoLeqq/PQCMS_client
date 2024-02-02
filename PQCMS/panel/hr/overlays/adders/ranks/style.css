@@ -1,0 +1,9 @@
+.formAside {
+    font-size: .7em;
+}
+
+table td, table th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+}

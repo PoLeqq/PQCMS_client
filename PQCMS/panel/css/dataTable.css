@@ -1,0 +1,54 @@
+.data-table {
+    color: black;
+}
+
+.data-table td,
+.data-table th {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.data-table > thead > tr {
+    background-color: #f5f5f5;
+}
+
+.data-table > tbody > tr:nth-child(even) {
+    background-color: #e5e5e5;
+}
+
+.data-table > tbody > tr:nth-child(odd) {
+    background-color: #b9b9b9;
+}
+
+.data-table > tbody > tr:hover {
+    background-color: #919191!important;
+}
+
+.data-table > tbody > tr > td > input[type=checkbox] {
+    width: 15px;
+    height: 15px;
+}
+
+/*.data-table > tbody > tr > td:nth-child(3):hover,*/
+/*.data-table > tbody > tr > td:nth-child(4):hover,*/
+/*.data-table > tbody > tr > td:nth-child(3) > *:hover,*/
+/*.data-table > tbody > tr > td:nth-child(4) > *:hover {*/
+/*    cursor: pointer;*/
+/*}*/
+
+.data-table > tbody > tr {
+    user-select: text!important;
+}
+
+.disabled,
+.disabled > * {
+    cursor: not-allowed!important;
+}
+
+.perm-enabled {
+    background: rgba(0,255,0,.4);
+}
+
+.perm-disabled {
+    background: rgba(255,0,0,0.4);
+}
