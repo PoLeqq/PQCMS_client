@@ -1,0 +1,15 @@
+{
+  "name": "vendor_name/pqcmsclient",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Wiktor 'PoLeq' Soliński",
+      "email": "wiktorsolinski123@gmail.com"
+    }
+  ],
+  "require": {
+    "genert/bbcode": "^1.1"
+  }
+}
