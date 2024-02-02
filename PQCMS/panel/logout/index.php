@@ -8,12 +8,9 @@ if(empty($_SESSION["pqcms"]["panel"]["auth_key"]))
 }
 
 require_once(dirname(__DIR__,2)."/Communicator.inc.php");
-$logoutResponse = Communicator::communicate(CommunicateURL::LOGOUT_USER,["auth_key" => $_SESSION["pqcms-panel-auth_key"]]);
+$logoutResponse = Communicator::communicate(CommunicateURL::LOGOUT_USER);
 
 unset($_SESSION["pqcms"]);
-foreach(array_keys($_SESSION) as $sessionKey)
-    if(str_starts_with($sessionKey,"pqcms-"))
-        unset($_SESSION[$sessionKey]);
 
 if($logoutResponse["resp"])
 {
