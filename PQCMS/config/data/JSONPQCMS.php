@@ -69,7 +69,8 @@ class JSONPQCMS extends JSONObject {
      */
     function setLicenseKey(string $licenseKey): bool
     {
-        if(!$this->isProperLicenseKey($licenseKey)) return false;
+        if(!$this->isProperLicenseKey($licenseKey))
+            return false;
         $this->setObject("license_key",$licenseKey);
         return true;
     }
