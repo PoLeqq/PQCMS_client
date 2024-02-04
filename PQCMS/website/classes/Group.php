@@ -19,12 +19,14 @@ class Group
         $conn = Database::getConnection();
         if(is_null($conn))
             return null;
-        $query = $conn->query("SELECT id FROM pqcms_site_text_group WHERE id = $this->id");
+        $stmt = $conn->prepare("SELECT id FROM pqcms_site_text_group WHERE id = ?");
+        $stmt->bind_param("i",$this->id);
+        $stmt->execute();
 
-        if($query->num_rows == 0) $resp = false;
+        if($stmt->get_result()->num_rows == 0) $resp = false;
         else $resp = true;
 
-        $query->close();
+        $stmt->close();
         $conn->close();
         return $resp;
     }
@@ -35,36 +37,16 @@ class Group
         $conn = Database::getConnection();
         if(is_null($conn))
             return null;
-        $query = $conn->query("SELECT name FROM pqcms_site_text_group WHERE id = $this->id");
+        $stmt = $conn->prepare("SELECT name FROM pqcms_site_text_group WHERE id = ?");
+        $stmt->bind_param("i",$this->id);
+        $stmt->execute();
 
-        if($query->num_rows == 0) $resp = "null";
-        else $resp = $query->fetch_row()[0];
+        $result = $stmt->get_result();
+        if($result->num_rows == 0) $resp = null;
+        else $resp = $result->fetch_row()[0];
 
-        $query->close();
+        $stmt->close();
         $conn->close();
         return $resp;
     }
-
-//    /**
-//     * @param string $name nazwa tekstu. wymagania: tylko cyfry oraz litery a-z (małe)
-//     * @return Text|null
-//     */
-//    public static function getTextByName(string $name): ?Group
-//    {
-//        if(!preg_match_all('/[a-z0-9]/', $name))
-//            return null;
-//
-//        require_once(dirname(__DIR__,2)."/utils/database/Database.inc.php");
-//        $conn = Database::getConnection();
-//        if(is_null($conn))
-//            return null;
-//        $query = $conn->query("SELECT id FROM pqcms_site_text WHERE name = '$name'");
-//
-//        if($query->num_rows == 0) $resp = null;
-//        else $resp = new Group($query->fetch_row()[0]);
-//
-//        $query->close();
-//        $conn->close();
-//        return $resp;
-//    }
 }

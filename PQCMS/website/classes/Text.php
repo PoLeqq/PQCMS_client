@@ -14,15 +14,17 @@ class Text
         $conn = Database::getConnection();
         if(is_null($conn))
             return null;
-        $query = $conn->query("SELECT group_id FROM pqcms_site_text WHERE id = $this->id");
+        $stmt = $conn->prepare("SELECT group_id FROM pqcms_site_text WHERE id = ?");
+        $stmt->bind_param("i",$this->id);
+        $stmt->execute();
 
-        if($query->num_rows == 0) $resp = null;
-        else $resp = (int) $query->fetch_row()[0];
+        $result = $stmt->get_result();
+        if($result->num_rows == 0) $resp = null;
+        else $resp = $result->fetch_row()[0];
 
-        $query->close();
+        $stmt->close();
         $conn->close();
 
-        require_once "Group.php";
         if(!is_null($resp))
             return new Group($resp);
         return null;
@@ -34,12 +36,15 @@ class Text
         $conn = Database::getConnection();
         if(is_null($conn))
             return null;
-        $query = $conn->query("SELECT value FROM pqcms_site_text WHERE id = $this->id");
+        $stmt = $conn->prepare("SELECT value FROM pqcms_site_text WHERE id = ?");
+        $stmt->bind_param("i",$this->id);
+        $stmt->execute();
 
-        if($query->num_rows == 0) $resp = "";
-        else $resp = $query->fetch_row()[0];
+        $result = $stmt->get_result();
+        if($result->num_rows == 0) $resp = "";
+        else $resp = $result->fetch_row()[0];
 
-        $query->close();
+        $stmt->close();
         $conn->close();
         return $resp;
     }
@@ -82,12 +87,15 @@ HTML;
         $conn = Database::getConnection();
         if(is_null($conn))
             return null;
-        $query = $conn->query("SELECT id FROM pqcms_site_text WHERE name = '$name'");
+        $stmt = $conn->prepare("SELECT id FROM pqcms_site_text WHERE name = ?");
+        $stmt->bind_param("s",$name);
+        $stmt->execute();
 
-        if($query->num_rows == 0) $resp = null;
-        else $resp = new Text($query->fetch_row()[0]);
+        $result = $stmt->get_result();
+        if($result->num_rows == 0) $resp = null;
+        else $resp = new Text($result->fetch_row()[0]);
 
-        $query->close();
+        $stmt->close();
         $conn->close();
         return $resp;
     }
