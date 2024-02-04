@@ -25,6 +25,8 @@ class Communicator
 //        curl_close($ch);
 //
 //        echo $result;
+        $postData["client_ip"] = $_SERVER["REMOTE_ADDR"];
+
         if($path == CommunicateURL::VERIFY_LICENSE)
         {
             require_once("config/data/JSONPQCMS.php");
@@ -33,6 +35,7 @@ class Communicator
                 'domain' => $pqcms->getDomain(),
                 'login' => $pqcms->getLogin(),
                 'license_key' => $pqcms->getLicenseKey(),
+                'client_ip' => $postData["client_ip"] = $_SERVER["REMOTE_ADDR"]
             );
         }
         else if($path === CommunicateURL::LOGIN_USER && !empty($_SESSION["pqcms"]["panel"]["auth_key"]["value"]))
@@ -53,7 +56,7 @@ class Communicator
                 }
             }
 
-            $postData["domain"] = $_SERVER["SERVER_NAME"];
+            $postData["domain"] = self::getDomain($_SERVER["SERVER_NAME"]);
 
 
             date_default_timezone_set("Europe/Warsaw");
@@ -91,16 +94,14 @@ class Communicator
         );
 
         $targetUrl = 'https://poleq.pl/server/api/'.$path;
+//        $targetUrl = 'http://localhost/pqcms/server/api/'.$path;
 
         $context = stream_context_create($options);
 
         try { @$response = file_get_contents($targetUrl, false, $context); }
-        catch(Exception)
-        {
+        catch(Exception) {
             return ["suc" => 0, "desc" => "Nieznany błąd podczas komunikacji z serwerami PQCMS. Skontaktuj się z administratorem PQCMS!"];
         }
-
-//        var_dump($response);
 
         if($response === false)
             return ["suc" => 0, "desc" => "Błąd funkcji file_get_contents podczas komunikacji z serwerami PQCMS. Skontaktuj się z administratorem PQCMS!"];
@@ -114,29 +115,54 @@ class Communicator
                 $_SESSION["pqcms"]["secure_key"]["value"] = $ret["secure_key"]["value"];
                 $_SESSION["pqcms"]["secure_key"]["expiry_time"] = $ret["secure_key"]["expire_time"];
             }
+            else if($path === CommunicateURL::GET_PERMS && !empty($ret["resp"]))
+            {
+                require_once("utils/perms/LocalPermissions.inc.php");
+                $ret["resp"] = array_merge($ret["resp"], LocalPermissions::getLocalWebsitePermissions());
+                $perm = array_column($ret["resp"], 'perm');
+                array_multisort($perm, SORT_ASC, $ret["resp"]);
+            }
             return $ret;
         }
+    }
+
+    private static function getDomain(string $server_name): string
+    {
+        if(ip2long($_SERVER['HTTP_HOST']))
+        {
+            require_once("config/data/JSONPQCMS.php");
+            $pqcms = new JSONPQCMS();
+            return $pqcms->getDomain();
+        }
+        else
+            return $server_name;
     }
 }
 
 class CommunicateURL
 {
     public const VERIFY_LICENSE = "website/license/VerifyLicense.php";
+    public const PLAIN_VERIFY_LICENSE = "website/license/VerifyLicense.php";
     public const GET_CLIENT_VERSION = "system/version/GetClientVersion.php";
     public const GET_SERVER_VERSION = "system/version/GetServerVersion.php";
     public const DOES_ADMIN_EXISTS = "website/hr/admin/DoesAdminExists.php";
     public const ADD_USER = "website/hr/user/AddUser.php";
     public const GET_USER = "website/hr/user/GetUser.php";
+    public const EDIT_USER = "website/hr/user/EditUser.php";
+    public const RESET_PASSWORD = "website/hr/user/ResetPassword.php";
     public const DELETE_USER = "website/hr/user/DeleteUser.php";
     public const INVALIDATE_SESSION = "website/hr/user/InvalidateSession.php";
     public const ADD_RANK = "website/hr/rank/AddRank.php";
+    public const DELETE_RANK = "website/hr/rank/DeleteRank.php";
     public const GET_RANK = "website/hr/rank/GetRank.php";
+    public const EDIT_RANK = "website/hr/rank/EditRank.php";
     public const LOGIN_USER = "website/auth/LoginUser.php";
     public const LOGOUT_USER = "website/auth/LogoutUser.php";
     public const GET_LICENSE_EXPIRATION = "website/data/GetLicenseExpiration.php";
     public const IS_VALID_AUTH_KEY = "website/auth/IsValidAuthKey.php";
     public const HAS_PERMISSION = "website/perms/HasPermission.php";
     public const IS_PERMISSION_SET = "website/perms/IsPermissionSet.php";
+    public const PLAIN_GET_PERMS = "website/perms/GetPerms.php";
     public const GET_PERMS = "website/perms/GetPerms.php";
     public const GET_SETTINGS = "website/settings/GetSettings.php";
     public const UPDATE_SETTINGS = "website/settings/UpdateSettings.php";
