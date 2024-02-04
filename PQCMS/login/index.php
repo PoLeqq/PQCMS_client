@@ -30,7 +30,6 @@ if(!empty($_SESSION["pqcms"]["panel"]["auth_key"]))
     <link rel="icon" type="image/x-icon" href="../images/PQCMS.svg">
 
     <link rel="stylesheet" href="../bs5/css/bootstrap.min.css">
-<!--    <link rel="stylesheet" href="../../default.css">-->
     <link rel="stylesheet" href="index.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
