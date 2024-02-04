@@ -37,6 +37,11 @@ final class BBCodeParser extends Parser
             'replace' => '<h6>$1</h6>',
             'content' => '$1'
         ],
+        'p' => [
+            'pattern' => '/\[p\](.*?)\[\/p\]/s',
+            'replace' => '<p>$1</p>',
+            'content' => '$1'
+        ],
         'bold' => [
             'pattern' => '/\[b\](.*?)\[\/b\]/s',
             'replace' => '<b>$1</b>',
@@ -55,11 +60,6 @@ final class BBCodeParser extends Parser
         'strikethrough' => [
             'pattern' => '/\[s\](.*?)\[\/s\]/s',
             'replace' => '<s>$1</s>',
-            'content' => '$1'
-        ],
-        'quote' => [
-            'pattern' => '/\[quote\](.*?)\[\/quote\]/s',
-            'replace' => '<blockquote>$1</blockquote>',
             'content' => '$1'
         ],
         'link' => [
@@ -130,6 +130,11 @@ final class BBCodeParser extends Parser
         'table-row' => [
             'pattern' => '/\[tr\](.*?)\[\/tr\]/s',
             'replace' => '<tr>$1</tr>',
+            'content' => '$1',
+        ],
+        'table-header' => [
+            'pattern' => '/\[th\](.*?)\[\/th\]/s',
+            'replace' => '<th>$1</th>',
             'content' => '$1',
         ],
         'table-data' => [
