@@ -95,10 +95,12 @@ class Database
 
     /**
      * Funkcja pobiera wszystkie pliki .sql dołączone do utils/database/tables i je wykonuje.
-     * @return array poprawność wykonania operacji z plików sql
+     * @return ?array poprawność wykonania operacji z plików sql
      */
-    public static function setupDefaultDatabase(mysqli $conn): array
+    public static function setupDefaultDatabase($conn): ?array
     {
+        if(!($conn instanceof mysqli))
+            return null;
         $resp = [];
 
         $path = __DIR__."/tables/";
@@ -106,6 +108,8 @@ class Database
         foreach ($files as $file) {
             if(str_ends_with($file, '.sql')) {
                 $query = $conn->query("SHOW TABLES");
+                if($conn->errno !== 0)
+                    return null;
                 while($row = $query->fetch_row())
                     if($row[0].".sql" == $file) {
                         $resp[$file] = 0;
