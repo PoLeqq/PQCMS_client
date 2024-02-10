@@ -1,5 +1,8 @@
 <?php
 
+use Genert\BBCode\BBCode;
+require_once "Group.php";
+
 class Text
 {
     private int $id;
@@ -41,8 +44,10 @@ class Text
         $stmt->execute();
 
         $result = $stmt->get_result();
-        if($result->num_rows == 0) $resp = "";
-        else $resp = $result->fetch_row()[0];
+        if($result->num_rows == 0)
+            $resp = "";
+        else
+            $resp = $result->fetch_row()[0];
 
         $stmt->close();
         $conn->close();
@@ -58,10 +63,17 @@ class Text
     {
         $disabled = $disabled ? "disabled" : "";
         $code = $this->getCode();
+
+        $group = $this->getGroup();
+        if(!is_null($group))
+            $showId = "(".$group->getName().") $elementId";
+        else
+            $showId = $elementId;
+
         if($editable) return<<<HTML
 <div class="pqcms-editable-div" style="">
     <div style="border: 1px solid black; display:flex; justify-content:center; align-items:center; background-color: rgba(0,0,0,.2); font-weight: bold; border-radius: 3px">
-        $elementId
+        $showId
     </div>
     <textarea ${disabled} id='pqcms-editable-textarea-$elementId' data-name='$elementId' style='box-sizing: border-box; width: 100%; margin-bottom: -7px' class='pqcms-editable-textarea'>$code</textarea>
 </div>
@@ -69,9 +81,11 @@ HTML;
 
         if(is_null($code))
             return "";
-        require_once("PQCode.php");
-        $pqCode = new PQCode($code);
-        return $pqCode->getHTML();
+
+        require_once(dirname(__DIR__,2)."/vendor/genert/bbcode/src/BBCode.php");
+        $bbCode = new BBCode();
+//        return $code;
+        return $bbCode->convertToHtml($code);
     }
 
     /**
