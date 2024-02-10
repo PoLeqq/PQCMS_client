@@ -9,7 +9,7 @@ class Communicator
      *
      * @param string $path ścieżka linku do API (Najlepiej skorzystać z CommunicateURL)
      * @param array $postData dane, które zostaną przesłane metodą POST. (podczas VERIFY_LICENSE przesłać pustą)
-     * @return mixed zwraca return (json) z danego APIka (lub array z kluczami "suc" i "desc", gdy połączenie nie powiedzie się)
+     * @return array zwraca return (json) z danego APIka (lub array z kluczami "suc" i "desc", gdy połączenie nie powiedzie się)
      */
     public static function communicate(string $path, array $postData = []): array
     {
@@ -109,7 +109,7 @@ class Communicator
         {
             $ret = json_decode($response,true);
             if(is_null($ret))
-                return ["suc" => 0, "desc" => "Otrzymano niepoprawną odpowiedź!", "todo_remove_debug_response" => $response];
+                return ["suc" => 0, "desc" => "Otrzymano niepoprawną odpowiedź!"];
             if($path === CommunicateURL::VERIFY_LICENSE && !empty($ret["secure_key"]))
             {
                 $_SESSION["pqcms"]["secure_key"]["value"] = $ret["secure_key"]["value"];
