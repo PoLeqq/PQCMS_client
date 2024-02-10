@@ -8,8 +8,16 @@ class Database
     public static function getConnection(): bool|mysqli|null
     {
         require_once(dirname(__DIR__,2) . "/config/data/JSONDatabase.php");
-
         $db = new JSONDatabase();
+
+        if($db->getHost() === "" && $db->getName() === "" && $db->getUser() === "" && $db->getPassword() === "")
+        {
+            require_once(dirname(__DIR__,2)."/panel/scripts/notifications/NotificationManager.inc.php");
+            NotificationManager::addNewNotification("pqcms-databaseConnectionError","Baza danych","e",
+                "Nie można połączyć z bazą danych (dane są puste)! Zmień je w ustawieniach!");
+            return null;
+        }
+
         try{
             @$connect = mysqli_connect($db->getHost(), $db->getUser(), $db->getPassword());
             if($connect instanceof mysqli)
