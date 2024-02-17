@@ -50,58 +50,6 @@ class Database
     }
 
     /**
-     * Funkcja dodająca wiersz do tabeli
-     */
-    function insertInto($conn, $table, ...$colsAndVales): void
-    {
-        $size = count($colsAndVales) / 2;
-        $cols = array_slice($colsAndVales, 0, $size);
-        $values = array_slice($colsAndVales, $size);
-
-        $params = str_repeat("?,", $size);
-        $params = rtrim($params, ",");
-
-        $stringCols = implode(",", $cols);
-
-        $valTypes = "";
-        for ($i = 0; $i < $size; $i++) {
-            switch (gettype($values[$i])) {
-                case "boolean":
-                    $values[$i] = intval($values[$i]);
-//                    Linijki niżej nie było, dodałem i nie ma błędu, ale czy na pewno git?
-                    $valTypes .= "b";
-//                    Break dodany później, ale chyba git???
-                    break;
-                case "integer":
-                    $valTypes .= "i";
-                    break;
-                case "double":
-                    $valTypes .= "d";
-                    break;
-                default:
-                    $valTypes .= "s";
-                    break;
-            }
-        }
-
-        $sql = "INSERT INTO $table ($stringCols) VALUES ($params)";
-        $query = $conn->prepare($sql);
-        $query->bind_param($valTypes, ...$values);
-        $query->execute();
-    }
-
-    /**
-     * Funkcja usuwająca wiersz z danej tabeli $table gdzie pole $col jest równe wartości $val
-     */
-    function deleteRowWhere($conn, $table, $col, $val): void
-    {
-        $sql = "DELETE FROM $table WHERE $col = ?";
-        $query = $conn->prepare($sql);
-        $query->bind_param("s", $val);
-        $query->execute();
-    }
-
-    /**
      * Funkcja pobiera wszystkie pliki .sql dołączone do utils/database/tables i je wykonuje.
      * @return ?array poprawność wykonania operacji z plików sql
      */
@@ -140,16 +88,5 @@ class Database
 
         $conn->close();
         return $resp;
-    }
-
-    /**
-     * Funkcja sprawdza, czy słowo kończy się danym ciągiem
-     */
-    function endsWith($haystack, $needle)
-    {
-        $length = strlen($needle);
-        if (!$length)
-            return true;
-        return substr($haystack, -$length) === $needle;
     }
 }
