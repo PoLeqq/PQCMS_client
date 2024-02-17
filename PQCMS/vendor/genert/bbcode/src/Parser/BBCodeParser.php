@@ -142,6 +142,26 @@ final class BBCodeParser extends Parser
             'replace' => '<td>$1</td>',
             'content' => '$1',
         ],
+        'color' => [
+            'pattern' => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
+            'replace' => '<span class="pqcms-custom-color" data-pqcms-custom-color="$1">$2</span>',
+            'content' => '$2'
+        ],
+        'new-line' => [
+            'pattern' => '/\[nl\]/s',
+            'replace' => '<br/>',
+            'content' => ''
+        ],
+        'article' => [
+            'pattern' => '/\[article\](.*?)\[\/article\]/s',
+            'replace' => '<article>$1</article>',
+            'content' => '$1'
+        ],
+        'header' => [
+            'pattern' => '/\[header\](.*?)\[\/header\]/s',
+            'replace' => '<header>$1</header>',
+            'content' => '$1'
+        ],
     ];
 
     public function stripTags(string $source): string
