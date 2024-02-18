@@ -7,7 +7,7 @@ class Root extends Tab
 {
     public function __construct($editable)
     {
-        parent::__construct("_root_","",$editable,
+        parent::__construct("_root_","",$editable,"../../../../",
             [
                 "header1",
                 "text1",
@@ -30,12 +30,6 @@ class Root extends Tab
             ],
             ["main"]
         );
-    }
-
-    protected function getSourcePath(): string
-    {
-        if($this->editable) return "../../../../";
-        return "";
     }
 
     public function generateHeadCode(string $lang = "pl"): string
