@@ -1,6 +1,12 @@
 <?php
 
-@session_start();
+require_once(dirname(__DIR__,4)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUserChildrenTab("hr");
+
+require_once(dirname(__DIR__,5)."/utils/PQCMSToken.inc.php");
+require_once(dirname(__DIR__,4)."/scripts/notifications/NotificationManager.inc.php");
+$notificationManager = new NotificationManager("hr-editUser","HR - Edytowanie użytkownika");
+PQCMSToken::verifyToken($notificationManager,$_SESSION["pqcms"]["panel"]["hr"]["users"]["edit"]["token"],$_POST["token"]);
 
 $posts = [];
 
@@ -14,6 +20,8 @@ if(!empty($_POST["password"]))
     $posts["password"] = $_POST["password"];
 if(!empty($_POST["email"]))
     $posts["email"] = $_POST["email"];
+else
+    $posts["email"] = "";
 if(isset($_POST["disabled"]))
     $posts["disabled"] = $_POST["disabled"];
 
@@ -27,8 +35,8 @@ else
     $posts["perms"] = $perms;
 
 require_once(dirname(__DIR__, 5) . "/Communicator.inc.php");
-//var_dump($posts);
 $resp = Communicator::communicate(CommunicateURL::EDIT_USER,$posts);
+
 $perms = empty($resp["perms"]) ? [] : $resp["perms"];
 endScript($resp["suc"],$resp["desc"],$perms);
 

@@ -1,3 +1,13 @@
+<?php
+
+require_once(dirname(__DIR__,4)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUserChildrenTab("hr");
+
+require_once(dirname(__DIR__,5)."/utils/PQCMSToken.inc.php");
+$token = PQCMSToken::generateToken();
+$_SESSION["pqcms"]["panel"]["hr"]["ranks"]["edit"]["token"] = $token;
+
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -28,6 +38,8 @@
 
     <div>
         <form method="POST" action="EditRank.php">
+            <input type="hidden" name="token" value="<?php echo $token["value"] ?>"/>
+
             <fieldset class="d-flex flex-column justify-content-center align-items-start">
                 <legend class="h1">Ranga</legend>
 
@@ -47,11 +59,11 @@
 
                 <label for="priority" class="mt-1">
                     <span class="h4">
-                        Waga
+                        Priorytet
                     </span>
                 </label>
-                <i>Im niższa, tym ranga ważniejsza</i>
-                <input type="number" id="priority" name="priority" class="my-2 rounded-0"value="<?php echo $_GET["priority"] ?>"/>
+                <i>(im wyższy, tym ranga jest "ważniejsza"; min. 0, max. 65535)</i>
+                <input type="number" id="priority" name="priority" class="my-2 rounded-0" value="<?php echo $_GET["priority"] ?>"/>
 
 <!--                <label class="mt-1">-->
 <!--                    <span class="h4">-->
@@ -143,7 +155,7 @@
         HTML;
                         }
                         else
-                            echo "<p style='color: red'>Wystąpił błąd podczas listy permisji! Opis: ${ranks["desc"]}</p>";
+                            echo "<p style='color: red'>Wystąpił błąd podczas listy permisji! Opis: ${perm["desc"]}</p>";
                         ?>
                     </tbody>
                 </table>

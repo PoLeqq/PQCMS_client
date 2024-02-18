@@ -1,3 +1,14 @@
+<?php
+
+require_once(dirname(__DIR__,4)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUserChildrenTab("hr");
+
+require_once(dirname(__DIR__,5)."/utils/PQCMSToken.inc.php");
+$token = PQCMSToken::generateToken();
+$_SESSION["pqcms"]["panel"]["hr"]["ranks"]["add"]["token"] = $token;
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -17,6 +28,8 @@
 <body>
 
     <form method="POST" action="AddRank.php" class="col-12 p-4">
+        <input type="hidden" name="token" value="<?php echo $token["value"] ?>"/>
+
         <fieldset class="d-flex flex-column justify-content-center align-items-start">
             <legend class="">Ranga</legend>
     
@@ -59,7 +72,7 @@
 
             <label class="mt-1">
                 Priorytet<br/>
-                <i class="formAside">(im mniejszy, tym ranga jest "ważniejsza"; min. 0)</i><br/>
+                <i class="formAside">(im wyższy, tym ranga jest "ważniejsza"; min. 0, max. 65535)</i><br/>
                 <input type="number" name="priority" placeholder="priorytet">
             </label>
 

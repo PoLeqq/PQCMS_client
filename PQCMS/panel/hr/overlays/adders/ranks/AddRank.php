@@ -1,6 +1,12 @@
 <?php
 
-@session_start();
+require_once(dirname(__DIR__,4)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUserChildrenTab("hr");
+
+require_once(dirname(__DIR__,5)."/utils/PQCMSToken.inc.php");
+require_once(dirname(__DIR__,4)."/scripts/notifications/NotificationManager.inc.php");
+$notificationManager = new NotificationManager("hr-addRank","HR - Dodawanie rangi");
+PQCMSToken::verifyToken($notificationManager,$_SESSION["pqcms"]["panel"]["hr"]["ranks"]["add"]["token"],$_POST["token"]);
 
 if(empty($_POST["name"]) || empty($_POST["display_name"]) || !isset($_POST["priority"]))
     endScript(0,"Uzupełnij wszystkie pola!",null);

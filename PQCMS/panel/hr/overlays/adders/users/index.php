@@ -1,3 +1,13 @@
+<?php
+
+require_once(dirname(__DIR__,4)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUserChildrenTab("hr");
+
+require_once(dirname(__DIR__,5)."/utils/PQCMSToken.inc.php");
+$token = PQCMSToken::generateToken();
+$_SESSION["pqcms"]["panel"]["hr"]["users"]["add"]["token"] = $token;
+
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -16,6 +26,8 @@
 </head>
 <body class="d-flex justify-content-center align-items-center">
     <form method="POST" action="AddUser.php">
+        <input type="hidden" name="token" value="<?php echo $token["value"] ?>"/>
+
         <fieldset class="d-flex flex-column justify-content-center align-items-start">
             <legend class="h1">Użytkownik</legend>
 

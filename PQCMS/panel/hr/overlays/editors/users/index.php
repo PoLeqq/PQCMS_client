@@ -1,3 +1,13 @@
+<?php
+
+require_once(dirname(__DIR__,4)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUserChildrenTab("hr");
+
+require_once(dirname(__DIR__,5)."/utils/PQCMSToken.inc.php");
+$token = PQCMSToken::generateToken();
+$_SESSION["pqcms"]["panel"]["hr"]["users"]["edit"]["token"] = $token;
+
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -24,6 +34,9 @@ if(is_null($_GET["perms"]))
 ?>
     <div>
         <form method="POST" action="EditUser.php">
+
+            <input type="hidden" name="token" value="<?php echo $token["value"] ?>"/>
+
             <fieldset class="d-flex flex-column justify-content-center align-items-start">
                 <legend class="h1">Użytkownik</legend>
 
@@ -162,7 +175,7 @@ if(is_null($_GET["perms"]))
     HTML;
                         }
                     else
-                        echo "<p style='color: red'>Wystąpił błąd podczas listy permisji! Opis: ${ranks["desc"]}</p>";
+                        echo "<p style='color: red'>Wystąpił błąd podczas listy permisji! Opis: ${allPerms["desc"]}</p>";
 
                     ?>
                     </tbody>

@@ -1,6 +1,12 @@
 <?php
 
-@session_start();
+require_once(dirname(__DIR__,4)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUserChildrenTab("hr");
+
+require_once(dirname(__DIR__,5)."/utils/PQCMSToken.inc.php");
+require_once(dirname(__DIR__,4)."/scripts/notifications/NotificationManager.inc.php");
+$notificationManager = new NotificationManager("hr-addUser","HR - Dodawanie użytkownika");
+PQCMSToken::verifyToken($notificationManager,$_SESSION["pqcms"]["panel"]["hr"]["users"]["add"]["token"],$_POST["token"]);
 
 if(empty($_POST["username"]) || empty($_POST["nickname"]) || !isset($_POST["email"]) || empty($_POST["password"]) || !isset($_POST["disabled"]))
     endScript(0,"Uzupełnij wszystkie pola!",null);

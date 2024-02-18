@@ -1,6 +1,12 @@
 <?php
 
-@session_start();
+require_once(dirname(__DIR__,4)."/scripts/server/TabUtils.inc.php");
+TabUtils::verifyUserChildrenTab("hr");
+
+require_once(dirname(__DIR__,5)."/utils/PQCMSToken.inc.php");
+require_once(dirname(__DIR__,4)."/scripts/notifications/NotificationManager.inc.php");
+$notificationManager = new NotificationManager("hr-addRank","HR - Edytowanie rangi");
+PQCMSToken::verifyToken($notificationManager,$_SESSION["pqcms"]["panel"]["hr"]["ranks"]["edit"]["token"],$_POST["token"]);
 
 $posts = [];
 
@@ -14,11 +20,11 @@ if(!empty($_POST["priority"]))
     $posts["priority"] = $_POST["priority"];
 
 if($posts === [])
-    endScript(0,"Żadne pole nie jest uzupełnione, więc nie można nic zmienić!");
+    endScript(0,"Żadne pole nie jest uzupełnione, więc nie można nic zmienić!",null);
 
 $perms = (empty($_POST["perms"])) ? [] : parsePermsArray($_POST["perms"]);
 if(is_null($perms))
-    endScript(0,"Podano niepoprawne uprawnienia!");
+    endScript(0,"Podano niepoprawne uprawnienia!",null);
 else
     $posts["perms"] = $perms;
 require_once(dirname(__DIR__, 5) . "/Communicator.inc.php");
