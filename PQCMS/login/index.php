@@ -1,8 +1,4 @@
 <?php
-// todo połączenie jakoś tego z serwerem
-//    require_once(dirname(__DIR__)."/config/settings/JSONLogin.php");
-//    $login = new JSONLogin();
-//    $_SESSION["loginAmount"] = $login->getAttempts();
 
 @session_start();
 if(!empty($_SESSION["pqcms"]["panel"]["auth_key"]))
@@ -11,10 +7,6 @@ if(!empty($_SESSION["pqcms"]["panel"]["auth_key"]))
     die("Sesja logowania jest już aktywna!");
 }
 
-//    require_once("loginUser.php");
-//    if(isset($_POST["submit"])){
-//        $error = loginUser($_POST["username"],$_POST["password"]);
-//    }
 ?>
 
 <!doctype html>
