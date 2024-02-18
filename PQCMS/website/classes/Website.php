@@ -7,9 +7,9 @@ class Website
     public function __construct()
     {
         require_once(dirname(__DIR__)."/code/Root.php");
-        require_once(dirname(__DIR__)."/code/Contact.php");
-        $this->tabs["_root_"] = new Root();
-        $this->tabs["kontakt"] = new Contact();
+//        require_once(dirname(__DIR__)."/code/Contact.php");
+        $this->tabs["_root_"] = new Root(true);
+//        $this->tabs["kontakt"] = new Contact();
     }
 
     public function getTab(string $name): ?Tab
