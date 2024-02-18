@@ -10,6 +10,7 @@
     }
   ],
   "require": {
-    "genert/bbcode": "^1.1"
+    "genert/bbcode": "^1.1",
+    "ext-mysqli": "*"
   }
 }
