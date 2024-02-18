@@ -55,6 +55,8 @@ class Database
      */
     public static function setupDefaultDatabase($conn): ?array
     {
+        if(is_null($conn))
+            return null;
         if(!($conn instanceof mysqli))
             return null;
         $resp = [];
