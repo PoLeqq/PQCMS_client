@@ -1,0 +1,15 @@
+{
+  "forms": [
+    {
+      "id": "contact",
+      "name": "Kontakt",
+      "enabled": 1,
+      "cols": [
+        "client",
+        "email",
+        "title",
+        "message"
+      ]
+    }
+  ]
+}
