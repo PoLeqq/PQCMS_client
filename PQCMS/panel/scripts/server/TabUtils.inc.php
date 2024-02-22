@@ -20,5 +20,21 @@ class TabUtils
             if(!$websiteSettingsResponse["perms"]["pqcms.tabs.view.$tabName"])
                 die("Nie masz uprawnień, aby przeglądać tą stronę!");
         }
+
+        return [];
+    }
+
+    public static function verifyUserChildrenTab(string $parentTabName): void
+    {
+        @session_start();
+        TabUtils::checkIfLogged();
+
+        $error = "Nie masz uprawnień do tej zakładki. Najpierw otwórz stronę główną, z której możesz tutaj dotrzeć.";
+        @session_start();
+        if(empty($_SESSION["pqcms"]["panel"]["allow_view"]))
+            die($error);
+
+        if(!in_array($parentTabName, $_SESSION["pqcms"]["panel"]["allow_view"]))
+            die($error);
     }
 }
