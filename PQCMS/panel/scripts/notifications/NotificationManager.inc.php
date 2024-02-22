@@ -4,8 +4,8 @@
 
 class NotificationManager
 {
-    private $id;
-    private $title;
+    private string $id;
+    private string $title;
 
     public function __construct(string $id, string $title)
     {
@@ -27,6 +27,7 @@ class NotificationManager
 
     public static function addNewNotification(string $id, string $title, string $type, string $text): void
     {
+        $id = uniqid($id."-");
         $_SESSION["pqcms"]["panel"]["notifications"][$id]["title"] = $title;
         $_SESSION["pqcms"]["panel"]["notifications"][$id]["type"] = $type;
         $_SESSION["pqcms"]["panel"]["notifications"][$id]["text"] = $text;
