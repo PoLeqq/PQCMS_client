@@ -10,10 +10,10 @@ if(empty($_SESSION["pqcms"]["panel"]["auth_key"]))
 //if(!isset($_GET["outdated"]) && !isset($_GET["invalidated"]) && !isset($_GET["not_secure"]))
 //    die("Niepoprawne dane. Powodem może być niespójność między plikami lub błędne przekierowanie.");
 
+require_once(dirname(__DIR__,2)."/Communicator.inc.php");
+Communicator::communicate(CommunicateURL::LOGOUT_USER);
+
 unset($_SESSION["pqcms"]);
-//foreach(array_keys($_SESSION) as $sessionKey)
-//    if(str_starts_with($sessionKey,"pqcms-"))
-//        unset($_SESSION[$sessionKey]);
 
 if($_GET["not_secure"] == 1)
     $_SESSION["pqcms"]["login"]["error"] = "Twoja sesja została unieważniona, ponieważ przesłane dane nie były bezpieczne! (niepoprawny \"auth_key\")";
