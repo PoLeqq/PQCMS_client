@@ -2,37 +2,32 @@
 
 header("Content-type: application/json");
 
-if(empty($_GET["name"]))
-    die(json_encode(["suc" => 0, "desc" => "Nie podano nazwy powiadomienia!"],JSON_UNESCAPED_UNICODE));
+if(empty($_GET["id"]))
+    die(json_encode(["suc" => 0, "desc" => "Nie podano id powiadomienia!"],JSON_UNESCAPED_UNICODE));
 if(empty($_GET["action"]))
-    die(json_encode(["suc" => 0, "desc" => "Nie podano akcji!"],JSON_UNESCAPED_UNICODE));
-
+    die(json_encode(["suc" => 0, "desc" => "Nie podano typu akcji!"],JSON_UNESCAPED_UNICODE));
 
 @session_start();
 switch($_GET["action"])
 {
     case "a": {
+        require_once "NotificationManager.inc.php";
+
+        if(empty($_GET["title"]))
+            die(json_encode(["suc" => 0, "desc" => "Nie podano tytułu powiadomienia!"],JSON_UNESCAPED_UNICODE));
         if(empty($_GET["text"]))
-            die(json_encode(["suc" => 0, "desc" => "Nie podano tekstu!"],JSON_UNESCAPED_UNICODE));
+            die(json_encode(["suc" => 0, "desc" => "Nie podano tekstu powiadomienia!"],JSON_UNESCAPED_UNICODE));
 
-        $_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]["text"] = $_GET["text"];
-
-        if(isset($_GET["type"]))
-            $_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]["type"] = $_GET["type"];
-
-        if(isset($_GET["title"]))
-            $_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]["type"] = $_GET["title"];
-        else
-            $_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]["type"] = $_GET["id"];
+        NotificationManager::addNewNotification($_GET["id"],$_GET["title"],$_GET["type"],$_GET["text"]);
 
         break;
     }
     case "d": {
-        unset($_SESSION["pqcms"]["panel"]["notifications"][$_GET["name"]]);
+        unset($_SESSION["pqcms"]["panel"]["notifications"][$_GET["id"]]);
         break;
     }
     default: {
-        die(json_encode(["suc" => 0, "desc" => "Podano niepoprawną akcję!"]));
+        die(json_encode(["suc" => 0, "desc" => "Podano niepoprawną akcję!"],JSON_UNESCAPED_UNICODE));
     }
 }
 
