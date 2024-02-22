@@ -34,7 +34,9 @@ function updateDatabase(?string $host, ?string $user, ?string $password, ?string
 
     $error = false;
     try {
-        mysqli_connect($database->getHost(),$database->getUser(),$database->getPassword(),$database->getName());
+        $conn = mysqli_connect($database->getHost(),$database->getUser(),$database->getPassword(),$database->getName());
+        if(is_bool($conn))
+            $error = true;
     } catch(Exception) {
         $error = true;
     }
@@ -61,19 +63,24 @@ function updatePQCMS(?string $login, ?string $licenseKey): array
 
     $warning = "";
     if(!is_null($licenseKey))
-        $warning = !$pqcms->setLicenseKey($licenseKey) ? "Błędny format klucza licencyjnego!" : "";
+        $warning = !$pqcms->setLicenseKey($licenseKey) ? "Błędny format klucza licencyjnego! (nie został on zmieniony)" : "";
     if(!is_null($login))
         $pqcms->setLogin($login);
-
     $pqcms->saveData();
+
+    require_once(dirname(__DIR__,3)."/Communicator.inc.php");
+    $verifyLicense = Communicator::communicate(CommunicateURL::PLAIN_VERIFY_LICENSE);
+
     $resp = ["suc" => 1, "desc" => "Zmieniono dane systemowe!"];
     if($warning !== "")
-        $resp["warning"] = $warning;
+        $resp["warning_licenseKey"] = $warning;
+    if($verifyLicense["suc"] == 0)
+        $resp["warning_verifyLicense"] = "Podano błędne dane do logowania PQCMS! Popraw je, zanim utracisz dostęp do panelu!";
 
     return $resp;
 }
 
-function updateSettings(?int $loginCount, ?bool $resetLoginCount, ?int $loginSessionTime, ?bool $resetLoginSessionTime, ?int $tokenLifespan, ?bool $resetTokenLifespan): array
+function updateSettings(?int $loginCount, ?bool $resetLoginCount, ?int $loginSessionTime, ?bool $resetLoginSessionTime): array
 {
     $posts = [];
     if(!is_null($loginCount) && !is_null($resetLoginCount))
@@ -83,10 +90,6 @@ function updateSettings(?int $loginCount, ?bool $resetLoginCount, ?int $loginSes
     if(!is_null($loginSessionTime) && !is_null($resetLoginSessionTime))
         if($resetLoginSessionTime) $posts["login_session_time_reset"] = true;
         else $posts["login_session_time"] = $loginSessionTime;
-
-    if(!is_null($tokenLifespan) && !is_null($resetTokenLifespan))
-        if($resetTokenLifespan) $posts["token_lifespan_reset"] = true;
-        else $posts["token_lifespan"] = $tokenLifespan;
 
     require_once(dirname(__DIR__, 3) . "/Communicator.inc.php");
     return Communicator::communicate(CommunicateURL::UPDATE_SETTINGS,$posts);
