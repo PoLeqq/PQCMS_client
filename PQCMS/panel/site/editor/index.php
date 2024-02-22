@@ -55,9 +55,7 @@ TabUtils::verifyUserChildrenTab("editor");
                     "i": "i",
                     "u": "u",
                     "s": "s",
-                    "q": "quote",
-                    "l": "link=https://poleq.pl",
-                    // "br": "br",
+                    "l": "url",
                     "p": "p"
                 };
 
