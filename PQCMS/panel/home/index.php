@@ -24,6 +24,6 @@ TabUtils::verifyUser();
     </style>
 </head>
 <body>
-    <iframe src="https://poleq.pl/server/client/system/index.php?token=<?php echo $_SESSION["pqcms"]["panel"]["pqcms_token"] ?>"></iframe>
+    <iframe src="https://poleq.pl/server/client/system/?token=<?php echo $_SESSION["pqcms"]["panel"]["pqcms_token"] ?>"></iframe>
 </body>
 </html>
