@@ -12,10 +12,9 @@
         "license_key": "3D8RX-CA4T5-QF3H3-P2JFX"
     },
     "sites": {
-        "_root_": "Główna",
-        "root": "root"
+        "_root_": "Główna"
     },
     "tabs": {
-        "_root_": "Strona główna"
+        "Root": "Strona główna"
     }
 }
