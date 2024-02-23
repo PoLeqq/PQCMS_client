@@ -56,6 +56,20 @@ body {
     padding: 10px;
 }
 
+.main-section::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.main-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.main-section::-webkit-scrollbar-thumb {
+    background: #9f9f9f;
+}
+.main-section::-webkit-scrollbar-thumb:hover {
+    background: #6b6b6b;
+}
+
 .main-section-info > div {
     min-height: 10px;
     max-height: 50px;
@@ -90,9 +104,10 @@ body {
 .addImage > img {
     min-width: 10px;
     max-width: 50px;
+    transition: .3s;
 }
 
-.addImage:hover {
+.addImage > img:hover {
     cursor: pointer;
     transition: .2s;
     transform: scale(0.9);
