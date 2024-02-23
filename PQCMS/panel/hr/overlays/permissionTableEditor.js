@@ -77,7 +77,7 @@ document.querySelectorAll(".checkbox-perm-false").forEach((e) => {
 })
 
 document.querySelectorAll("#permission-table-editable > tbody > tr > td:nth-last-child(2), #permission-table-editable > tbody > tr > td:last-child").forEach(function(e) {
-    e.addEventListener("click", function(event) {
+    e.addEventListener("click", function() {
         e.querySelector("input").click();
     });
 });
