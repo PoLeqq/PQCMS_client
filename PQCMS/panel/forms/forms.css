@@ -1,0 +1,8 @@
+table {
+    margin-top: 15px;
+}
+
+table td, table th {
+    outline: 1px solid black;
+    padding: 10px;
+}
