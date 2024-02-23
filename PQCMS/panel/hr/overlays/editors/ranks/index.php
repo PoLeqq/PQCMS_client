@@ -155,7 +155,7 @@ $_SESSION["pqcms"]["panel"]["hr"]["ranks"]["edit"]["token"] = $token;
         HTML;
                         }
                         else
-                            echo "<p style='color: red'>Wystąpił błąd podczas listy permisji! Opis: ${perm["desc"]}</p>";
+                            echo "<p style='color: red'>Wystąpił błąd podczas listy permisji! Opis: ${allPerms["desc"]}</p>";
                         ?>
                     </tbody>
                 </table>
