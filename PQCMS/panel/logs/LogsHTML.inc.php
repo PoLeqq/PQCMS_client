@@ -7,8 +7,16 @@ class LogsHTML
     public function __construct()
     {
         $this->links = [
-            "logs" => "Logi",
-            "stats" => "Statystyki"
+            "site" => [
+                "header" => "Dziennik zdarzeń",
+                "description" => "Logi serwerowe. Logowania (udane/nieudane), zmiana: tekstu, ustawień,
+                dodawanie/edycja rang/użytkowników itp."
+            ],
+            "stats" => [
+                "header" => "Statystyki",
+                "description" => "Wejścia na stronę (podział na sumę oraz unikalne wejścia dnia). Wgląd 
+                na lokalizację gości, którzy znaleźli się na Twojej stronie."
+            ]
         ];
     }
 
@@ -18,8 +26,11 @@ class LogsHTML
         foreach($this->links as $link => $text)
         {
             $html .= <<<HTML
-<div class="col-3 p-5" id="pqcms-log-type-button-$link">
-    <h3>${text}</h3>
+<div class="col-3 p-5 log-type-button d-flex flex-column justify-content-center align-items-center" id="pqcms-log-type-button-$link">
+    <h3 class="mb-3">${text["header"]}</h3>
+    <span>
+        ${text["description"]}    
+    </span>
 </div>
 HTML;
         }
