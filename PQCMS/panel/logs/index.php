@@ -16,9 +16,30 @@ $logsHTML = new LogsHTML();
 
     <link rel="stylesheet" href="../../bs5/css/bootstrap.min.css">
     <link rel="stylesheet" href="../default.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+        }
+
+        .log-type-button {
+            border: 3px solid #282828;
+            border-radius: 10px;
+            background-color: rgba(44, 74, 190, 0.8);
+            color: white;
+            transition: .3s;
+        }
+
+        .log-type-button:hover {
+            transition: .2s;
+            transform: scale(0.95);
+            cursor: pointer;
+            filter: brightness(90%);
+        }
+    </style>
 </head>
 <body>
-    <main class="p-0">
+    <main class="d-flex justify-content-around align-items-center" style="min-height: 100vh">
         <?php
         echo $logsHTML->getLogsButtons();
         ?>
