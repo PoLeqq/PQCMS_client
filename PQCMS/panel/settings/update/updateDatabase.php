@@ -5,44 +5,33 @@ require_once(dirname(__DIR__,2)."/scripts/notifications/NotificationManager.inc.
 
 $notificationManager = new NotificationManager("settings-updateDatabase","Ustawienia - Baza danych");
 $notificationManagerError = new NotificationManager("settings-updateDatabase-perms","Ustawienia - Baza danych");
-if(empty($_POST["token"]) || $_POST["token"] != $_SESSION["pqcms"]["panel"]["settings"]["database"]["token"]["value"])
+require_once(dirname(__DIR__,3)."/utils/PQCMSToken.inc.php");
+PQCMSToken::verifyToken($notificationManager,$_SESSION["pqcms"]["panel"]["settings"]["database"]["token"], $_POST["token"]);
+
+
+require_once(dirname(__DIR__,3)."/Communicator.inc.php");
+$userPerms = Communicator::communicate(CommunicateURL::HAS_PERMISSION,
+    ["perms" => [
+        "pqcms.settings.database.set.host","pqcms.settings.database.set.username","pqcms.settings.database.set.password","pqcms.settings.database.set.name",
+    ]]);
+if($userPerms["suc"] == 0)
 {
-    $notificationManager->addNotification("e","Walidacja tokenu nie powiodła się.");
+    $notificationManager->addNotification("e","Nic nie zmieniono, ponieważ wystąpił błąd podczas pobierania uprawnień. Skontaktuj się z administratorem PQCMS!");
     header("location: ../");
     die("Niepoprawne przekierowanie");
 }
 
-if(time() >= $_SESSION["pqcms"]["panel"]["settings"]["database"]["token"]["expire"])
+$userPerms = $userPerms["perms"];
+$dataToSave = ["host" => null,"username" => null,"password" => null,"name" => null];
+
+foreach(array_keys($dataToSave) as $data)
 {
-    $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
-    header("location: ../");
-    die("Niepoprawne przekierowanie");
-}
-
-// Sprawdzenie permisji, ustawienie danych
-{
-    require_once(dirname(__DIR__,3)."/Communicator.inc.php");
-    $userPerms = Communicator::communicate(CommunicateURL::HAS_PERMISSION,
-        ["perms" => [
-            "pqcms.settings.database.set.host","pqcms.settings.database.set.username","pqcms.settings.database.set.password","pqcms.settings.database.set.name",
-        ]]);
-    if($userPerms["resp"] == 0)
+    if(!empty($_POST[$data]))
     {
-        $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
-        header("location: ../");
-        die("Niepoprawne przekierowanie");
-    }
-
-    $userPerms = $userPerms["perms"];
-    $dataToSave = ["host" => null,"username" => null,"password" => null,"name" => null];
-
-    foreach(array_keys($dataToSave) as $data)
-    {
-        if(!empty($_POST[$data]))
-            if($userPerms["pqcms.settings.database.set.$data"])
-                $dataToSave[$data] = $_POST[$data];
-            else
-                $notificationManagerError->addNotification("e","Niektóre pola nie zostały zmienione, ponieważ nie posiadasz odpowiednich uprawnień!");
+        if($userPerms["pqcms.settings.database.set.$data"])
+            $dataToSave[$data] = $_POST[$data];
+        else
+            $notificationManagerError->addNotification("e","Niektóre pola nie zostały zmienione, ponieważ nie posiadasz odpowiednich uprawnień!");
     }
 }
 

@@ -5,19 +5,9 @@ require_once(dirname(__DIR__,2)."/scripts/notifications/NotificationManager.inc.
 $notificationManager = new NotificationManager("settings-updatePQCMS","Ustawienia - PQCMS");
 $notificationManagerError = new NotificationManager("settings-updatePQCMS-perms","Ustawienia - PQCMS");
 
-if(empty($_POST["token"]) || $_POST["token"] != $_SESSION["pqcms"]["panel"]["settings"]["system"]["token"])
-{
-    $notificationManager->addNotification("e","Walidacja tokenu nie powiodła się.");
-    header("location: ../");
-    die("Niepoprawne przekierowanie");
-}
+require_once(dirname(__DIR__,3)."/utils/PQCMSToken.inc.php");
+PQCMSToken::verifyToken($notificationManager,$_SESSION["pqcms"]["panel"]["settings"]["system"]["token"], $_POST["token"]);
 
-if(time() >= $_SESSION["pqcms"]["panel"]["settings"]["system"]["token"]["expire"])
-{
-    $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
-    header("location: ../");
-    die("Niepoprawne przekierowanie");
-}
 
 // Sprawdzenie permisji, ustawienie danych
 {
@@ -26,9 +16,9 @@ if(time() >= $_SESSION["pqcms"]["panel"]["settings"]["system"]["token"]["expire"
         ["perms" => [
             "pqcms.settings.pqcms.set.username","pqcms.settings.pqcms.set.licensekey"
         ]]);
-    if($userPerms["resp"] == 0)
+    if($userPerms["suc"] == 0)
     {
-        $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
+        $notificationManager->addNotification("e","Błąd podczas pobierania uprawnień! Opis: ${userPerms["desc"]}");
         header("location: ../");
         die("Niepoprawne przekierowanie");
     }
@@ -50,5 +40,9 @@ require_once("UpdateData.inc.php");
 $response = updatePQCMS($dataToSave["username"],$dataToSave["licensekey"]);
 
 $notificationManager->addNotification($response["suc"] ? "s" : "e",$response["desc"]);
+if(isset($response["warning_verifyLicense"]))
+    NotificationManager::addNewNotification("settings-updatePQCMS-verifyLicense","Ustawienia - PQCMS","w",$response["warning_verifyLicense"]);
+if(isset($response["warning_licenseKey"]))
+    NotificationManager::addNewNotification("settings-updatePQCMS-verifyLicense","Ustawienia - PQCMS","w",$response["warning_licenseKey"]);
 header("location: ../");
 die("Niepoprawne przekierowanie");

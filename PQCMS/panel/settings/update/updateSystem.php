@@ -5,28 +5,18 @@ require_once(dirname(__DIR__,2)."/scripts/notifications/NotificationManager.inc.
 
 $notificationManager = new NotificationManager("settings-updateSystem","Ustawienia - Ustawienia systemowe");
 $notificationManagerError = new NotificationManager("settings-updateSystem-perms","Ustawienia - Ustawienia systemowe");
-if(empty($_POST["token"]) || $_POST["token"] != $_SESSION["pqcms-panel-settings-settings-token"])
-{
-    $notificationManager->addNotification("e","Walidacja tokenu nie powiodła się.");
-    header("location: ../");
-    die("Niepoprawne przekierowanie");
-}
 
-if(time() >= $_SESSION["pqcms-panel-settings-settings-token-expire"])
-{
-    $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
-    header("location: ../");
-    die("Niepoprawne przekierowanie");
-}
+require_once(dirname(__DIR__,3)."/utils/PQCMSToken.inc.php");
+PQCMSToken::verifyToken($notificationManager,$_SESSION["pqcms"]["panel"]["settings"]["settings"]["token"], $_POST["token"]);
 
 // Sprawdzenie permisji, ustawienie danych
 {
     require_once(dirname(__DIR__,3)."/Communicator.inc.php");
     $userPerms = Communicator::communicate(CommunicateURL::HAS_PERMISSION,
         ["perms" => [
-            "pqcms.settings.system.set.loginattempts","pqcms.settings.system.set.loginsessiontime","pqcms.settings.system.set.tokenlifespan"
+            "pqcms.settings.system.set.loginattempts","pqcms.settings.system.set.loginsessiontime"
         ]]);
-    if($userPerms["resp"] == 0)
+    if($userPerms["suc"] == 0)
     {
         $notificationManager->addNotification("e","Token jest przestarzały. Przeładuj stronę!");
         header("location: ../");
@@ -34,7 +24,7 @@ if(time() >= $_SESSION["pqcms-panel-settings-settings-token-expire"])
     }
 
     $userPerms = $userPerms["perms"];
-    $dataToSave = ["loginattempts" => null,"loginsessiontime" => null,"tokenlifespan" => null];
+    $dataToSave = ["loginattempts" => null,"loginsessiontime" => null];
 
     foreach(array_keys($dataToSave) as $data)
     {
@@ -48,8 +38,7 @@ if(time() >= $_SESSION["pqcms-panel-settings-settings-token-expire"])
 
 require_once("UpdateData.inc.php");
 $response = updateSettings((int) $_POST["login_count"], isset($_POST["login_count_reset"]),
-    (int) $_POST["login_session_time"], isset($_POST["login_session_time_reset"]),
-    (int) $_POST["token_lifespan"], isset($_POST["token_lifespan_reset"]));
+    (int) $_POST["login_session_time"], isset($_POST["login_session_time_reset"]));
 
 $notificationManager->addNotification($response["suc"] ? "s" : "e",$response["desc"]);
 header("location: ../");
