@@ -1,0 +1,4 @@
++ session: login / invalidate session / logout
++ site: edit text
+hr: (add/edit/delete) (rank/user)
+change settings: (pqcms/db/system)
