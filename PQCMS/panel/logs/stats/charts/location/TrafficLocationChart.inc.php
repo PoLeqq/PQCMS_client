@@ -96,7 +96,7 @@ HTML;
     const data = {
         labels: $labels,
         datasets: [{
-            label: 'Wszystkie odwiedziny',
+            label: 'Odwiedziny',
             data: $values,
             backgroundColor: $colors
         }]
@@ -151,26 +151,44 @@ JS;
         $endDate = date('Y-m-d', strtotime('today + 1 day'));
 
         $count = "ip";
-        if($this->uniqueIds)
+        if ($this->uniqueIds) {
             $count = "DISTINCT ip";
+        }
+
         $query = $conn->query("SELECT $column, COUNT($count) AS amount FROM pqcms_tabs_counter WHERE 
                                                        date BETWEEN '$startDate' 
                                                            AND '$endDate' 
                                                    GROUP BY $column
                                                    ORDER BY amount DESC
-                                                   LIMIT 10");
+                                                   LIMIT 9");
+
         $traffic = [];
-        while($row = $query->fetch_assoc())
-        {
-            if(is_null($row[$column]))
+        $otherAmount = 0;
+
+        while ($row = $query->fetch_assoc()) {
+            if (is_null($row[$column])) {
                 $row[$column] = "(brak danych)";
-            else if($row[$column] == "")
+            } elseif ($row[$column] == "") {
                 $row[$column] = "(nieznane)";
+            }
 
             $traffic[$row[$column]] = $row["amount"];
+            $otherAmount += $row["amount"];
         }
 
         $query->close();
+
+        $remainingCitiesQuery = $conn->query("SELECT COUNT($count) AS amount FROM pqcms_tabs_counter WHERE 
+                                                            date BETWEEN '$startDate' 
+                                                                AND '$endDate' 
+                                                            AND $column NOT IN ('" . implode("','", array_keys($traffic)) . "')");
+
+        $remainingCitiesRow = $remainingCitiesQuery->fetch_assoc();
+        $remainingAmount = $remainingCitiesRow["amount"];
+        $remainingCitiesQuery->close();
+
+        if($remainingAmount > 0)
+            $traffic["(inne)"] = $remainingAmount;
 
         return $traffic;
     }
