@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 18, 2024 at 10:14 PM
+-- Generation Time: Feb 19, 2024 at 10:11 PM
 -- Wersja serwera: 10.4.28-MariaDB
 -- Wersja PHP: 8.2.4
 
@@ -25,7 +25,10 @@ CREATE TABLE `pqcms_tabs_counter` (
   `id` int(11) NOT NULL,
   `tab_name` varchar(100) NOT NULL,
   `ip` varchar(39) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `continent` varchar(2) DEFAULT NULL,
+  `country` varchar(2) DEFAULT NULL,
+  `city` varchar(57) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
