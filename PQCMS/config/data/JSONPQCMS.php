@@ -24,6 +24,33 @@ class JSONPQCMS extends JSONObject {
     }
 
     /**
+     * Zmienia wersję systemu
+     */
+    function setVersion(string $version): void
+    {
+        $this->setObject("version",$version);
+    }
+
+    function getComplexVersion(): array
+    {
+        $complexVersion = [];
+
+        $versionString = $this->getVersion();
+
+        $parts = explode('-', $versionString);
+        $complexVersion["type"] = $parts[0];
+
+        $versionNumbers = explode('.', $parts[1]);
+
+        $complexVersion["major"] = $versionNumbers[0];
+        $complexVersion["minor"] = $versionNumbers[1];
+        $complexVersion["patch"] = $versionNumbers[2];
+
+        return $complexVersion;
+    }
+
+
+    /**
      * Zwraca nazwę użytkownika (systemowego)
      */
     function getLogin(): string
