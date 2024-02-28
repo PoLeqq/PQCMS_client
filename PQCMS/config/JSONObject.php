@@ -76,6 +76,6 @@ class JSONObject
         // $config = array_replace_recursive($this->config,$config[$this->name]);
         $data[$this->name] = $this->data;
 
-        file_put_contents($this->dir,json_encode($data,JSON_PRETTY_PRINT));
+        file_put_contents($this->dir,json_encode($data,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
     }
 }
