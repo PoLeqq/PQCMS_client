@@ -13,7 +13,7 @@ TabUtils::verifyUser();
     <link rel="stylesheet" href="../default.css">
     <link rel="stylesheet" href="index.css">
 
-    <title>PQCMS - Home Panel</title>
+    <title>PQCMS - Start</title>
 
     <style>
         body {
