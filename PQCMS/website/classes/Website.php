@@ -6,10 +6,13 @@ class Website
 
     public function __construct()
     {
-        require_once(dirname(__DIR__)."/code/Root.php");
-//        require_once(dirname(__DIR__)."/code/Contact.php");
-        $this->tabs["_root_"] = new Root(true);
-//        $this->tabs["kontakt"] = new Contact();
+        require_once(dirname(__DIR__,2)."/config/data/JSONTabs.php");
+        $tabs = new JSONTabs();
+        foreach($tabs->getTabs() as $class => $name)
+        {
+            require_once(dirname(__DIR__)."/code/$class.php");
+            $this->tabs["$class"] = new $class(true);
+        }
     }
 
     public function getTab(string $name): ?Tab
