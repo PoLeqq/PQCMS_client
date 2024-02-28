@@ -9,6 +9,8 @@ if(empty($_SESSION["pqcms"]["panel"]["auth_key"]))
 
 require_once(dirname(__DIR__,2)."/Communicator.inc.php");
 $logoutResponse = Communicator::communicate(CommunicateURL::LOGOUT_USER);
+//var_dump($logoutResponse);
+//die();
 
 unset($_SESSION["pqcms"]);
 
