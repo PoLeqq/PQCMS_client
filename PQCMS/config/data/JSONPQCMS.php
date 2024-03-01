@@ -23,6 +23,11 @@ class JSONPQCMS extends JSONObject {
         return $this->getObject("version");
     }
 
+    function getVersionDate(): string
+    {
+        return $this->getObject("version_date");
+    }
+
     /**
      * Zmienia wersję systemu
      */
