@@ -10,7 +10,7 @@ class JSONForms extends JSONObject
 {
     function __construct()
     {
-        parent::__construct("forms","/files/forms.json");
+        parent::__construct("forms","/files/data.json");
     }
 
     /**
