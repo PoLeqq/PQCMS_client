@@ -31,9 +31,10 @@ class JSONPQCMS extends JSONObject {
     /**
      * Zmienia wersję systemu
      */
-    function setVersion(string $version): void
+    function setVersion(string $version, string $versionDate): void
     {
         $this->setObject("version",$version);
+        $this->setObject("version_date",$versionDate);
     }
 
     function getComplexVersion(): array
