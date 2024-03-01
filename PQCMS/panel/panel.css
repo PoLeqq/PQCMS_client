@@ -3,26 +3,27 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'Roboto', sans-serif;
+    overflow: hidden;
 }
 
 #main {
     display: flex;
-    min-height: 90vh;
-
+    height: 90vh;
 }
 
 #background {
     position: absolute;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(180deg, #8a2be2, #793ee6, #00bfff,#8a2be2);
+    /*background: linear-gradient(180deg, #8a2be2, #793ee6, #00bfff,#8a2be2);*/
+    background: linear-gradient(180deg, rgba(138,43,226,.8), rgba(121,62,230,.8), rgba(0,191,255,.8), rgba(138,43,226,.8));
+
     background-size: 400% 400%;
     animation: block-background 30s ease-in-out infinite;
     z-index: -10;
 }
 
 nav {
-    background: rgba(255,255,255,0.2);
     color: #fff;
     width: 170px;
     transition: all .8s;
@@ -33,6 +34,27 @@ nav {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    z-index: 1000000;
+    overflow: auto;
+    /*background: rgba(255,255,255,.2);*/
+}
+
+/* width */
+nav::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+/* Track */
+nav::-webkit-scrollbar-track {
+    background: #c2c2c2;
+}
+/* Handle */
+nav::-webkit-scrollbar-thumb {
+    background: #8f8f8f;
+}
+/* Handle on hover */
+nav::-webkit-scrollbar-thumb:hover {
+    background: #2d2d2d;
 }
 
 nav:hover {
@@ -45,15 +67,15 @@ nav:hover {
 nav > ul {
     list-style-type: none;
     padding-left: 0;
-    margin-top: -20px;
+    margin-top: -10px;
 }
 
 .internalLink {
-    height: 40px;
+    height: 35px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 20px 0;
+    margin: 5px 0;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -101,15 +123,19 @@ nav > ul {
 }
 
 footer {
-    height: 10vh;
+    height: max(50px,10vh);
     display: flex;
     flex-direction: column;
-    background: rgba(255,255,255,0.2);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
     color: #fff;
     justify-content: center;
     align-items: center;
     text-align: center;
     row-gap: 10px;
+    z-index: 99999;
 }
 
 footer > a {
@@ -138,9 +164,18 @@ footer > a {
     align-items: center;
 }
 
-.nav-image > img {
-    height: 40px;
+.nav-image > img, #nav-pqcms-logo > img {
+    height: 35px;
+}
+
+.nav-image > img, #nav-pqcms-logo {
     margin-left: 15px;
+}
+
+#nav-pqcms-logo {
+    background-color: rgba(255,255,255,.2);
+    padding: 2px 6px;
+    border-radius: 10px;
 }
 
 #edit_site {
@@ -157,4 +192,30 @@ footer > a {
     100% {
         background-position: 0 50%;
     }
+}
+
+#pqcms-username {
+    overflow-x: auto;
+    margin-right: 15px;
+}
+
+/* width */
+#pqcms-username::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+/* Track */
+#pqcms-username::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+#pqcms-username::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+#pqcms-username::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
