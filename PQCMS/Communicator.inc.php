@@ -56,8 +56,15 @@ class Communicator
                 }
             }
 
-            $postData["domain"] = self::getDomain($_SERVER["SERVER_NAME"]);
+            if($path == CommunicateURL::GET_NEWER_VERSION)
+            {
+                require_once("config/data/JSONPQCMS.php");
+                $jsonPQCMS = new JSONPQCMS();
 
+                $postData["version"] = $jsonPQCMS->getComplexVersion();
+            }
+
+            $postData["domain"] = self::getDomain($_SERVER["SERVER_NAME"]);
 
             date_default_timezone_set("Europe/Warsaw");
             if(empty($_SESSION["pqcms"]["secure_key"]) ||
@@ -145,6 +152,7 @@ class CommunicateURL
     public const PLAIN_VERIFY_LICENSE = "website/license/VerifyLicense.php";
     public const GET_CLIENT_VERSION = "system/version/GetClientVersion.php";
     public const GET_SERVER_VERSION = "system/version/GetServerVersion.php";
+    public const GET_NEWER_VERSION = "system/version/GetNewerVersion.php";
     public const DOES_ADMIN_EXISTS = "website/hr/admin/DoesAdminExists.php";
     public const ADD_USER = "website/hr/user/AddUser.php";
     public const GET_USER = "website/hr/user/GetUser.php";
