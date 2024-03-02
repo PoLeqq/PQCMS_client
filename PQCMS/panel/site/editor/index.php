@@ -21,13 +21,13 @@ TabUtils::verifyUserChildrenTab("editor");
     require_once(dirname(__DIR__,3)."/website/classes/Website.php");
     $website = new Website();
 
-    if(empty($_GET["site"])) $site = "_root_";
+    if(empty($_GET["site"])) $site = "Root";
     else $site = $_GET["site"];
 
     $tab = $website->getTab($site);
 
     if(is_null($tab)) echo "Nie znaleziono podanej strony.";
-    else echo $tab->generateHtml(true);
+    else echo $tab->generateSiteCode(true);
 
     ?>
 
