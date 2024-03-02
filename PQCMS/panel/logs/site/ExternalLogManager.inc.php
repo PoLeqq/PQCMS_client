@@ -102,9 +102,10 @@ fetch("local_communicators/GetLogs.php", {
                 tr.appendChild(e);
             })
             
+            $tableCounterVar++;
             tbody.appendChild(tr); 
         })
-        tbody.appendChild(getLoadMoreButton(tbody));
+        tbody.appendChild(getLoadMoreButton());
     }).catch((err) => {
         infoElement.innerText = err.message;
         infoElement.style.color = "red";
@@ -128,7 +129,7 @@ function getTds(tr, data) {
     else if(action === "logout")
     {
         if(data["admin_logout"])
-            tr.style.background = "rgba(255,0,0,.8)";
+            tr.style.background = "rgba(255,20,20,.8)";
         else
             tr.style.background = "rgba(248, 157, 31,.8)";
     }
@@ -156,7 +157,7 @@ function getTds(tr, data) {
     return tds;
 }
 
-function getLoadMoreButton(tbody) 
+function getLoadMoreButton() 
 {
     const tr = document.createElement("tr");
     
@@ -182,23 +183,32 @@ function getData(from, amount)
       body: JSON.stringify({
         type: "$id",
         from: from,
-        amont: amount
+        amount: amount
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
       }
     }).then((resp) => {
+        const tbody = table.querySelector("tbody");
+        
         resp.json().then((json) => {
             if(json["suc"] !== 1 || (!("logs" in json)))
             {
-                console.error(json["desc"]);
+                setErrorField(json["desc"]);
+                console.error("Błąd podczas pobierania dodatkowych wierszy logów ($id):",json["desc"]);
+                tbody.appendChild(getLoadMoreButton());
                 return;
             }
             
-            const tbody = table.querySelector("tbody");
-            console.log("foreach:");
+            if(json["logs"].length === 0)
+            {
+                setErrorField("To jest początek historii!");
+                setTimeout(() => {
+                    table.parentElement.parentElement.querySelector("#error-$id").remove();
+                },5000);
+                return;
+            }
             json["logs"].forEach(e => {
-                console.log(e);
                 const tr = document.createElement("tr");
                 const data = JSON.parse(e)["data"];
                 
@@ -207,14 +217,39 @@ function getData(from, amount)
                 });
                 
                 $tableCounterVar++;
-                console.log($tableCounterVar);
                 tbody.appendChild(tr); 
             })
-            tbody.appendChild(getLoadMoreButton(tbody));
+            tbody.appendChild(getLoadMoreButton());
+            setErrorField(null);
         }).catch((err) => {
-            console.error(err);
+            setErrorField("Wystąpił błąd podczas przetwarzania danych.");
+            tbody.appendChild(getLoadMoreButton());
+            console.error("Błąd podczas przetwarzania danych (pobieranie dodatkowych wierszy logów $id)",err);
         });
     });
+}
+
+function setErrorField(error) {
+    const destinationElement = table.parentElement.parentElement;
+    
+    if(error == null)
+    {
+        const errorField = destinationElement.querySelector("#error-$id");
+        if(errorField != null)
+            errorField.remove();
+        return;
+    }
+    
+    if(destinationElement.querySelector("#error-$id") == null)
+    {
+        const div = document.createElement("div");
+        div.id = "error-$id";
+        div.style.color = "red";
+        destinationElement.appendChild(div);
+    }
+    
+    const errorField = destinationElement.querySelector("#error-$id");
+    errorField.innerText = error;
 }
 JS;
     }
