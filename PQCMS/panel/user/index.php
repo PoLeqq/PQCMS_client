@@ -1,16 +1,14 @@
 <?php
 
-// Sprawdzenie, czy user posiada permisje do strony
 require_once(dirname(__DIR__)."/scripts/server/TabUtils.inc.php");
-TabUtils::verifyUser("hr");
+require_once("Perms.php");
+@session_start();
+$verify = TabUtils::verifyUser("hr",(new UserPerms($_SESSION["pqcms"]["panel"]["username"]))->getPerms());
 
 require_once(dirname(__DIR__,2)."/Communicator.inc.php");
 $user = Communicator::communicate(CommunicateURL::GET_USER,["username" => $_SESSION["pqcms"]["panel"]["username"]])["resp"][0];
 $perms = Communicator::communicate(CommunicateURL::GET_PERMS);
-$hasPerms = Communicator::communicate(CommunicateURL::HAS_PERMISSION,["perms" => [
-        "pqcms.hr.user.edit.nickname.${user["username"]}",
-        "pqcms.hr.user.edit.email.${user["username"]}"
-]])["perms"];
+$hasPerms = $verify["perms"];
 
 ?>
 
@@ -56,7 +54,7 @@ $hasPerms = Communicator::communicate(CommunicateURL::HAS_PERMISSION,["perms" =>
 
 <label>
     <b>Nazwa użytkownika</b>
-    <input name="username" value="${user["nickname"]}" ${nicknameInput}>
+    <input name="nickname" value="${user["nickname"]}" ${nicknameInput}>
 </label>
 
 <label>
