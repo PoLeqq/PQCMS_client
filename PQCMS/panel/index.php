@@ -1,8 +1,16 @@
 <?php
 require_once("../utils/database/Database.inc.php");
 $conn = Database::getConnection();
-if($conn)
+if(!is_null($conn))
+{
     $setupDatabase = (Database::setupDefaultDatabase($conn));
+    if(is_null($setupDatabase))
+    {
+        require_once(dirname(__DIR__)."/panel/scripts/notifications/NotificationManager.inc.php");
+        NotificationManager::addNewNotification("pqcms-databaseSetupError","Baza danych","e",
+            "Niepowodzenie! Nie połączono z bazą danych, przez co nie można jej skonfigurować!");
+    }
+}
 else
 {
     require_once(dirname(__DIR__)."/panel/scripts/notifications/NotificationManager.inc.php");
@@ -10,11 +18,8 @@ else
         "Niepowodzenie! Nie połączono z bazą danych, przez co nie można jej skonfigurować!");
 }
 
-require_once("scripts/server/TabUtils.inc.php");
-TabUtils::verifyUser();
-
 require_once(dirname(__DIR__)."/Communicator.inc.php");
-$tabs = ["editor" => false,"hr" => false,"settings" => false, "user" => false];
+$tabs = ["editor" => false, "hr" => false, "settings" => false, "user" => false, "logs" => false, "forms" => false];
 $tabsViewPermissions = Communicator::communicate(CommunicateURL::HAS_PERMISSION,["perms" => getTabsAsPerms($tabs)]);
 
 function getTabsAsPerms(array $tabs): array
