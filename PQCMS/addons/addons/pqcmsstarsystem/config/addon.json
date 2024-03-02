@@ -1,0 +1,16 @@
+{
+  "id": "pqcmsstarsystem",
+  "name": "(PQ) Star System",
+  "main": "PQCMSStarSystem.inc.php",
+  "description": "Dodatek, który wzbogaci Twoją działalność o pozytywne opinie! Jak to działa? Jeśli klient oceni firmę np. na 5 gwiazdek, zostanie przekierowany na opinie Google. Jednak, gdy opinia będzie negatywna, klient nie będzie przekierowany na opinie Google, jednak zostanie poproszony o opisanie, jak jakość obsługi może być polepszona.",
+  "version": {
+    "type": "alpha",
+    "major": 1,
+    "minor": 0,
+    "patch": 0,
+    "date": "2024-03-01"
+  },
+  "author": "Wiktor Soliński",
+  "default_config": {},
+  "permissions": []
+}
