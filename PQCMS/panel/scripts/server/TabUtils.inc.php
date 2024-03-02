@@ -2,23 +2,42 @@
 
 class TabUtils
 {
-    public static function verifyUser(string $tabName = null): void
+    private static function checkIfLogged(): void
     {
-        @session_start();
-        if(empty($_SESSION["pqcms-panel-auth_key"]))
+        if(empty($_SESSION["pqcms"]["panel"]["auth_key"]))
         {
             header("location: ../");
             die("Najpierw musisz się zalogować!");
         }
+    }
 
+    public static function verifyUser(string $tabName = null, ?array $addPerms = null): ?array
+    {
+        @session_start();
+        TabUtils::checkIfLogged();
+
+        $perms = [];
         if(!is_null($tabName))
+            $perms[] = "pqcms.tabs.view.$tabName";
+
+        if(!is_null($addPerms))
+            $perms = array_merge($perms,$addPerms);
+
+        if(!is_null($addPerms) || !is_null($tabName))
         {
             require_once(dirname(__DIR__,3)."/Communicator.inc.php");
-            $websiteSettingsResponse = Communicator::communicate(CommunicateURL::HAS_PERMISSION,["perms" => ["pqcms.tabs.view.$tabName"]]);
+            $websiteSettingsResponse = Communicator::communicate(CommunicateURL::HAS_PERMISSION,["perms" => $perms]);
             if($websiteSettingsResponse["suc"] == 0)
                 die("Wystąpił błąd podczas sprawdzania uprawnień! Ze względów bezpieczeństwa nie masz dostępu do tej strony. Skontaktuj się z administratorem PQCMS!");
-            if(!$websiteSettingsResponse["perms"]["pqcms.tabs.view.$tabName"])
-                die("Nie masz uprawnień, aby przeglądać tą stronę!");
+
+            if(!is_null($addPerms))
+                if(!$websiteSettingsResponse["perms"]["pqcms.tabs.view.$tabName"])
+                    die("Nie masz uprawnień, aby przeglądać tą stronę!");
+
+//            nadaj uprawnienia, do podstron panelu, aby nie trzeba było cały czas łączyć się z pqcms (krótszy czas ładowania)
+            if(empty($_SESSION["pqcms"]["panel"]["allow_view"]) || !in_array($tabName,$_SESSION["pqcms"]["panel"]["allow_view"]))
+                $_SESSION["pqcms"]["panel"]["allow_view"][] = $tabName;
+            return $websiteSettingsResponse;
         }
 
         return [];
