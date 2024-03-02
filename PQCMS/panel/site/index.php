@@ -20,16 +20,17 @@ TabUtils::verifyUser("editor");
     <nav>
         <ul>
             <?php
-                $site = json_decode(file_get_contents("site.json"),true);
+            require_once(dirname(__DIR__,2)."/config/data/JSONTabs.php");
+            $sites = new JSONTabs();
 
-                foreach($site["tabs"] as $path => $name)
-                {
-                    echo<<<END
-                    <li title="${name} - ${path}/" data-site="${path}">
-                        ${name}
-                    </li>
-                    END;
-                }
+            foreach($sites->getTabs() as $path => $name)
+            {
+                echo<<<END
+                <li title="${name} - ${path}/" data-site="${path}">
+                    ${name}
+                </li>
+                END;
+            }
             ?>
         </ul>
     </nav>
@@ -38,7 +39,7 @@ TabUtils::verifyUser("editor");
         <div id="mainIframeOverlay">
             <img src="../images/preloader.gif" alt="preloader"/>
         </div>
-        <iframe src="editor?site=_root_"></iframe>
+        <iframe src="editor?site=Root"></iframe>
     </div>
 
     <script>
@@ -54,7 +55,8 @@ TabUtils::verifyUser("editor");
             const baseUrl = currentURL.origin + currentURL.pathname;
             const pathURL = baseUrl + "?site=" + encodeURIComponent(newUrl);
 
-            if(currentURL.href === pathURL) return;
+            if(currentURL.href === pathURL)
+                return;
 
             iframeOverlay.style.visibility = "visible";
             iframeOverlay.style.opacity = "1";
