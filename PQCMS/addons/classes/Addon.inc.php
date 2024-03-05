@@ -81,6 +81,28 @@ abstract class Addon
         $this->panel = $panel;
     }
 
+    /**
+     * Zwraca ścieżkę od otwartego panelu dodatku, która kieruje na ścieżkę folderu dodatku (do użytku zewnętrznego)
+     * @return string
+     */
+    public function getRelativePathFromPanelToAddon(): string
+    {
+        return "../../addons/addons/".$this->id;
+    }
+
+    /**
+     * Zwraca ścieżkę od folderu dodatku do panelu dodatku (do użytku zewnętrznego)
+     * @return string
+     */
+    public function getRelativePathFromAddonToPanel(): string
+    {
+        return "../../../panel/addons/addonPanel.php?addon=".$this->id;
+    }
+
+    /**
+     * Zwraca ścieżkę do głównego folderu dodatku (do użytku wewnętrznego)
+     * @return string
+     */
     public function getAddonPath(): string
     {
         return dirname(__DIR__)."/addons/".$this->id."/";
