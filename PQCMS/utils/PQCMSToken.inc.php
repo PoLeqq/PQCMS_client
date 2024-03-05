@@ -15,7 +15,41 @@ class PQCMSToken
         ];
     }
 
-    public static function verifyToken(NotificationManager $notificationManager, ?array &$generatedToken, string $postToken): void
+    public static function verifyTokenGetResponse(NotificationManager $notificationManager, ?array &$generatedToken, ?string $postToken): array
+    {
+        if(empty($generatedToken))
+        {
+            $msg = "Nie wygenerowano tokenu! Czy próbujesz przesłać dane nie przez formularz PQCMS?";
+            $notificationManager->addNotification("e",$msg);
+            return ["suc" => 0, "desc" => $msg];
+        }
+
+        if(empty($postToken))
+        {
+            $msg = "Nie podano tokenu!";
+            $notificationManager->addNotification("e",$msg);
+            return ["suc" => 0, "desc" => $msg];
+        }
+
+        if($postToken != $generatedToken["value"])
+        {
+            $msg = "Walidacja tokenu nie powiodła się.";
+            $notificationManager->addNotification("e",$msg);
+            return ["suc" => 0, "desc" => $msg];
+        }
+
+        if(time() >= $generatedToken["expire"])
+        {
+            $msg = "Token jest przestarzały. Przeładuj stronę!";
+            $notificationManager->addNotification("e",$msg);
+            return ["suc" => 0, "desc" => $msg];
+        }
+
+        $generatedToken = null;
+        return ["suc" => 1];
+    }
+
+    public static function verifyToken(NotificationManager $notificationManager, ?array &$generatedToken, ?string $postToken): void
     {
         if(empty($generatedToken))
             self::endScript($notificationManager,"e","Nie wygenerowano tokenu! Czy próbujesz przesłać dane nie przez formularz PQCMS?");
