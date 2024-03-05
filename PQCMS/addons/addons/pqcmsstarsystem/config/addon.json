@@ -11,6 +11,9 @@
     "date": "2024-03-01"
   },
   "author": "Wiktor Soliński",
-  "default_config": {},
+  "default_config": {
+    "star-redirect-rate": 4,
+    "redirect-url": "https://www.google.com/intl/pl_pl/business/"
+  },
   "permissions": []
 }
