@@ -116,7 +116,7 @@ class Communicator
         {
             $ret = json_decode($response,true);
             if(is_null($ret))
-                return ["suc" => 0, "desc" => "Otrzymano niepoprawną odpowiedź!"];
+                return ["suc" => 0, "desc" => "Otrzymano niepoprawną odpowiedź!", "debug" => $response];
             if($path === CommunicateURL::VERIFY_LICENSE && !empty($ret["secure_key"]))
             {
                 $_SESSION["pqcms"]["secure_key"]["value"] = $ret["secure_key"]["value"];
