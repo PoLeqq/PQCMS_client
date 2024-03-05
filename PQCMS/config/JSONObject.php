@@ -67,6 +67,15 @@ class JSONObject
     }
 
     /**
+     * Zmienia dane obiektu (całego)
+     * @param mixed $value wartość
+     */
+    public function setSelf(mixed $value): void
+    {
+        $this->data = $value;
+    }
+
+    /**
      * Zapisuje dane aktualnie znajdujące się w $data.js
      */
     public function saveData(): void
