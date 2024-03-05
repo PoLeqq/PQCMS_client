@@ -4,10 +4,10 @@ require_once(dirname(__DIR__)."/TabPerms.php");
 
 class FormsPerms extends TabPerms
 {
-    public function __construct(array $formNames)
+    public function __construct(array $forms)
     {
         $formsPermsNames = [];
-        foreach ($formNames as $form)
+        foreach ($forms as $form)
             $formsPermsNames[] = "pqcms.forms.".$form->getId();
 
         parent::__construct($formsPermsNames);

@@ -48,13 +48,28 @@ HTML;
 
         foreach($form->getRows() as $row)
         {
+            $rowData = json_decode($row["data"],true);
+
             $tbody .= "<tr>";
-            foreach(json_decode($row["data"]) as $rowCol => $rowVal)
-                $tbody .= <<<HTML
+            foreach($form->getCols() as $colId => $colName)
+            {
+                if(in_array($colId,array_keys($rowData)))
+                   $tbody .= <<<HTML
 <td>
-    $rowVal
+    ${rowData[$colId]}
 </td>
 HTML;
+                else
+                    $tbody .= "<td></td>";
+
+//                else
+            }
+//            foreach(json_decode($row["data"]) as $rowCol => $rowVal)
+//                $tbody .= <<<HTML
+//<td>
+//    $rowVal
+//</td>
+//HTML;
             $tbody .= <<<HTML
 <td>
     ${row["date"]}
