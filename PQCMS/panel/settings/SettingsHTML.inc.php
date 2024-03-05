@@ -15,9 +15,9 @@ class SettingsHTML
         $disabledSubmit = ($setLogin && $setLicenseKey) ? "disabled" : "";
 
         return<<<HTML
-<form method="POST" action="update/updatePQCMS.php" class="col-3 p-4">
-    <fieldset class="d-flex flex-column justify-content-center align-items-start" >
-        <legend class="">PQCMS</legend>
+<form method="POST" action="update/updatePQCMS.php" class="col-6 col-lg-3 p-4">
+    <fieldset class="d-flex flex-column justify-content-center align-items-start">
+        <legend class=""><h2>PQCMS</h2></legend>
 
         <input type="hidden" name="token" value="{$_SESSION["pqcms"]["panel"]["settings"]["system"]["token"]["value"]}">
 
@@ -54,9 +54,9 @@ HTML;
         $disabledSubmit = ($setHost && $setUser && $setPass && $setName) ? "disabled" : "";
 
         return<<<HTML
-<form method="POST" action="update/updateDatabase.php" class="col-3 p-4">
+<form method="POST" action="update/updateDatabase.php" class="col-6 col-lg-3 p-4">
     <fieldset class="d-flex flex-column justify-content-center align-items-start" >
-        <legend class="">Baza Danych</legend>
+        <legend class=""><h2>Baza Danych</h2></legend>
 
         <input type="hidden" name="token" value="{$_SESSION["pqcms"]["panel"]["settings"]["database"]["token"]["value"]}">
 
@@ -91,9 +91,9 @@ HTML;
     {
         $html = self::getSystemHTML($userPerms, $communicatorGetSettings);
         return<<<HTML
-<form method="POST" action="update/updateSystem.php" class="col-3 p-4">
+<form method="POST" action="update/updateSystem.php" class="col-6 col-lg-3 p-4">
     <fieldset class="d-flex flex-column justify-content-center align-items-start" >
-        <legend class="">System</legend>
+        <legend class=""><h2>System</h2></legend>
         ${html}       
     </fieldset>
 </form>

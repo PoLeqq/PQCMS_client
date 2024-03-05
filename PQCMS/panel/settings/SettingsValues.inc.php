@@ -23,6 +23,7 @@ class SettingsValues
                 "pqcms.settings.view.system",
                 "pqcms.settings.system.get.loginattempts","pqcms.settings.system.get.loginsessiontime",
                 "pqcms.settings.system.set.loginattempts","pqcms.settings.system.set.loginsessiontime",
+                "pqcms.settings.systemupdate"
             ]]);
         $this->databaseData = new JSONDatabase();
         $this->pqcmsData = new JSONPQCMS();
