@@ -19,4 +19,9 @@ class JSONAddons extends JSONObject
     {
         return $this->data;
     }
+
+    public function setSelf(mixed $value): void
+    {
+        parent::setSelf($value);
+    }
 }
