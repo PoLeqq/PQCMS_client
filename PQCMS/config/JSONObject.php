@@ -70,7 +70,7 @@ class JSONObject
      * Zmienia dane obiektu (całego)
      * @param mixed $value wartość
      */
-    public function setSelf(mixed $value): void
+    protected function setSelf(mixed $value): void
     {
         $this->data = $value;
     }
