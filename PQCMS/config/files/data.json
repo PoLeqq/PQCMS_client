@@ -32,6 +32,7 @@
         }
     ],
     "addons": [
-        "pqcmsstarsystem"
+        "pqcmsstarsystem",
+        "pqcmsclientbot"
     ]
 }
