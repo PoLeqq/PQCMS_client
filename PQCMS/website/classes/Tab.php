@@ -8,13 +8,15 @@ abstract class Tab
     protected string $longSourcePath;
     protected array $texts;
     protected array $groups;
+    protected int $folderDepth;
 
-    public function __construct(string $name, string $path, bool $editable, string $longSourcePath, array $texts = [], array $groups = [])
+    public function __construct(string $name, string $path, bool $editable, string $longSourcePath, int $folderDepth, array $texts = [], array $groups = [])
     {
         $this->name = $name;
         $this->path = $path;
         $this->editable = $editable;
         $this->longSourcePath = $longSourcePath;
+        $this->folderDepth = $folderDepth;
 
         $this->texts = $texts;
         $this->texts[] = "*";
