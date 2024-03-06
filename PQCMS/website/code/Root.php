@@ -7,7 +7,7 @@ class Root extends Tab
 {
     public function __construct($editable)
     {
-        parent::__construct("_root_","",$editable,"../../../../",
+        parent::__construct("_root_","",$editable,"../../../../",0,
             [
                 "header1",
                 "text1",

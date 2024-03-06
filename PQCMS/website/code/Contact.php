@@ -7,7 +7,7 @@ class Contact extends Tab
 {
     public function __construct(bool $editable)
     {
-        parent::__construct("kontakt","kontakt","../../../../",$editable);
+        parent::__construct("kontakt","kontakt","../../../../",$editable,1);
     }
 
     public function generateHeadCode(string $lang = "pl"): string
