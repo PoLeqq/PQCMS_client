@@ -164,6 +164,7 @@ class CommunicateURL
     public const DELETE_RANK = "website/hr/rank/DeleteRank.php";
     public const GET_RANK = "website/hr/rank/GetRank.php";
     public const EDIT_RANK = "website/hr/rank/EditRank.php";
+    public const GET_LOGS = "website/logs/GetLogs.php";
     public const LOGIN_USER = "website/auth/LoginUser.php";
     public const LOGOUT_USER = "website/auth/LogoutUser.php";
     public const GET_LICENSE_EXPIRATION = "website/data/GetLicenseExpiration.php";
