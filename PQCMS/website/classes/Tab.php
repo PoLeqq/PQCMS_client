@@ -193,8 +193,8 @@ JS;
                 return "Najpierw musisz się zalogować!";
         }
 
-        $head = $this->generateHeadCode();
-        $body = $this->generateBodyCode();
+        $head = $this->generateHeadCode($this->folderDepth);
+        $body = $this->generateBodyCode($this->folderDepth);
 
         $sourcePath = $this->getSourcePath();
 
@@ -217,14 +217,42 @@ HTML;
             $body .= $this->generateJS($this->texts);
         }
 
+        $addonsHead = "";
+        $addonsBody = "";
+        require_once(dirname(__DIR__,2)."/addons/AddonManager.inc.php");
+        /** @var $addon Addon */
+        foreach((new AddonManager())->getEnabledAddons() as $addon)
+        {
+            $websiteAddon = $addon->getWebsiteAddon();
+            if(is_null($websiteAddon))
+                continue;
+
+            $id = $addon->getId();
+            $addonHead = $websiteAddon->onWebsiteHeadLoaded($this->folderDepth);
+            $addonBody = $websiteAddon->onWebsiteBodyLoaded($this->folderDepth);
+
+            if(!empty($addonHead))
+                $addonsHead .= <<<HTML
+<!-- PQCMS "$id" addon -->
+$addonHead
+HTML;
+            if(!empty($addonBody))
+                $addonsBody .= <<<HTML
+<!-- PQCMS "$id" addon -->
+$addonBody
+HTML;
+        }
+
         return<<<HTML
 <!DOCTYPE html>
 <html lang="$lang">
 <head>
     $head
+    $addonsHead
 </head>
 <body>
     $body
+    $addonsBody
 </body>
 </html>
 HTML;
