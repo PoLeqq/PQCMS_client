@@ -54,7 +54,10 @@ class PQCMSToken
         if(empty($generatedToken))
             self::endScript($notificationManager,"e","Nie wygenerowano tokenu! Czy próbujesz przesłać dane nie przez formularz PQCMS?");
 
-        if(empty($postToken) || $postToken != $generatedToken["value"])
+        if(empty($postToken))
+            self::endScript($notificationManager,"e","Nie podano tokenu!");
+
+        if($postToken != $generatedToken["value"])
             self::endScript($notificationManager,"e","Walidacja tokenu nie powiodła się.");
 
         if(time() >= $generatedToken["expire"])
