@@ -89,4 +89,15 @@ class AddonManager
 
         return $addonList;
     }
+
+    public function getEnabledAddons(): array
+    {
+        $addons = $this->getAddonList();
+        for($i=0; $i<sizeof($addons); $i++)
+        {
+            if(!$this->isAddonEnabled($addons[$i]->getId()))
+                unset($addons[$i]);
+        }
+        return $addons;
+    }
 }
