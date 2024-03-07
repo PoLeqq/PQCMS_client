@@ -131,7 +131,7 @@ HTML;
     public static function getTypes(): array
     {
         return [
-            "site-text",
+            "sitetext",
             "session",
             "hr",
             "settings"

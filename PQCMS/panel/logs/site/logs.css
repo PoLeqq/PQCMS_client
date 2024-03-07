@@ -17,6 +17,24 @@ main > div {
     padding-bottom: 1px;
 }
 
+.data-table
+{
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid black;
+}
+
+.data-table thead {
+    position: sticky;
+    top: 0;
+    margin-top: 1px;
+    z-index: 5;
+}
+
+.data-table thead th {
+    border: 1px solid black;
+}
+
 .data-table td,
 .data-table th {
     border: 1px solid black;
@@ -57,7 +75,7 @@ main > div {
 .td-div {
     overflow: auto;
     /*resize: both;*/
-    text-align: left;
+    text-align: center;
     /*padding-right: 10px;*/
     /*padding-bottom: 10px;*/
 }

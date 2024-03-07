@@ -6,19 +6,16 @@ TabUtils::verifyUser("logs");
 require_once(dirname(__DIR__,3)."/utils/database/Database.inc.php");
 $conn = Database::getConnection();
 
-require_once("LocalLogManager.inc.php");
-$logManager = new LocalLogManager($conn,"site-text","Tekst strony",
-    [
-        "user" => "Użytkownik", "date" => "Data", "old_text" => "Stary tekst", "new_text" => "Nowy tekst"
-    ],
-    10,10
-);
-
 require_once("ExternalLogManager.inc.php");
 $sessionLogs = new ExternalLogManager("session","Sesje użytkowników",
     [
         "action" => "Akcja", "date" => "Data", "ip" => "IP" ,"username" => "Użytkownik","logged" => "Zalogowano","admin_logout" => "Admin."
     ],5);
+
+require_once(dirname(__DIR__,3)."/Communicator.inc.php");
+$hasPermission = Communicator::communicate(CommunicateURL::HAS_PERMISSION,["perms" => ["pqcms.logs.sitetext","pqcms.logs.session"]]);
+if($hasPermission["suc"] == 0)
+    die("Wystąpił błąd podczas sprawdzania uprawnień, przez co nie masz dostępu do panelu!");
 
 ?>
 <!DOCTYPE html>
@@ -38,7 +35,15 @@ $sessionLogs = new ExternalLogManager("session","Sesje użytkowników",
             <div class="border border-2 border-secondary border-start-0 border-top-0
                         col-6 p-3">
                 <?php
+                if($hasPermission["perms"]["pqcms.logs.sitetext"])
+                {
+                    require_once("LocalLogManager.inc.php");
+                    $logManager = new LocalLogManager($conn,"sitetext","Tekst strony",
+                        ["user" => "Użytkownik", "date" => "Data", "old_text" => "Stary tekst", "new_text" => "Nowy tekst"], 10,10);
                     echo $logManager->generateHtml();
+                }
+                else
+                    echo "Nie masz uprawnień do wglądu logów tekstów strony";
                 ?>
 
             </div>
