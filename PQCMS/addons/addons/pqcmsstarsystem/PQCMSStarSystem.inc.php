@@ -7,6 +7,6 @@ class PQCMSStarSystem extends Addon
     public const addonID = "pqcmsstarsystem";
     public function __construct()
     {
-        parent::__construct(PQCMSStarSystem::addonID, new PQCMSStarSystemPanel($this));
+        parent::__construct(PQCMSStarSystem::addonID, new PQCMSStarSystemPanel($this),null);
     }
 }
