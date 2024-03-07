@@ -1,0 +1,73 @@
+{
+    "bot_name": "Wirtualny asystent",
+    "error_message": "Brr... Bzzt! Wystąpił błąd!",
+    "start-messages": [
+        [
+            "Cześć! W czym mogę pomóc?",
+            "Hej! Potrzebujesz pomocy?",
+            "Witam, jestem wirtualnym asystentem, może mogę Ci w czymś pomóc?",
+            "Cześć! Co chcesz zrobić?"
+        ],
+        "Wiadomość, która zawsze się pojawi"
+    ],
+    "responses": [
+        {
+            "id": "default",
+            "name": "Start",
+            "bot_resp": [
+                "Wybierz opcję:"
+            ],
+            "user_resp": [
+                {
+                    "text": "Umów wizytę!",
+                    "redirect": "booking",
+                    "user_text": "Chcę umówić wizytę",
+                    "actions": []
+                },
+                {
+                    "text": "Oceń nas!",
+                    "redirect": "rate",
+                    "user_text": "Chcę was ocenić",
+                    "actions": []
+                }
+            ]
+        },
+        {
+            "id": "rate",
+            "name": "Ocena",
+            "bot_resp": [
+                "Możesz nas ocenić, klikając w przycisk poniżej (w odpowiedziach)"
+            ],
+            "user_resp": [
+                {
+                    "text": "Ocena strony",
+                    "redirect": "rate_thanks",
+                    "user_text": "Już klikam!",
+                    "actions": [
+                        {
+                            "type": "redirect",
+                            "text": "Oceniam!",
+                            "user_text": "Chcę umówić wizytę.4",
+                            "value": "https://google.com/"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rate_thanks",
+            "name": "Ocena - Podziękowania",
+            "bot_resp": [
+                "Dziękujemy za ocenę!"
+            ],
+            "user_resp": [
+                {
+                    "text": "Początek",
+                    "redirect": "default",
+                    "user_text": "Na początek",
+                    "actions": []
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,124 @@
+{
+  "id": "pqcmsclientbot",
+  "name": "(PQ) Client Bot",
+  "main": "PQCMSClientBot.inc.php",
+  "description": "Prosty bot, który służy do automatycznej obsługi klienta. Może być dostosowany według życzeń. Nie działa na podstawie AI (nie będzie działać jak np. ChatGPT), jednak dobrze skonfigurowany z pewnością przyniesie zyski Twojej firmie oraz zaoszczędzi czasu pracownikom. <u>Wymaga Bootstrap 5 > do poprawnego wyświetlania na stronie.</u>",
+  "version": {
+    "type": "alpha",
+    "major": 1,
+    "minor": 0,
+    "patch": 0,
+    "date": "2024-03-05"
+  },
+  "author": "Wiktor Soliński",
+  "default_config": {
+    "bot_name": "Wirtualny asystent",
+    "responses": [
+      {
+        "id": "greeting",
+        "name": "Powitanie",
+        "texts": [
+          "Cześć! W czym mogę pomóc?",
+          "Hej! Potrzebujesz pomocy?",
+          "Witam, jestem wirtualnym asystentem, może mogę Ci w czymś pomóc?",
+          "Cześć! Co chcesz zrobić?"
+        ],
+        "answers": [
+          {
+            "text": "Umów wizytę",
+            "action": {
+              "type": "question",
+              "value": "booking"
+            }
+          },
+          {
+            "text": "Oceń nas!",
+            "action": {
+              "type": "question",
+              "value": "rate"
+            }
+          }
+        ]
+      },
+      {
+        "id": "start",
+        "name": "Start",
+        "responses": [
+          "Wybierz opcję:"
+        ],
+        "answers": [
+          {
+            "text": "Umów wizytę",
+            "action": {
+              "type": "question",
+              "value": "booking"
+            }
+          },
+          {
+            "text": "Oceń nas!",
+            "action": {
+              "type": "question",
+              "value": "rate"
+            }
+          }
+        ]
+      },
+      {
+        "id": "problem_resolved",
+        "name": "Problem rozwiązany",
+        "responses": [
+          "Cieszę się, że mogłem pomóc! Czy jeszcze czegoś potrzebujesz?"
+        ],
+        "answers": [
+          {
+            "Nie": -1,
+            "Tak": ""
+          }
+        ]
+      },
+      {
+        "id": "problem_not_resolved",
+        "name": "Problem nierozwiązany",
+        "responses": [
+          "Przepraszam, że w tym przypadku nie mogłem pomóc. Może będę w stanie rozwiązać inny problem?"
+        ],
+        "answers": [
+          {
+            "Umów wizytę": "booking",
+            "Oceń nas!": 2
+          }
+        ]
+      },
+      {
+        "id": "booking",
+        "name": "Powitanie",
+        "responses": [
+          "Cześć! W czym mogę pomóc?",
+          "Hej! Potrzebujesz pomocy?",
+          "Witam, jestem wirtualnym asystentem, może mogę Ci w czymś pomóc?",
+          "Cześć! Co chcesz zrobić?"
+        ],
+        "answers": [
+          {
+            "Umów wizytę": 1,
+            "Oceń nas!": 2
+          }
+        ]
+      },
+      {
+        "id": "rate",
+        "name": "Ocena",
+        "responses": [
+          "Możesz ocenić nas w skali 1-5, klikając <a href=\"ocen/\">Tutaj</a>"
+        ],
+        "answers": [
+          {
+            "Umów wizytę": 1,
+            "Oceń nas!": 2
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": []
+}

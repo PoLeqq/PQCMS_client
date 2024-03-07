@@ -1,0 +1,176 @@
+#pqcms-clientbot {
+    position: fixed;
+    bottom: calc(-70vh - 3px);
+    right: 10px;
+
+    z-index: 99999999;
+
+    height: 70vh;
+    min-width: 400px;
+    max-width: 500px;
+
+    transition: all .4s;
+}
+
+@media screen and (max-width: 600px) {
+    #pqcms-clientbot {
+        min-width: 200px;
+        max-width: calc(100vw - 40px);
+    }
+}
+
+#pqcms-clientbot-expander {
+    position: relative;
+    top: -60px;
+    right: calc(-100% + 60px);
+
+    width: 60px;
+    height: 60px;
+
+    padding: 7px;
+
+    z-index: 999999;
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    background-color: #3636ff;
+}
+
+#pqcms-clientbot:hover {
+    transition: all .2s;
+    bottom: calc(-1 * 70vh + 20px);
+}
+
+#pqcms-clientbot-expander:hover {
+    transition: all .2s;
+    cursor: pointer;
+    background-color: #4c4cff;
+}
+
+#pqcms-clientbot-bot {
+    position: relative;
+    top: -60px;
+    right: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: white;
+
+    border: 2px solid grey;
+    border-bottom: none;
+    border-top-left-radius: 10px;
+
+    overflow: hidden;
+}
+
+#pqcms-clientbot-bot > header {
+    background: linear-gradient(135deg, #4c4cff, #7f4cff, #9d4cff,#4c4cff);
+    background-size: 400% 400%;
+    animation: block-background 30s ease-in-out infinite;
+
+    padding: 10px;
+
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#pqcms-clientbot-bot-conversation {
+    overflow: auto;
+    flex-grow: 1;
+}
+
+
+@keyframes block-background {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+
+.pqcms-clientbot-bot-message-bot,
+.pqcms-clientbot-bot-message-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /*justify-content: center;*/
+    margin: 10px 0;
+}
+
+.pqcms-clientbot-bot-message-user {
+    flex-direction: row-reverse;
+}
+
+.pqcms-clientbot-bot-message-bot-icon,
+.pqcms-clientbot-bot-message-user-icon {
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    border-radius: 25px;
+}
+
+.pqcms-clientbot-bot-message-bot-icon,
+.pqcms-clientbot-bot-message-bot-content {
+    position: relative;
+    color: white;
+    background-color: #4c4cff;
+}
+
+.pqcms-clientbot-bot-message-user-icon,
+.pqcms-clientbot-bot-message-user-content {
+    position: relative;
+    background-color: #cccccc;
+}
+
+.pqcms-clientbot-bot-message-bot-icon::after,
+.pqcms-clientbot-bot-message-user-icon::after {
+    content: "";
+    position: absolute;
+    display: block;
+}
+
+.pqcms-clientbot-bot-message-bot-content,
+.pqcms-clientbot-bot-message-user-content {
+    padding: 8px;
+    border-radius: 5px;
+}
+
+#pqcms-clientbot-options {
+    /*align-self: start;*/
+    background-color: #d2d2d2;
+}
+
+.pqcms-clientbot-option {
+    color: white;
+    background: linear-gradient(-50deg, #0d6efd, #650dfd 80%);
+    /*border: 1px solid #6d0dfd;*/
+    padding: 8px;
+    border-radius: 5px;
+
+    transition: all .4s, filter .2s;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.pqcms-clientbot-option[disabled] {
+    filter: grayscale(1)!important;
+}
+
+.pqcms-clientbot-option:hover {
+    cursor: pointer;
+    transition: all .2s;
+    transform: scale(1.05,1.05);
+    filter: brightness(1.1);
+
+}
