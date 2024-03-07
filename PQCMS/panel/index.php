@@ -1,4 +1,8 @@
 <?php
+
+require_once("scripts/server/TabUtils.inc.php");
+TabUtils::verifyUser();
+
 require_once("../utils/database/Database.inc.php");
 $conn = Database::getConnection();
 if(!is_null($conn))
