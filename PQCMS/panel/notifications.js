@@ -20,7 +20,7 @@ function closeNotification(notification)
     },1000);
 
     const id = notification.getAttribute("data-id");
-    fetch("scripts/notifications/NotificationManager.php?name="+id+"&action=d")
+    fetch("scripts/notifications/NotificationManager.php?id="+id+"&action=d")
         .then(function (response) {
             if(!response.ok)
                 throw new Error('Nie połączono z NotificationManager');
@@ -32,7 +32,7 @@ function closeNotification(notification)
 
 
 // Show notifications
-document.addEventListener("load",() => {
+window.addEventListener("load",() => {
     setTimeout(updateNotifications,0);
     setInterval(updateNotifications,3000);
 })
