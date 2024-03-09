@@ -32,13 +32,14 @@ class Root extends Tab
         );
     }
 
-    public function generateHeadCode(string $lang = "pl"): string
+    public function generateHeadCode(): string
     {
         $sourcePath = $this->getSourcePath();
 
         return<<<HTML
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
 <title>Strona główna | poleq.pl</title>
 <meta name="description" content="Moje skromne portfolio c:">
@@ -71,7 +72,7 @@ class Root extends Tab
 HTML;
     }
 
-    public function generateBodyCode(string $lang = "pl"): string
+    public function generateBodyCode(): string
     {
         $sourcePath = $this->getSourcePath();
         $siteTexts = $this->texts;
@@ -126,7 +127,7 @@ HTML;
         <div class="big-element-img mt-5 mt-lg-0 col-lg-7 col-xl-6" id="svgs1-container">
             <img class="svgs1" id="svg1-1" src="${sourcePath}img/blob1.svg">
             <img class="svgs1" id="svg1-2" src="${sourcePath}img/blob2.svg">
-            <img src="${sourcePath}img/trex.jpg" xmlns="http://www.w3.org/2000/svg" id="trex">
+            <img src="${sourcePath}img/trex.jpg" id="trex">
         </div>
     </div>
     <hr class="hr-space" id="umiejetnosci">

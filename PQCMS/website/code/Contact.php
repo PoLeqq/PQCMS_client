@@ -10,7 +10,7 @@ class Contact extends Tab
         parent::__construct("kontakt","kontakt","../../../../",$editable,1);
     }
 
-    public function generateHeadCode(string $lang = "pl"): string
+    public function generateHeadCode(): string
     {
         $sourcePath = $this->getSourcePath();
 
@@ -44,7 +44,7 @@ HTML;
 
     }
 
-    public function generateBodyCode(string $lang = "pl"): string
+    public function generateBodyCode(): string
     {
         //        $absolutePath = "https://poleq.pl/";
         $absolutePath = "https://localhost/pqcmsclient/pqcms/";
