@@ -258,8 +258,8 @@ HTML;
 HTML;
     }
 
-    public abstract function generateHeadCode(string $lang = "pl"): string;
-    public abstract function generateBodyCode(string $lang = "pl"): string;
+    public abstract function generateHeadCode(): string;
+    public abstract function generateBodyCode(): string;
 
     public function saveVisit(string $remoteAddr): void
     {
