@@ -13,6 +13,10 @@ table td, table th {
     transition: .4s;
 }
 
+.addon:has(input:not(:checked)) {
+    filter: brightness(0.8) grayscale(0.7);
+}
+
 .addon:hover {
     transform: scale(1.05);
     filter: brightness(1.1);
