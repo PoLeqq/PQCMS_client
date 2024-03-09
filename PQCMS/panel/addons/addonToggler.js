@@ -1,3 +1,5 @@
+const tokenInput = document.querySelector("#pqcms-addon-token");
+
 document.querySelectorAll(".addon-toggler").forEach(e => {
     const addon = e.getAttribute("data-addon");
     let data = {
@@ -11,9 +13,8 @@ document.querySelectorAll(".addon-toggler").forEach(e => {
         return;
     }
 
-    checkbox.addEventListener("click",(event) => {
-        if(e.hasAttribute("data-addon"))
-            data.token = e.getAttribute("data-token");
+    checkbox.addEventListener("click",() => {
+        data.token = tokenInput.value;
         data.enabled = checkbox.checked;
 
         if(!e.hasAttribute("data-addon"))
@@ -41,7 +42,8 @@ document.querySelectorAll(".addon-toggler").forEach(e => {
                     },250);
                 }
                 else
-                    e.setAttribute("data-token",json["token"]);
+                    tokenInput.value = json["token"];
+                    // e.setAttribute("data-token",json["token"]);
             }).catch(ex => {
                 console.error(ex);
             })

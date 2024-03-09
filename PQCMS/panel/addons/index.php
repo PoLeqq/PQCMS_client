@@ -41,13 +41,14 @@ $_SESSION["pqcms"]["panel"]["addons"]["change-activation"]["token"] = $token;
 </head>
 <body>
 <div class="p-3 d-flex flex-wrap">
+    <input type="hidden" id="pqcms-addon-token" value="<?php echo $token["value"] ?>">
 <?php
 
     /** @var Addon $addon */
     foreach($addonManager->getAddonList() as $addon)
     {
         $disabled = ($verify["perms"]["pqcms.addons.".$addon->getId()]) ? "addon-disabled" : "";
-        echo $addon->getViewHTML($addonManager->isAddonEnabled($addon->getId()),$disabled,$token["value"]);
+        echo $addon->getViewHTML($addonManager->isAddonEnabled($addon->getId()),$disabled);
     }
 
 ?>
