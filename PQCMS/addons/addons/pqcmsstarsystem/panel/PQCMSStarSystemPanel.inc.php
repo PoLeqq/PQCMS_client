@@ -4,6 +4,39 @@ require_once(dirname(__DIR__,3)."/classes/AddonPanel.inc.php");
 
 class PQCMSStarSystemPanel extends AddonPanel
 {
+    /**
+     * @param Addon $addon dodatek
+     */
+    public function __construct(Addon $addon)
+    {
+        parent::__construct($addon);
+    }
+
+    private function getDataTable(): string
+    {
+        require_once(dirname(__DIR__)."/database/PQCMSStarSystemDatabase.inc.php");
+        $systemDatabase = new PQCMSStarSystemDatabase();
+        $rates = $systemDatabase->getRates();
+        var_dump($rates);
+
+        return<<<HTML
+<table>
+    <thead>
+        <tr>
+            <th>IP</th>        
+            <th>Ilość gwiazdek</th>        
+            <th>E-mail</th>        
+            <th>Opis</th>        
+        </tr>    
+    </thead>
+    <tbody>
+    
+    </tbody>
+</table>
+HTML;
+
+    }
+
 
     protected function getWebsiteHTML(): string
     {
@@ -17,6 +50,8 @@ class PQCMSStarSystemPanel extends AddonPanel
 
         $selectedNewPageYes = $config["redirect-new-page"] ? "selected" : "";
         $selectedNewPageNo = $config["redirect-new-page"] ? "" : "selected";
+
+        $table = $this->getDataTable();
 
         return<<<HTML
 <!DOCTYPE html>
@@ -47,6 +82,7 @@ class PQCMSStarSystemPanel extends AddonPanel
             </div>
             <input type="submit" value="Aktualizuj wartości"/>
         </form>
+        $table
     </div>
 </body>
 </html>

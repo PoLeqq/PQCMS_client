@@ -1,5 +1,5 @@
 {
     "star-redirect-rate": 4,
     "redirect-url": "https://www.google.com/intl/pl_pl/business/",
-    "redirect-new-page": false
+    "redirect-new-page": true
 }
