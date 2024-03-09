@@ -92,6 +92,27 @@ HTML;
 </p>
 HTML;
 
+                if(!is_null($licenseExpiration["license_expiration"]))
+                {
+                    $isLicenseRenewable = Communicator::communicate(CommunicateURL::IS_LICENSE_RENEWABLE);
+                    if($isLicenseRenewable["suc"] == 1)
+                    {
+                        if($isLicenseRenewable["license_renew"])
+                        echo<<<HTML
+<p style="color: limegreen">Licencja może być odnowiona na kolejny miesiąc. Nic nie musisz robić, wszystko jest zautomatyzowane.</p>
+HTML;
+                        else
+                            echo<<<HTML
+<p style="color: red">Licencja nie może być odnowiona. Uzupełnij środki na koncie.</p>
+HTML;
+                    }
+                    else
+                        echo<<<HTML
+<p style="color: red">
+    ${$isLicenseRenewable["desc"]}
+</p>
+HTML;
+                }
                 ?>
 
                 <?php
