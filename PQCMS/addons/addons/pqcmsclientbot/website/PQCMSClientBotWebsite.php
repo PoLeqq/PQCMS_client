@@ -5,20 +5,19 @@ class PQCMSClientBotWebsite extends AddonWebsite
 {
     public function onWebsiteHeadLoaded(int $folderDepth): ?string
     {
-        $css = file_get_contents(__DIR__."/style.css");
         $dir = $this->addon->getRelativePathFromWebsiteToAddon($folderDepth);
 
         return<<<HTML
+<link rel="stylesheet" href="$dir/website/style.css"/>
 <style>
-$css
 
 .pqcms-clientbot-bot-message-bot-icon::after {
     background: url("${dir}/images/icon.svg") no-repeat;
     top: 5px;
     left: 5px;
 
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
 }
 
 .pqcms-clientbot-bot-message-user-icon::after {
@@ -26,8 +25,8 @@ $css
     top: 8px;
     left: 8px;
 
-    width: 34px;
-    height: 34px;
+    width: 24px;
+    height: 24px;
 }
 </style>
 HTML;
@@ -40,13 +39,38 @@ HTML;
      */
     public function onWebsiteBodyLoaded(int $folderDepth): ?string
     {
-        $js = file_get_contents(__DIR__."/script.js");
         $dir = $this->addon->getRelativePathFromWebsiteToAddon($folderDepth);
 
-        $config = $this->addon->getConfig();
-        $name = $config["bot_name"];
+        try {
+            $config = $this->addon->getConfig();
+        } catch (Exception $e) {
+            return<<<HTML
+$e
+HTML;
+        }
+        if(!isset($config["bot_name"]))
+            $name = "Wirtualny asystent";
+        else
+            $name = $config["bot_name"];
 
-//        $startMessages =
+        $startMessages = "";
+        foreach($config["start-messages"] as $cfgStartMessage)
+        {
+            if(is_array($cfgStartMessage))
+                $msg = $cfgStartMessage[array_rand($cfgStartMessage)];
+            else
+                $msg = $cfgStartMessage;
+
+            $startMessages .= <<<HTML
+<div class="pqcms-clientbot-bot-message-bot">
+    <div class="pqcms-clientbot-bot-message-bot-icon"></div>
+    <div class="pqcms-clientbot-bot-message-bot-content">
+        $msg
+    </div>
+</div>
+HTML;
+        }
+
 
         return<<<HTML
 <div id="pqcms-clientbot" class="col-12 col-md-8 col-lg-5 col-xl-3" data-expand="false">
@@ -57,64 +81,16 @@ HTML;
         <header>
             $name
         </header>
-        <div id="pqcms-clientbot-bot-conversation" class="p-3"></div>
+        <div id="pqcms-clientbot-bot-conversation" class="p-3">
+            $startMessages   
+        </div>
         <div id="pqcms-clientbot-options" class="d-flex flex-wrap align-items-center justify-content-center gap-3 py-3"></div>
     </div>
 </div>
 
-<script>
+<input type="hidden" id="pqcms-clientbot-data-dir" value="$dir"/>
 
-function getResponse(value)
-{
-    disableAllResponses();
-    
-    fetch("pqcms/addons/addons/pqcmsclientbot/system/GetResponse.php", {
-        method: "POST",
-        headers: {
-            "Content-Type" : "application/json",
-        },
-        body : JSON.stringify(value)
-    }).then((resp) => {
-        resp.clone().text().then(console.log);
-        
-        resp.json().then((json) => {
-            setTimeout(() => {
-                addMessageBox("bot",json["suc"],json["msg"]);
-            
-                if(json["suc"] === 1)
-                {
-                    const options = document.querySelector("#pqcms-clientbot-options");
-                    options.innerHTML = "";
-                     
-                    json["resp"].forEach(e => {
-                        const option = getAnswerResponseBox(e.text);
-                        option.addEventListener("click", () => {
-                            if(option.hasAttribute("disabled"))
-                                return;
-                            onAnswerResponseBotClick(e);
-                        });
-                    
-                        options.appendChild(option);
-                    })           
-                }
-                else
-                    enableAllResponses();
-            },1000);
-        }).catch((err) => {
-            console.error(err);
-            enableAllResponses();
-        });
-    }).catch((err) => {
-        console.error(err);
-        enableAllResponses();
-    });
-}
-
-// setTimeout(() => {getResponse("default")},1000);
-getResponse("default");
-
-$js
-</script>
+<script src="$dir/website/script.js" type="module"></script>
 HTML;
 
     }

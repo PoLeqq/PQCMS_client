@@ -3,7 +3,7 @@
     bottom: calc(-70vh - 3px);
     right: 10px;
 
-    z-index: 99999999;
+    z-index: 99999;
 
     height: 70vh;
     min-width: 400px;
@@ -17,6 +17,18 @@
         min-width: 200px;
         max-width: calc(100vw - 40px);
     }
+}
+
+
+#pqcms-clientbot ul {
+    margin: 6px 0;
+}
+
+#pqcms-clientbot li {
+    position: relative;
+    left: -10px;
+    width: calc(100% + 10px);
+    margin: 2px 0;
 }
 
 #pqcms-clientbot-expander {
@@ -96,6 +108,9 @@
     }
 }
 
+.pqcms-clientbot-bot-message-error .pqcms-clientbot-bot-message-bot-content {
+    background-color: #f13c3c;
+}
 
 .pqcms-clientbot-bot-message-bot,
 .pqcms-clientbot-bot-message-user {
@@ -111,12 +126,19 @@
 }
 
 .pqcms-clientbot-bot-message-bot-icon,
+.pqcms-clientbot-bot-message-bot-icon {
+    align-self: flex-start;
+    margin-top: 2px;
+}
+
+
+.pqcms-clientbot-bot-message-bot-icon,
 .pqcms-clientbot-bot-message-user-icon {
-    min-width: 50px;
-    max-width: 50px;
-    min-height: 50px;
-    max-height: 50px;
-    border-radius: 25px;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    border-radius: 20px;
 }
 
 .pqcms-clientbot-bot-message-bot-icon,
@@ -124,12 +146,14 @@
     position: relative;
     color: white;
     background-color: #4c4cff;
+    max-width: 70%;
 }
 
 .pqcms-clientbot-bot-message-user-icon,
 .pqcms-clientbot-bot-message-user-content {
     position: relative;
     background-color: #cccccc;
+    max-width: 70%;
 }
 
 .pqcms-clientbot-bot-message-bot-icon::after,
@@ -152,8 +176,7 @@
 
 .pqcms-clientbot-option {
     color: white;
-    background: linear-gradient(-50deg, #0d6efd, #650dfd 80%);
-    /*border: 1px solid #6d0dfd;*/
+    background: linear-gradient(-50deg, #4c4cff 10%, #650dfd 150%);
     padding: 8px;
     border-radius: 5px;
 
