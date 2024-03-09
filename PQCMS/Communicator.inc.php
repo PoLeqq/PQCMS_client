@@ -168,6 +168,7 @@ class CommunicateURL
     public const LOGIN_USER = "website/auth/LoginUser.php";
     public const LOGOUT_USER = "website/auth/LogoutUser.php";
     public const GET_LICENSE_EXPIRATION = "website/data/GetLicenseExpiration.php";
+    public const IS_LICENSE_RENEWABLE = "website/data/IsLicenseRenewable.php";
     public const IS_VALID_AUTH_KEY = "website/auth/IsValidAuthKey.php";
     public const HAS_PERMISSION = "website/perms/HasPermission.php";
     public const IS_PERMISSION_SET = "website/perms/IsPermissionSet.php";
