@@ -45,7 +45,8 @@ class PQCMSStarSystemDatabase
         return $rows;
     }
 
-    public function close() {
+    public function close(): void
+    {
         $this->connection->close();
     }
 }
