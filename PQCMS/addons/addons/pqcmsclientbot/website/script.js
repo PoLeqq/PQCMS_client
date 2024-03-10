@@ -51,7 +51,7 @@ function getResponse(value)
 getResponse("default");
 
 expander.addEventListener("click",() => {
-    if(main.getAttribute("data-expand") == "false")
+    if(main.getAttribute("data-expand") === "false")
         showBot();
     else
         hideBot();
