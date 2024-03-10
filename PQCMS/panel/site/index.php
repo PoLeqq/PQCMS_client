@@ -55,9 +55,6 @@ TabUtils::verifyUser("editor");
             const baseUrl = currentURL.origin + currentURL.pathname;
             const pathURL = baseUrl + "?site=" + encodeURIComponent(newUrl);
 
-            if(currentURL.href === pathURL)
-                return;
-
             iframeOverlay.style.visibility = "visible";
             iframeOverlay.style.opacity = "1";
 
