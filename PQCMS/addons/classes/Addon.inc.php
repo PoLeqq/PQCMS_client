@@ -54,6 +54,8 @@ abstract class Addon
      */
     protected ?AddonWebsite $websiteAddon;
 
+    protected mysqli $connection;
+
     /**
      * @param string $id id (a-z; tylko małe!)
      * @throws Exception gdy id nie spełnia wymagań
@@ -88,6 +90,11 @@ abstract class Addon
 
         $this->panel = $panel;
         $this->websiteAddon = $websiteAddon;
+
+        require_once(dirname(__DIR__,2)."/utils/database/Database.inc.php");
+        $this->connection = Database::getConnection();
+        if($this->isEnabled())
+            self::setupDefaultAddonDatabase($this);
     }
 
     /**
@@ -217,13 +224,19 @@ abstract class Addon
         return null;
     }
 
+    public final function isEnabled(): bool
+    {
+        require_once(dirname(__DIR__)."/AddonManager.inc.php");
+        $maganer = new AddonManager();
+        return $maganer->isAddonEnabled($this->id);
+    }
+
     /**
      * @param bool $enabled czy dodatek jest włączony
      * @param bool $hasPerms czy użytkownik ma dostęp do dodatku
-     * @param string $token token, który blokuje XSS
      * @return string html, który pokazywany jest na stronie w liście dodatków
      */
-    public final function getViewHTML(bool $enabled, bool $hasPerms, string $token): string
+    public final function getViewHTML(bool $enabled, bool $hasPerms): string
     {
         $checked = $enabled ? "checked" : "";
 
@@ -265,7 +278,7 @@ HTML;
         <div class="d-flex align-items-center justify-content-between">
             $panelLink
             <div class="col-4 d-flex justify-content-end">
-                <label class="addon-toggler switch" data-addon="$id" data-token="$token">
+                <label class="addon-toggler switch" data-addon="$id">
                   <input type="checkbox" $checked $disabledAttr>
                   <span class="addon-toggler-span slider round"></span>
                 </label>
@@ -343,5 +356,42 @@ HTML;
         ob_start();
         include $filePath;
         return ob_get_clean();
+    }
+
+    private static function setupDefaultAddonDatabase(Addon $addon): ?array
+    {
+        $resp = [];
+
+        $path = $addon->getAddonPath()."sql/";
+        if(!file_exists($path))
+            return $resp;
+        $files = scandir($path);
+        foreach ($files as $file)
+        {
+            if(str_ends_with($file, '.sql'))
+            {
+                $query = $addon->connection->query("SHOW TABLES");
+                while($row = $query->fetch_row())
+                    if($row[0].".sql" == $file)
+                    {
+                        $resp[$file] = 0;
+                        continue 2;
+                    }
+
+                $sqlFile = file_get_contents($path . $file);
+                if (!$addon->connection->multi_query($sqlFile))
+                {
+                    $resp[$file] = -1;
+                    continue;
+                }
+
+                do if($result = $addon->connection->store_result()) $result->free_result();
+                while ($addon->connection->next_result());
+
+                $resp[$file] = 1;
+            }
+        }
+
+        return $resp;
     }
 }
