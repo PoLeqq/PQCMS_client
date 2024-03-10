@@ -54,11 +54,6 @@ class Text
         return $resp;
     }
 
-    /**
-     * @param string $elementId id elementu (ustawiony dla textarea) (tylko, gdy editable = true)
-     * @param bool $editable czy edytowalny
-     * @return string wygenerowany kod HTML tekstu
-     */
     public function generateHtml(string $elementId, bool $editable, bool $disabled = false): string
     {
         $disabled = $disabled ? "disabled" : "";
@@ -84,7 +79,6 @@ HTML;
 
         require_once(dirname(__DIR__,2)."/vendor/genert/bbcode/src/BBCode.php");
         $bbCode = new BBCode();
-//        return $code;
         return $bbCode->convertToHtml($code);
     }
 
