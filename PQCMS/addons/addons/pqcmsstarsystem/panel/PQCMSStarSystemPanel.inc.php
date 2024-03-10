@@ -17,22 +17,42 @@ class PQCMSStarSystemPanel extends AddonPanel
         require_once(dirname(__DIR__)."/database/PQCMSStarSystemDatabase.inc.php");
         $systemDatabase = new PQCMSStarSystemDatabase();
         $rates = $systemDatabase->getRates();
-        var_dump($rates);
+
+        $rows = "";
+        foreach ($rates["rates"] as $rate) {
+            $rows .= <<<HTML
+<tr>
+    <td>${rate["ip"]}</td>
+    <td>${rate["stars"]}</td>
+    <td>${rate["email"]}</td>
+    <td>${rate["description"]}</td>
+    <td>${rate["date"]}</td>
+</tr>
+
+HTML;
+
+        }
+
+        $amount = count($rates);
 
         return<<<HTML
-<table>
-    <thead>
-        <tr>
-            <th>IP</th>        
-            <th>Ilość gwiazdek</th>        
-            <th>E-mail</th>        
-            <th>Opis</th>        
-        </tr>    
-    </thead>
-    <tbody>
-    
-    </tbody>
-</table>
+<div class="table-parent" id="rates-table-div">
+    <table class="col-12">
+        <thead>
+            <tr>
+                <th>IP</th>        
+                <th>Ocena</th>        
+                <th>E-mail</th>        
+                <th>Opis</th>        
+                <th>Data</th>        
+            </tr>    
+        </thead>
+        <tbody>
+            $rows
+        </tbody>
+    </table>
+</div>
+Ilość ocen: $amount
 HTML;
 
     }
@@ -40,12 +60,14 @@ HTML;
 
     protected function getWebsiteHTML(): string
     {
-        $path = $this->addon->getRelativePathFromPanelToAddon();
+        $dir = $this->addon->getRelativePathFromPanelToAddon();
 
         try {
             $config = $this->addon->getConfig();
         } catch (Exception $e) {
-            return $e;
+            return<<<HTML
+<!--Internal addon error (while trying to get config file)-->
+HTML;
         }
 
         $selectedNewPageYes = $config["redirect-new-page"] ? "selected" : "";
@@ -60,30 +82,37 @@ HTML;
     <title>PQCMS - Addon Panel</title>
     
     <link rel="stylesheet" href="../../bs5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="$dir/panel/style.css">
 </head>
 <body>
-    <div class="p-4">
-        <h1>PQ Star System Panel</h1>
-        <form method="post" action="$path/scripts/UpdateConfig.php" class="col-3 d-flex flex-column gap-3">
-            <div class="d-flex flex-column">
-                Od ilu gwiazdek przekierowywać:<br/>
-                <input type="number" name="star-redirect-rate" value="${config["star-redirect-rate"]}"/>            
-            </div>
-            <div class="d-flex flex-column">
-                Link przekierowania (np. do opini Google):
-                <input name="redirect-url" value="${config["redirect-url"]}"/>            
-            </div>
-            <div>
-                Czy przekierowanie otwiera nowe okno:
-                <select name="redirect-new-page" class="col-12">
-                    <option value="true" $selectedNewPageYes>Tak</option>
-                    <option value="false" $selectedNewPageNo>Nie</option>
-                </select>
-            </div>
+    <div class="p-4 d-flex flex-wrap" style="height: 100vh">
+        <div class="col-12 col-lg-6 p-4">
+            <h1>PQ Star System Panel</h1>
+            <form method="post" action="$dir/scripts/UpdateConfig.php" class="col-12 d-flex flex-column gap-3">
+                <div class="d-flex flex-column">
+                    Od ilu gwiazdek przekierowywać:<br/>
+                    <input type="number" name="star-redirect-rate" value="${config["star-redirect-rate"]}"/>            
+                </div>
+                <div class="d-flex flex-column">
+                    Link przekierowania (np. do opini Google):
+                    <input name="redirect-url" value="${config["redirect-url"]}"/>            
+                </div>
+                <div>
+                    Czy przekierowanie otwiera nowe okno:
+                    <select name="redirect-new-page" class="col-12">
+                        <option value="true" $selectedNewPageYes>Tak</option>
+                        <option value="false" $selectedNewPageNo>Nie</option>
+                    </select>
+                </div>
+            </form>
             <input type="submit" value="Aktualizuj wartości"/>
+        </div>
         </form>
-        $table
+        <div class="col-12 col-lg-6 p-4" style="height: 95%">
+            $table
+        </div>
     </div>
+    
 </body>
 </html>
 HTML;
