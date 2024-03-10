@@ -102,6 +102,7 @@ if(count($toChangeTexts) > 0)
 
     foreach ($toChangeTexts as $textName => $textValue)
     {
+        $logData = [];
         $logData["user"] = $_SESSION["pqcms"]["panel"]["username"];
         $logData["old_text"] = $oldText[$textName];
         $logData["new_text"] = $textValue;
