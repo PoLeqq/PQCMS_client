@@ -1,0 +1,17 @@
+.text-inputs > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.text-inputs > div > input {
+    margin: 5px 0;
+    width: 90%;
+}
+
+.text-inputs > div > input[type=button] {
+    width: 8%;
+    margin: 0 1%;
+}
+

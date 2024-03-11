@@ -6,7 +6,7 @@ class PQCMSClientBotPanel extends AddonPanel
 {
     protected function getWebsiteHTML(): string
     {
-        $path = $this->addon->getRelativePathFromPanelToAddon();
+        $dir = $this->addon->getRelativePathFromPanelToAddon();
 
         try {
             $config = $this->addon->getConfig();
@@ -14,8 +14,9 @@ class PQCMSClientBotPanel extends AddonPanel
             return $e;
         }
 
-        $selectedNewPageYes = $config["redirect-new-page"] ? "selected" : "";
-        $selectedNewPageNo = $config["redirect-new-page"] ? "" : "selected";
+        require_once("messages/PQCMSClientBotStartMessageManager.inc.php");
+        $startMessages = new PQCMSClientBotStartMessageManager($config["start_messages"]);
+        $startMsg = $startMessages->getEditableTable();
 
         return<<<HTML
 <!DOCTYPE html>
@@ -24,28 +25,30 @@ class PQCMSClientBotPanel extends AddonPanel
     <title>PQCMS - Addon Panel</title>
     
     <link rel="stylesheet" href="../../bs5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="$dir/panel/style.css">
+    <script src="$dir/panel/editableTable.js" type="module" defer></script>
 </head>
 <body>
-    <div class="p-4">
+    <div class="p-4 d-flex flex-column">
         <h1>PQ Chatbot Panel</h1>
-        <!--<form method="post" action="$path/scripts/UpdateConfig.php" class="col-3 d-flex flex-column gap-3">
-            <div class="d-flex flex-column">
-                Od ilu gwiazdek przekierowywać:<br/>
-                <input type="number" name="star-redirect-rate" value="${config["star-redirect-rate"]}"/>            
-            </div>
-            <div class="d-flex flex-column">
-                Link przekierowania (np. do opini Google):
-                <input name="redirect-url" value="${config["redirect-url"]}"/>            
-            </div>
-            <div>
-                Czy przekierowanie otwiera nowe okno:
-                <select name="redirect-new-page" class="col-12">
-                    <option value="true" $selectedNewPageYes>Tak</option>
-                    <option value="false" $selectedNewPageNo>Nie</option>
-                </select>
-            </div>
-            <input type="submit" value="Aktualizuj wartości"/>
-        </form>-->
+        <div class="col-12 col-lg-6">
+            <form action="$dir/scripts/UpdateConfig.php" method="post" class="d-flex flex-column gap-3">
+                <h2>Zmienne</h2>
+                <div>
+                    Nazwa bota:<br/>
+                    <input name="botname" value="${config["bot_name"]}"/>                
+                </div>
+                <div>
+                    Opis błędu:<br/>
+                    <input name="errormessage" value="${config["error_message"]}"/>             
+                </div>
+                <div>
+                    Wiadomości startowe:<br/>
+                    $startMsg            
+                </div>
+                <input type="submit" value="Aktualizuj dane">
+            </form>        
+        </div>
     </div>
 </body>
 </html>
