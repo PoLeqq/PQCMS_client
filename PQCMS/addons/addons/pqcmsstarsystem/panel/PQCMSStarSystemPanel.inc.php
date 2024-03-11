@@ -19,7 +19,7 @@ class PQCMSStarSystemPanel extends AddonPanel
         $rates = $systemDatabase->getRates();
 
         $rows = "";
-        foreach ($rates["rates"] as $rate) {
+        foreach ($rates as $rate) {
             $rows .= <<<HTML
 <tr>
     <td>${rate["ip"]}</td>
@@ -36,7 +36,7 @@ HTML;
         $amount = count($rates);
 
         return<<<HTML
-<div class="table-parent" id="rates-table-div">
+<div class="table-parent mb-2" id="rates-table-div">
     <table class="col-12">
         <thead>
             <tr>
@@ -104,8 +104,8 @@ HTML;
                         <option value="false" $selectedNewPageNo>Nie</option>
                     </select>
                 </div>
+                <input type="submit" value="Aktualizuj wartości"/>
             </form>
-            <input type="submit" value="Aktualizuj wartości"/>
         </div>
         </form>
         <div class="col-12 col-lg-6 p-4" style="height: 95%">
