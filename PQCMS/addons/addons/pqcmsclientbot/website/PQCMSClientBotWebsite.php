@@ -54,12 +54,12 @@ HTML;
             $name = $config["bot_name"];
 
         $startMessages = "";
-        foreach($config["start-messages"] as $cfgStartMessage)
+        foreach($config["start_messages"] as $cfgStartMessage)
         {
-            if(is_array($cfgStartMessage))
-                $msg = $cfgStartMessage[array_rand($cfgStartMessage)];
-            else
-                $msg = $cfgStartMessage;
+            if(!is_array($cfgStartMessage))
+                continue;
+
+            $msg = $cfgStartMessage[array_rand($cfgStartMessage)];
 
             $startMessages .= <<<HTML
 <div class="pqcms-clientbot-bot-message-bot">

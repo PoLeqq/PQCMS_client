@@ -1,14 +1,16 @@
 {
     "bot_name": "Wirtualny asystent",
     "error_message": "Brr... Bzzt! Wystąpił błąd!",
-    "start-messages": [
+    "start_messages": [
         [
             "Cześć! W czym mogę pomóc?",
             "Hej! Potrzebujesz pomocy?",
             "Witam, jestem wirtualnym asystentem, może mogę Ci w czymś pomóc?",
             "Cześć! Co chcesz zrobić?"
         ],
-        "Wiadomość, która zawsze się pojawi"
+        [
+            "Kliknij w przyciski poniżej, aby wyszukać tego, czego potrzebujesz..."
+        ]
     ],
     "responses": [
         {
@@ -19,16 +21,57 @@
             ],
             "user_resp": [
                 {
-                    "text": "Umów wizytę!",
-                    "redirect": "booking",
-                    "user_text": "Chcę umówić wizytę",
+                    "text": "Strony internetowe",
+                    "redirect": "websites",
+                    "user_text": "Strony internetowe",
                     "actions": []
                 },
                 {
-                    "text": "Oceń nas!",
-                    "redirect": "rate",
-                    "user_text": "Chcę was ocenić",
+                    "text": "Kontakt",
+                    "redirect": "contact",
+                    "user_text": "Chcę zobaczyć możliwości kontaktu",
                     "actions": []
+                },
+                {
+                    "text": "Ocena",
+                    "redirect": "rate",
+                    "user_text": "Chcę ocenić waszą działalność",
+                    "actions": [
+                        {
+                            "type": "function",
+                            "value": "pqcms_starsystem_show"
+                        }
+                    ]
+                },
+                {
+                    "text": "Redirect",
+                    "redirect": "default",
+                    "user_text": "redirect",
+                    "actions": [
+                        {
+                            "type": "redirect",
+                            "value": "https://google.com/"
+                        }
+                    ]
+                },
+                {
+                    "text": "Wyjdź",
+                    "redirect": "default",
+                    "user_text": "Schowaj czat",
+                    "actions": [
+                        {
+                            "type": "hidebot"
+                        },
+                        {
+                            "type": "message",
+                            "value": [
+                                {
+                                    "type": "bot",
+                                    "msg": "Już się ukrywam... W razie czego jestem dalej do usług!"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -36,21 +79,14 @@
             "id": "rate",
             "name": "Ocena",
             "bot_resp": [
-                "Możesz nas ocenić, klikając w przycisk poniżej (w odpowiedziach)"
+                "Dziękujemy za ocenę!"
             ],
             "user_resp": [
                 {
-                    "text": "Ocena strony",
-                    "redirect": "rate_thanks",
-                    "user_text": "Już klikam!",
-                    "actions": [
-                        {
-                            "type": "redirect",
-                            "text": "Oceniam!",
-                            "user_text": "Chcę umówić wizytę.4",
-                            "value": "https://google.com/"
-                        }
-                    ]
+                    "text": "Początek",
+                    "redirect": "default",
+                    "user_text": "Na początek",
+                    "actions": []
                 }
             ]
         },
@@ -61,6 +97,114 @@
                 "Dziękujemy za ocenę!"
             ],
             "user_resp": [
+                {
+                    "text": "Początek",
+                    "redirect": "default",
+                    "user_text": "Na początek",
+                    "actions": []
+                }
+            ]
+        },
+        {
+            "id": "contact",
+            "name": "Kontakt",
+            "bot_resp": [
+                "Jak chcesz z nami się skontaktować?"
+            ],
+            "user_resp": [
+                {
+                    "text": "E-mail",
+                    "redirect": "contact_email",
+                    "user_text": "E-mail",
+                    "actions": []
+                },
+                {
+                    "text": "Discord",
+                    "redirect": "contact_discord",
+                    "user_text": "Discord",
+                    "actions": []
+                }
+            ]
+        },
+        {
+            "id": "contact_email",
+            "name": "Kontakt",
+            "bot_resp": [
+                "Kontaktowy adres e-mail: <b>wiktorsolinski123@gmail.com</b>"
+            ],
+            "user_resp": [
+                {
+                    "text": "Powrót",
+                    "redirect": "default",
+                    "user_text": "Na początek",
+                    "actions": []
+                }
+            ]
+        },
+        {
+            "id": "contact_discord",
+            "name": "Kontakt (Discord)",
+            "bot_resp": [
+                "Dodaj/napisz na Discord do <span style=\"background-color: #444; padding: 2px 3px; margin-right: 4px;\">poleq</span>!"
+            ],
+            "user_resp": [
+                {
+                    "text": "Powrót",
+                    "redirect": "default",
+                    "user_text": "Na początek",
+                    "actions": []
+                }
+            ]
+        },
+        {
+            "id": "rate_thanks",
+            "name": "Ocena - Podziękowania",
+            "bot_resp": [
+                "Dziękujemy za ocenę!"
+            ],
+            "user_resp": [
+                {
+                    "text": "Początek",
+                    "redirect": "default",
+                    "user_text": "Na początek",
+                    "actions": []
+                }
+            ]
+        },
+        {
+            "id": "websites",
+            "name": "Strony WWW",
+            "bot_resp": [
+                "O czym chcesz dowiedzieć się więcej?"
+            ],
+            "user_resp": [
+                {
+                    "text": "Współpraca",
+                    "redirect": "websites_coop",
+                    "user_text": "Jak wygląda współpraca?",
+                    "actions": []
+                },
+                {
+                    "text": "Powrót",
+                    "redirect": "default",
+                    "user_text": "Powrót",
+                    "actions": []
+                }
+            ]
+        },
+        {
+            "id": "websites_coop",
+            "name": "WWW - Współpraca",
+            "bot_resp": [
+                "Współpraca wygląda następująco: <ul><li>Klient przedstawia projekt strony www (albo szablon, albo inną witrynę (lub kilka), aby móc sie nią zainspirować)</li> <li>Po wykonaniu strony przysługuje możliwość kilkukrotnego zaproponowania zmian/poprawek</li> <li>Klient decyduje się, czy chce taką witrynę zakupić.</li> <li>Po dokonaniu zakupu pliki zostają przesyłane do klienta. Można również poprosić o wgranie plików na serwer docelowy.</li> <li>Jeżeli strona oparta jest o system PQCMS, klient zostanie poinstruowany jak z niego korzystać</li></ul>"
+            ],
+            "user_resp": [
+                {
+                    "text": "Powrót",
+                    "redirect": "websites",
+                    "user_text": "Powrót",
+                    "actions": []
+                },
                 {
                     "text": "Początek",
                     "redirect": "default",

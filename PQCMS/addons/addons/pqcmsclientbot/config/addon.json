@@ -4,117 +4,229 @@
   "main": "PQCMSClientBot.inc.php",
   "description": "Prosty bot, który służy do automatycznej obsługi klienta. Może być dostosowany według życzeń. Nie działa na podstawie AI (nie będzie działać jak np. ChatGPT), jednak dobrze skonfigurowany z pewnością przyniesie zyski Twojej firmie oraz zaoszczędzi czasu pracownikom. <u>Wymaga Bootstrap 5 > do poprawnego wyświetlania na stronie.</u>",
   "version": {
-    "type": "alpha",
+    "type": "beta",
     "major": 1,
     "minor": 0,
     "patch": 0,
-    "date": "2024-03-05"
+    "date": "2024-03-08"
   },
   "author": "Wiktor Soliński",
   "default_config": {
     "bot_name": "Wirtualny asystent",
+    "error_message": "Brr... Bzzt! Wystąpił błąd!",
+    "start_messages": [
+      [
+        "Cześć! W czym mogę pomóc?",
+        "Hej! Potrzebujesz pomocy?",
+        "Witam, jestem wirtualnym asystentem, może mogę Ci w czymś pomóc?",
+        "Cześć! Co chcesz zrobić?"
+      ],
+      [
+        "Kliknij w przyciski poniżej, aby wyszukać tego, czego potrzebujesz..."
+      ]
+    ],
     "responses": [
       {
-        "id": "greeting",
-        "name": "Powitanie",
-        "texts": [
-          "Cześć! W czym mogę pomóc?",
-          "Hej! Potrzebujesz pomocy?",
-          "Witam, jestem wirtualnym asystentem, może mogę Ci w czymś pomóc?",
-          "Cześć! Co chcesz zrobić?"
-        ],
-        "answers": [
-          {
-            "text": "Umów wizytę",
-            "action": {
-              "type": "question",
-              "value": "booking"
-            }
-          },
-          {
-            "text": "Oceń nas!",
-            "action": {
-              "type": "question",
-              "value": "rate"
-            }
-          }
-        ]
-      },
-      {
-        "id": "start",
+        "id": "default",
         "name": "Start",
-        "responses": [
+        "bot_resp": [
           "Wybierz opcję:"
         ],
-        "answers": [
+        "user_resp": [
           {
-            "text": "Umów wizytę",
-            "action": {
-              "type": "question",
-              "value": "booking"
-            }
+            "text": "Strony internetowe",
+            "redirect": "websites",
+            "user_text": "Strony internetowe",
+            "actions": []
           },
           {
-            "text": "Oceń nas!",
-            "action": {
-              "type": "question",
-              "value": "rate"
-            }
-          }
-        ]
-      },
-      {
-        "id": "problem_resolved",
-        "name": "Problem rozwiązany",
-        "responses": [
-          "Cieszę się, że mogłem pomóc! Czy jeszcze czegoś potrzebujesz?"
-        ],
-        "answers": [
+            "text": "Kontakt",
+            "redirect": "contact",
+            "user_text": "Chcę zobaczyć możliwości kontaktu",
+            "actions": []
+          },
           {
-            "Nie": -1,
-            "Tak": ""
-          }
-        ]
-      },
-      {
-        "id": "problem_not_resolved",
-        "name": "Problem nierozwiązany",
-        "responses": [
-          "Przepraszam, że w tym przypadku nie mogłem pomóc. Może będę w stanie rozwiązać inny problem?"
-        ],
-        "answers": [
+            "text": "Ocena",
+            "redirect": "rate",
+            "user_text": "Chcę ocenić waszą działalność",
+            "actions": [
+              {
+                "type": "function",
+                "value": "pqcms_starsystem_show"
+              }
+            ]
+          },
           {
-            "Umów wizytę": "booking",
-            "Oceń nas!": 2
-          }
-        ]
-      },
-      {
-        "id": "booking",
-        "name": "Powitanie",
-        "responses": [
-          "Cześć! W czym mogę pomóc?",
-          "Hej! Potrzebujesz pomocy?",
-          "Witam, jestem wirtualnym asystentem, może mogę Ci w czymś pomóc?",
-          "Cześć! Co chcesz zrobić?"
-        ],
-        "answers": [
+            "text": "Redirect",
+            "redirect": "default",
+            "user_text": "redirect",
+            "actions": [
+              {
+                "type": "redirect",
+                "value": "https://google.com/"
+              }
+            ]
+          },
           {
-            "Umów wizytę": 1,
-            "Oceń nas!": 2
+            "text": "Wyjdź",
+            "redirect": "default",
+            "user_text": "Schowaj czat",
+            "actions": [
+              {
+                "type": "hidebot"
+              },
+              {
+                "type": "message",
+                "value": [
+                  {
+                    "type": "bot",
+                    "msg": "Już się ukrywam... W razie czego jestem dalej do usług!"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       {
         "id": "rate",
         "name": "Ocena",
-        "responses": [
-          "Możesz ocenić nas w skali 1-5, klikając <a href=\"ocen/\">Tutaj</a>"
+        "bot_resp": [
+          "Dziękujemy za ocenę!"
         ],
-        "answers": [
+        "user_resp": [
           {
-            "Umów wizytę": 1,
-            "Oceń nas!": 2
+            "text": "Początek",
+            "redirect": "default",
+            "user_text": "Na początek",
+            "actions": []
+          }
+        ]
+      },
+      {
+        "id": "rate_thanks",
+        "name": "Ocena - Podziękowania",
+        "bot_resp": [
+          "Dziękujemy za ocenę!"
+        ],
+        "user_resp": [
+          {
+            "text": "Początek",
+            "redirect": "default",
+            "user_text": "Na początek",
+            "actions": []
+          }
+        ]
+      },
+      {
+        "id": "contact",
+        "name": "Kontakt",
+        "bot_resp": [
+          "Jak chcesz z nami się skontaktować?"
+        ],
+        "user_resp": [
+          {
+            "text": "E-mail",
+            "redirect": "contact_email",
+            "user_text": "E-mail",
+            "actions": []
+          },
+          {
+            "text": "Discord",
+            "redirect": "contact_discord",
+            "user_text": "Discord",
+            "actions": []
+          }
+        ]
+      },
+
+      {
+        "id": "contact_email",
+        "name": "Kontakt",
+        "bot_resp": [
+          "Kontaktowy adres e-mail: <b>wiktorsolinski123@gmail.com</b>"
+        ],
+        "user_resp": [
+          {
+            "text": "Powrót",
+            "redirect": "default",
+            "user_text": "Na początek",
+            "actions": []
+          }
+        ]
+      },
+      {
+        "id": "contact_discord",
+        "name": "Kontakt (Discord)",
+        "bot_resp": [
+          "Dodaj/napisz na Discord do <span style=\"background-color: #444; padding: 2px 3px; margin-right: 4px;\">poleq</span>!"
+        ],
+        "user_resp": [
+          {
+            "text": "Powrót",
+            "redirect": "default",
+            "user_text": "Na początek",
+            "actions": []
+          }
+        ]
+      },
+
+      {
+        "id": "rate_thanks",
+        "name": "Ocena - Podziękowania",
+        "bot_resp": [
+          "Dziękujemy za ocenę!"
+        ],
+        "user_resp": [
+          {
+            "text": "Początek",
+            "redirect": "default",
+            "user_text": "Na początek",
+            "actions": []
+          }
+        ]
+      },
+
+      {
+        "id": "websites",
+        "name": "Strony WWW",
+        "bot_resp": [
+          "O czym chcesz dowiedzieć się więcej?"
+        ],
+        "user_resp": [
+          {
+            "text": "Współpraca",
+            "redirect": "websites_coop",
+            "user_text": "Jak wygląda współpraca?",
+            "actions": []
+          },
+          {
+            "text": "Powrót",
+            "redirect": "default",
+            "user_text": "Powrót",
+            "actions": []
+          }
+        ]
+      },
+
+      {
+        "id": "websites_coop",
+        "name": "WWW - Współpraca",
+        "bot_resp": [
+          "Współpraca wygląda następująco: <ul><li>Klient przedstawia projekt strony www (albo szablon, albo inną witrynę (lub kilka), aby móc sie nią zainspirować)</li> <li>Po wykonaniu strony przysługuje możliwość kilkukrotnego zaproponowania zmian/poprawek</li> <li>Klient decyduje się, czy chce taką witrynę zakupić.</li> <li>Po dokonaniu zakupu pliki zostają przesyłane do klienta. Można również poprosić o wgranie plików na serwer docelowy.</li> <li>Jeżeli strona oparta jest o system PQCMS, klient zostanie poinstruowany jak z niego korzystać</li></ul>"
+        ],
+        "user_resp": [
+          {
+            "text": "Powrót",
+            "redirect": "websites",
+            "user_text": "Powrót",
+            "actions": []
+          },
+          {
+            "text": "Początek",
+            "redirect": "default",
+            "user_text": "Na początek",
+            "actions": []
           }
         ]
       }
