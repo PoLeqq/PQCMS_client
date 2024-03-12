@@ -11,7 +11,7 @@ class PQCMSClientBotStartMessageManager
 
     public function getEditableTable(): string
     {
-        $html = "<ul>";
+        $html = "<ul class='d-flex flex-column gap-2' id='bot-messages'>";
 
         for($i=0; $i<count($this->startMessages); $i++)
         {
@@ -25,7 +25,7 @@ HTML;
             {
                 $count = count($message);
                 $html .= <<<HTML
-    <li data-index="$i">
+    <li>
         <details class="d-flex flex-column">
             <summary>Losowe ($count)</summary>
             <div class="text-inputs">
@@ -34,7 +34,7 @@ HTML;
                 {
                     $html .= <<<HTML
                 <div>
-                    <input name="startmessages[$i][]" value="$msgOption"/>
+                    <input type="text" name="startmessages[$i][]" value="$msgOption"/>
                     <input type="button" class="text-remove" value="x">
                 </div>
 HTML;
@@ -42,19 +42,15 @@ HTML;
                 }
                 $html .= <<<HTML
             </div>
-            <input type="button" class="add-text-btn" value="Dodaj tekst"/>
+            <input type="button" class="add-text-text" value="Dodaj tekst (losowy)"/>
         </details>
     </li>
 HTML;
             }
 
         }
-        $html .= <<<HTML
-    <li><input type="button" class="add-text-btn" value="Dodaj tekst"/></li>
-HTML;
 
-
-        $html .= "<ul>";
+        $html .= "</ul>";
         return $html;
     }
 
