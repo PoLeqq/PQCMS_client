@@ -125,9 +125,9 @@ HTML;
             </div>
         </div>
         <div class="big-element-img mt-5 mt-lg-0 col-lg-7 col-xl-6" id="svgs1-container">
-            <img class="svgs1" id="svg1-1" src="${sourcePath}img/blob1.svg">
-            <img class="svgs1" id="svg1-2" src="${sourcePath}img/blob2.svg">
-            <img src="${sourcePath}img/trex.jpg" id="trex">
+            <img class="svgs1" id="svg1-1" src="${sourcePath}img/blob1.svg" alt="blob1">
+            <img class="svgs1" id="svg1-2" src="${sourcePath}img/blob2.svg" alt="blob2">
+            <img src="${sourcePath}img/trex.jpg" alt="ikona" id="trex">
         </div>
     </div>
     <hr class="hr-space" id="umiejetnosci">
@@ -136,7 +136,7 @@ HTML;
         
         <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll800">
             <div class="sp-img pl-5">
-                <img src="${sourcePath}img/web.png" width="40">
+                <img src="${sourcePath}img/web.png" width="40" alt="strona www">
             </div>
             <div class="sp-desc">
                 ${siteTexts["section21"]}
@@ -145,7 +145,7 @@ HTML;
 
         <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll1000">
             <div class="sp-img">
-                <img src="${sourcePath}img/minecraft.svg" width="40">
+                <img src="${sourcePath}img/minecraft.svg" width="40" alt="Minecraft">
             </div>
             <div class="sp-desc">
                 ${siteTexts["section22"]}
@@ -154,7 +154,7 @@ HTML;
         
         <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll1200">
             <div class="sp-img">
-                <img src="${sourcePath}img/discord.svg" width="40">
+                <img src="${sourcePath}img/discord.svg" width="40" alt="Discord">
             </div>
             <div class="sp-desc">
                 ${siteTexts["section23"]}
@@ -163,7 +163,7 @@ HTML;
         
         <div class="sp-element col-5 m-2 m-md-0 col-md-3 p-2 scroll1400">
             <div class="sp-img pt-1">
-                <img src="${sourcePath}img/coding.png" width="40">
+                <img src="${sourcePath}img/coding.png" width="40" alt="Kood">
             </div>
             <div class="sp-desc">
                 ${siteTexts["section24"]}
