@@ -18,6 +18,10 @@ class PQCMSClientBotPanel extends AddonPanel
         $startMessages = new PQCMSClientBotStartMessageManager($config["start_messages"]);
         $startMsg = $startMessages->getEditableTable();
 
+        require_once("messages/PQCMSClientBotMessageManager.inc.php");
+        $startMessages = new PQCMSClientBotMessageManager($config["responses"]);
+        $botMsg = $startMessages->getEditableTable();
+
         return<<<HTML
 <!DOCTYPE html>
 <html lang="pl">
@@ -26,12 +30,17 @@ class PQCMSClientBotPanel extends AddonPanel
     
     <link rel="stylesheet" href="../../bs5/css/bootstrap.min.css">
     <link rel="stylesheet" href="$dir/panel/style.css">
+    
+    <script src="http://SortableJS.github.io/Sortable/Sortable.js"></script>
+    
     <script src="$dir/panel/editableTable.js" type="module" defer></script>
+    <script src="$dir/panel/sortableList.js" type="module" defer></script>
 </head>
 <body>
     <div class="p-4 d-flex flex-column">
         <h1>PQ Chatbot Panel</h1>
-        <div class="col-12 col-lg-6">
+        <div class="d-flex flex-wrap">
+            <div class="col-12 col-lg-6 p-3">
             <form action="$dir/scripts/UpdateConfig.php" method="post" class="d-flex flex-column gap-3">
                 <h2>Zmienne</h2>
                 <div>
@@ -44,10 +53,21 @@ class PQCMSClientBotPanel extends AddonPanel
                 </div>
                 <div>
                     Wiadomości startowe:<br/>
-                    $startMsg            
+                    $startMsg
+                    <input type="button" class="add-text-btn" value="Dodaj tekst" disabled/>      
                 </div>
                 <input type="submit" value="Aktualizuj dane">
-            </form>        
+            </form>   
+        </div>
+        <div class="col-12 col-lg-6 p-3">
+            <form action="$dir/scripts/UpdateMessages.php" method="post" class="d-flex flex-column gap-3">
+                <h2>Odpowiedzi</h2>
+                <div>
+                    $botMsg
+                    <input type="button" class="add-text-btn" value="Dodaj odpowiedź" disabled/>      
+                </div>
+                <input type="submit" value="Aktualizuj dane">
+            </form>   
         </div>
     </div>
 </body>
