@@ -33,6 +33,8 @@ class PQCMSClientBotPanel extends AddonPanel
     
     <script src="http://SortableJS.github.io/Sortable/Sortable.js"></script>
     
+    <script src="$dir/panel/main.js" type="module" defer></script>
+    <script src="$dir/panel/messages/responsesManager.js" type="module" defer></script>
     <script src="$dir/panel/editableTable.js" type="module" defer></script>
     <script src="$dir/panel/sortableList.js" type="module" defer></script>
 </head>
