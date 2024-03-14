@@ -11,7 +11,7 @@ class PQCMSClientBotStartMessageManager
 
     public function getEditableTable(): string
     {
-        $html = "<ul class='d-flex flex-column gap-2' id='bot-messages'>";
+        $html = "<ul class='d-flex flex-column bot-list' id='start-messages'>";
 
         for($i=0; $i<count($this->startMessages); $i++)
         {
