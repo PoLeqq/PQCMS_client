@@ -1,4 +1,4 @@
-document.querySelectorAll(".add-text-btn").forEach(e => {
+document.querySelectorAll(".add-text-text").forEach(e => {
     e.addEventListener("click", () => {
         const li = e.parentElement.parentElement;
         const div = getStartMessageElement(li.getAttribute("data-index"));
