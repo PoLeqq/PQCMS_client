@@ -11,7 +11,7 @@ class PQCMSClientBotMessageManager
 
     public function getEditableTable(): string
     {
-        $html = "<ul class='d-flex flex-column gap-2' id='bot-messages'>";
+        $html = "<ul class='d-flex flex-column bot-list' id='bot-messages'>";
 
         for($i=0; $i<count($this->responses); $i++)
         {
@@ -26,7 +26,7 @@ class PQCMSClientBotMessageManager
             {
 //                $count = count($message);
                 $html .= <<<HTML
-    <li class="my-3">
+    <li>
         <details class="d-flex flex-column">
             <summary>
 <!--                <input type="text" name="responses[$/id][id]" value="$/id"/>-->
@@ -38,52 +38,69 @@ HTML;
                 <h4>
                     Dane:
                 </h4>
-                ID: <input type="text" name="messages[$id][id]" value="$id"/><br/>
-                Nazwa: <input type="text" name="messages[$id][name]" value="$name"/>
+                <input type="hidden" name="messages[$i][old_id]" value="$id" class="my-1"/><br/>
+                ID: <input type="text" name="messages[$i][id]" value="$id" class="my-1"/><br/>
+                Nazwa: <input type="text" name="messages[$i][name]" value="$name" class="text-input-name my-1"/>
                 <h4>Odpowiedzi bota</h4>
-                <ul>
+                <ul class="bot-resp">
 HTML;
                 foreach($botResp as $botR)
                 {
                     $html .= <<<HTML
                     <li>
-                        <input type="text" name="messages[$id][]" value="$botR"/>
+                        <input type="text" name="messages[$i][bot_resp][]" value="$botR"/>
                         <input type="button" class="text-remove" value="x">
                     </li>
 HTML;
                 }
                 $html .= <<<HTML
                 </ul>
+                <input type="button" value="Dodaj tekst" class="responses-add-bot mt-2"/>
 HTML;
 
                 $html .= <<<HTML
                 <h4>Wybory użytkownika</h4>
-                <ul>
+                <ul class="user-resp">
 HTML;
+
+                $j = 0;
                 foreach($userResp as $userR)
                 {
                     $text = $userR["text"];
                     $redirect = $userR["redirect"];
                     $user_text = $userR["user_text"];
-                    $actions = print_r($userR["actions"],true);
+                    $actions = $userR["actions"];
+
+                    $actionsHtml = "";
+                    foreach ($actions as $action) {
+                        $c = var_export($action,true);
+                        $action = urlencode(json_encode($action,true));
+                        $actionsHtml .= <<<HTML
+                        <input type="hidden" name="messages[$i][user_resp][$j][actions][]" value="$action"/>
+$c
+HTML;
+                    }
 
                     $html .= <<<HTML
-                    <li class="d-flex flex-column gap-1 my-3">
-                        Tekst: <input type="text" name="messages[$id][user_resp][text]" value="$text"/>
-                        Pytanie: <input type="text" name="messages[$id][]" value="$redirect"/>
-                        Odpowiedź użytkownika: <input type="text" name="messages[][$id][]" value="$user_text"/>
-                        Akcje: $actions
+                    <li>
+                        Tekst: <input type="text" name="messages[$i][user_resp][$j][text]" value="$text"/>
+                        Pytanie (przekierowanie): <input type="text" name="messages[$i][user_resp][$j][redirect]" value="$redirect"/>
+                        Odpowiedź użytkownika (tekst użytkownika po kliknięciu): <input type="text" name="messages[$i][user_resp][$j][user_text]" value="$user_text"/>
+<!--                        Akcje: $/actions-->
+                        $actionsHtml
                         <input type="button" class="text-remove" value="x">
                     </li>
 HTML;
+                    $j++;
                 }
+
                 $html .= <<<HTML
                 </ul>
+                <input type="button" value="Dodaj wybór" class="responses-add-user"/>
 HTML;
 
                 $html .= <<<HTML
             </div>
-            <input type="button" class="add-text-text" value="Dodaj tekst (losowy)"/>
         </details>
     </li>
 HTML;
@@ -99,8 +116,8 @@ HTML;
         return $html;
     }
 
-    public function getStartMessages(): array
+    public function getResponses(): array
     {
-        return $this->startMessages;
+        return $this->responses;
     }
 }
