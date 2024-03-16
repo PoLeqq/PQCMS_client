@@ -33,7 +33,7 @@ new Sortable(botMessages, {
         let x = 0;
         botMessages.querySelectorAll(".text-inputs").forEach(inputDiv => {
             inputDiv.querySelectorAll("input[type=text]").forEach(input => {
-                input.name = input.getAttribute('name').replace(/\[(\d+)\]/, '[' + x + ']');
+                input.name = input.getAttribute('name').replace(/\[(\d+)]/, '[' + x + ']');
             })
             x++;
         })
@@ -42,7 +42,7 @@ new Sortable(botMessages, {
         botMessages.querySelectorAll(".text-inputs").forEach(inputDiv => {
             inputDiv.querySelectorAll("input[type=hidden]").forEach(input => {
                 console.log(input);
-                input.name = input.getAttribute('name').replace(/\[(\d+)\]/, '[' + x + ']');
+                input.name = input.getAttribute('name').replace(/\[(\d+)]/, '[' + x + ']');
             })
             x++;
         })

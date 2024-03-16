@@ -33,6 +33,7 @@ class PQCMSClientBotMessageManager
                 $name
             </summary>
             <div class="text-inputs">
+
 HTML;
                 $html .= <<<HTML
                 <h4>
@@ -43,6 +44,7 @@ HTML;
                 Nazwa: <input type="text" name="messages[$i][name]" value="$name" class="text-input-name my-1"/>
                 <h4>Odpowiedzi bota</h4>
                 <ul class="bot-resp">
+
 HTML;
                 foreach($botResp as $botR)
                 {
@@ -51,16 +53,19 @@ HTML;
                         <input type="text" name="messages[$i][bot_resp][]" value="$botR"/>
                         <input type="button" class="text-remove" value="x">
                     </li>
+
 HTML;
                 }
                 $html .= <<<HTML
                 </ul>
                 <input type="button" value="Dodaj tekst" class="responses-add-bot mt-2"/>
+
 HTML;
 
                 $html .= <<<HTML
                 <h4>Wybory użytkownika</h4>
                 <ul class="user-resp">
+
 HTML;
 
                 $j = 0;
@@ -72,12 +77,14 @@ HTML;
                     $actions = $userR["actions"];
 
                     $actionsHtml = "";
-                    foreach ($actions as $action) {
+                    foreach ($actions as $action)
+                    {
                         $c = var_export($action,true);
-                        $action = urlencode(json_encode($action,true));
+                        $action = urlencode(json_encode($action));
                         $actionsHtml .= <<<HTML
                         <input type="hidden" name="messages[$i][user_resp][$j][actions][]" value="$action"/>
-$c
+$c<br/>
+
 HTML;
                     }
 

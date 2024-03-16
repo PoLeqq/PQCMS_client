@@ -66,11 +66,11 @@ class Text
             $showId = $elementId;
 
         if($editable) return<<<HTML
-<div class="pqcms-editable-div" style="">
+<div class="pqcms-editable-div">
     <div style="border: 1px solid black; display:flex; justify-content:center; align-items:center; background-color: rgba(0,0,0,.2); font-weight: bold; border-radius: 3px">
         $showId
     </div>
-    <textarea ${disabled} id='pqcms-editable-textarea-$elementId' data-name='$elementId' style='box-sizing: border-box; width: 100%; margin-bottom: -7px' class='pqcms-editable-textarea'>$code</textarea>
+    <textarea $disabled id='pqcms-editable-textarea-$elementId' data-name='$elementId' style='box-sizing: border-box; width: 100%; margin-bottom: -7px; max-height: 80vh' class='pqcms-editable-textarea'>$code</textarea>
 </div>
 HTML;
 
@@ -83,7 +83,7 @@ HTML;
     }
 
     /**
-     * @param string $name nazwa tekstu. wymagania: tylko cyfry oraz litery a-z (małe)
+     * @param string $name nazwa tekstu. Wymagania: tylko cyfry oraz litery a-z (małe)
      * @return Text|null
      */
     public static function getTextByName(string $name): ?Text

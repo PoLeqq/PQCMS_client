@@ -193,8 +193,8 @@ JS;
                 return "Najpierw musisz się zalogować!";
         }
 
-        $head = $this->generateHeadCode($this->folderDepth);
-        $body = $this->generateBodyCode($this->folderDepth);
+        $head = $this->generateHeadCode();
+        $body = $this->generateBodyCode();
 
         $sourcePath = $this->getSourcePath();
 
