@@ -26,7 +26,7 @@ class LogsHTML
         foreach($this->links as $link => $text)
         {
             $html .= <<<HTML
-<div class="col-3 p-5 log-type-button d-flex flex-column justify-content-center align-items-center" id="pqcms-log-type-button-$link">
+<div class="col-10 p-5 col-lg-3 offset-glg-0 log-type-button d-flex flex-column justify-content-center align-items-center" id="pqcms-log-type-button-$link">
     <h3 class="mb-3">${text["header"]}</h3>
     <span>
         ${text["description"]}    

@@ -39,7 +39,7 @@ $logsHTML = new LogsHTML();
     </style>
 </head>
 <body>
-    <main class="d-flex justify-content-around align-items-center" style="min-height: 100vh">
+    <main class="d-flex flex-column flex-lg-row justify-content-around align-items-center gap-4" style="min-height: 100vh">
         <?php
         echo $logsHTML->getLogsButtons();
         ?>
