@@ -29,6 +29,12 @@ export class IframeListener
 
     handleResponse()
     {
+        console.log(this.#data);
+        // if (this.#data.origin !== 'http://<?php //echo $pqcms->getDomain() ?>//' ||
+        //     this.#data.origin !== "https://<?php //echo $pqcms->getDomain() ?>//") {
+        //    return;
+        // }
+
         if(this.#data["close_overlay"] === 1)
             this.#overlay.hideOverlay();
 

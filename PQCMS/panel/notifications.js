@@ -51,7 +51,11 @@ function updateNotifications()
             for(let notification in json)
             {
                 if(notificationIds.includes(notification))
+                {
+                    // Update tekstu i rodzaju notification?
+                    // document.querySelectorAll(".pqcms-notification")
                     continue;
+                }
 
                 if(json.hasOwnProperty(notification))
                 {
