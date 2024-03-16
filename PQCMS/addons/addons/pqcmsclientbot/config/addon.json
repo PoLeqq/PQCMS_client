@@ -4,9 +4,9 @@
   "main": "PQCMSClientBot.inc.php",
   "description": "Prosty bot, który służy do automatycznej obsługi klienta. Może być dostosowany według życzeń. Nie działa na podstawie AI (nie będzie działać jak np. ChatGPT), jednak dobrze skonfigurowany z pewnością przyniesie zyski Twojej firmie oraz zaoszczędzi czasu pracownikom. <u>Wymaga Bootstrap 5 > do poprawnego wyświetlania na stronie.</u>",
   "version": {
-    "type": "beta",
-    "major": 1,
-    "minor": 0,
+    "type": "alpha",
+    "major": 0,
+    "minor": 1,
     "patch": 0,
     "date": "2024-03-08"
   },

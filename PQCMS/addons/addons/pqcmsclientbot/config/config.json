@@ -145,7 +145,7 @@
             "id": "contact_discord",
             "name": "Kontakt (Discord)",
             "bot_resp": [
-                "Dodaj/napisz na Discord do <span style=\"background-color: #444; padding: 2px 3px; margin-right: 4px;\">poleq</span>!"
+                "Dodaj/napisz na Discord do: poleq"
             ],
             "user_resp": [
                 {
@@ -196,7 +196,7 @@
             "id": "websites_coop",
             "name": "WWW - Współpraca",
             "bot_resp": [
-                "Współpraca wygląda następująco: <ul><li>Klient przedstawia projekt strony www (albo szablon, albo inną witrynę (lub kilka), aby móc sie nią zainspirować)</li> <li>Po wykonaniu strony przysługuje możliwość kilkukrotnego zaproponowania zmian/poprawek</li> <li>Klient decyduje się, czy chce taką witrynę zakupić.</li> <li>Po dokonaniu zakupu pliki zostają przesyłane do klienta. Można również poprosić o wgranie plików na serwer docelowy.</li> <li>Jeżeli strona oparta jest o system PQCMS, klient zostanie poinstruowany jak z niego korzystać</li></ul>"
+                "Współpraca wygląda następująco: <ul><li>Klient przedstawia projekt strony www (albo szablon, albo inną witrynę (lub kilka), aby móc się nią zainspirować)</li> <li>Po wykonaniu strony przysługuje możliwość kilkukrotnego zaproponowania zmian/poprawek</li> <li>Klient decyduje się, czy chce taką witrynę zakupić.</li> <li>Po dokonaniu zakupu pliki zostają przesyłane do klienta. Można również poprosić o wgranie plików na serwer docelowy.</li> <li>Jeżeli strona oparta jest o system PQCMS, klient zostanie poinstruowany jak z niego korzystać</li></ul>"
             ],
             "user_resp": [
                 {
